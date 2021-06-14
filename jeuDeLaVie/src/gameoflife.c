@@ -50,16 +50,27 @@ void initializeBlankGrid(Grid_t grid, int x, int y) {
 //implementation provisoire
 void displayGrid(Grid_t grid, int x, int y) {
 	int i, j;
+	
 	for(i = 0; i < x; ++i) {
 		for(j = 0; j < y; ++j) {
 			printf("%d ", grid[i][j]);
 		}
 		puts("");
 	}
+	puts("");
 }
 
+
+void initializeRandomGrid(Grid_t grid, int x, int y) {
+	int i, j;
+	
+	for(i = 0; i < x; ++i) {
+		for(j = 0; j < y; ++j) {
+			grid[i][j] = rand()%2;
+		}
+	}
+}
 /*
-void initializeRandomGrid(Grid_t grid, int x, int y);
 void nextIteration(Grid_t grid, int x, int y);
 */
 void quitSDL(void) {
@@ -69,6 +80,9 @@ void quitSDL(void) {
 int main(int argc, char **argv) {
 	Grid_t grid;
 	int x = 10, y = 10, i, iterations = 30;
+	
+	//initialisation de l'aleatoire
+	srand(time(0));
 	
 	if(!initializeSDL()) {
 		return GOLERRORCODE;
@@ -84,12 +98,13 @@ int main(int argc, char **argv) {
 		return GOLERRORCODE;
 	}
 	displayGrid(grid, x, y);
-	/*
-	initializeRandomGrid(grid);
+	initializeRandomGrid(grid, x, y);
 	if(grid == NULL) {
 		fputs("error in grid blank initialization", stderr);
 		return GOLERRORCODE;
 	}
+	displayGrid(grid, x, y);
+/*
 	for(i = 0; i < iterations; ++i) {
 		nextIteration(grid);
 		displayGrid(grid);
