@@ -19,7 +19,7 @@ int taileEcran(int *h, int* w)
     return code;
 }
 
-void descendreFenetres(SDL_Window  * window_1,SDL_Window * window_2,SDL_Window* window_4, SDL_Window* window_5, int pas)
+void deplacerFenetres(SDL_Window  * window_1,SDL_Window * window_2,SDL_Window* window_4, SDL_Window* window_5, int pas)
 {
     int window_x,
          window_y;
@@ -33,20 +33,6 @@ void descendreFenetres(SDL_Window  * window_1,SDL_Window * window_2,SDL_Window* 
     SDL_SetWindowPosition(window_5, window_x, window_y - 2*pas);
 }
 
-void monterFenetres(SDL_Window  * window_1,SDL_Window * window_2,SDL_Window* window_4, SDL_Window* window_5, int pas)
-{
-    int window_x,
-         window_y;
-    SDL_GetWindowPosition(window_1, &window_x, &window_y);
-    SDL_SetWindowPosition(window_1, window_x, window_y - 2*pas);
-    SDL_GetWindowPosition(window_2, &window_x, &window_y);
-    SDL_SetWindowPosition(window_2, window_x, window_y - pas);
-    SDL_GetWindowPosition(window_4, &window_x, &window_y);
-    SDL_SetWindowPosition(window_4, window_x, window_y + pas);
-    SDL_GetWindowPosition(window_5, &window_x, &window_y);
-    SDL_SetWindowPosition(window_5, window_x, window_y + 2*pas);
-}
-
 int main(int argc, char **argv) 
 {
     (void)argc;
@@ -56,7 +42,7 @@ int main(int argc, char **argv)
                              * window_2,
                              * window_3,
                              * window_4,
-                             * window_5;
+                             * window_5 ;
     int                        window_h, 
                                 window_w,
                                 height,
@@ -71,6 +57,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
+    //Recuperation de la taille de l'ecran
     if(taileEcran(&window_h, &window_w) != 0)
     {
         SDL_Log("Error : SDL Display Mode - %s\n", SDL_GetError()); 
@@ -80,6 +67,7 @@ int main(int argc, char **argv)
     weight = window_w / 5 ;
     height = window_h / 5;
 
+    //Creation de toutes les fenetres
     window_1 = SDL_CreateWindow("Fenêtre 1", 0, window_h/2 - height/2, weight, height, SDL_WINDOW_RESIZABLE);
     if (window_1 == NULL) {
         SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
@@ -110,33 +98,39 @@ int main(int argc, char **argv)
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
-    for(i=0; i<5; i++)
+
+    //On descend
+    for(i=0; i<50; i++)
     {
-        SDL_Delay(100);
-        descendreFenetres(window_1, window_2, window_4, window_5, 50);
+        SDL_Delay(10);
+        deplacerFenetres(window_1, window_2, window_4, window_5, 5);
     }
-    for(i=0; i<10; i++)
+    //On remonte
+    for(i=0; i<100; i++)
     {
-        SDL_Delay(100);
-        monterFenetres(window_1, window_2, window_4, window_5, 50);
+        SDL_Delay(10);
+        deplacerFenetres(window_1, window_2, window_4, window_5, -5);
     }
 
+    //Destruction des fenetres inutiles
     SDL_DestroyWindow(window_1);
     SDL_DestroyWindow(window_2);
     SDL_DestroyWindow(window_4);
     SDL_DestroyWindow(window_5);
 
-    for(i=0; i<5; i++)
+    //On agrandi celle du milieu
+    for(i=0; i<50; i++)
     {
-        SDL_Delay(100);
+        SDL_Delay(10);
         SDL_GetWindowSize(window_3, &window_w, &window_h);
-        SDL_SetWindowSize(window_3, window_w+100, window_h+100);
+        SDL_SetWindowSize(window_3, window_w+10, window_h+10);
         SDL_GetWindowPosition(window_3, &x, &y);
-        SDL_SetWindowPosition(window_3, x -50, y - 50);
+        SDL_SetWindowPosition(window_3, x -5, y - 5);
     }
 
     SDL_Delay(500);
 
+    //Destruction de la derniere fenetre
     SDL_DestroyWindow(window_3);
 
     SDL_Quit();
