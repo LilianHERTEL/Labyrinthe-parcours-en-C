@@ -25,7 +25,7 @@ implémenter en SDL :
 -jeu de la vie
 	rajouter extension maze
 	
--space numbers (interactions avec l'utilisateur)
+-space numbers (interactions avec l'utilisateur) (= minijeu)
 
 -file de priorité 
 	tas binaire ou binomial ou fibonacci
@@ -72,7 +72,9 @@ SDL:
 	X fenetré
 	pavé de serpent
 	jeu de la vie
-	projet en + (space numbers) (1j max)
+	premiere animation
+	jeu de la vie 2 (avec interactions)
+	chef d'oeuvre + (space numbers) (1j max) (=minijeu)
 	
 Tas binaire:
 	module à faire
