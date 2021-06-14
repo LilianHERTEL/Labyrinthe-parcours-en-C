@@ -69,7 +69,7 @@ bool createRenderer(SDL_Window* window, SDL_Renderer* renderer) {
 }
 
 bool testWindow(void) {
-    bool return_status = EXIT_FAILURE;
+    bool error = EXIT_FAILURE;
     SDL_Window *window = NULL;
     SDL_Renderer* renderer = NULL;
 
@@ -84,16 +84,36 @@ bool testWindow(void) {
         //return_status = EXIT_FAILURE;
       }
       else {
-        return_status = createRenderer(window, renderer);
+        error = createRenderer(window, renderer);
+
+        //Configuration de la couleur de dessin
+        if(!error) {
+          SDL_Color red = {255, 0, 0, 255};
+          if (SDL_SetRenderDrawColor(renderer, red.r, red.g, red.b, red.a) != 0) {
+            SDL_Log("Erreur de création de la couleur - %s\n", SDL_GetError());
+            error = EXIT_FAILURE
+          }
+          if (SDL_RenderClear(renderer)) {
+            SDL_Log("Erreur de changement de la couleur - %s\n", SDL_GetError());
+          }
+
+          // Création d'un rectangle
+          SDL_Rect rect = {10, 10, 10, 10};
+          SDL_RenderFillRect(renderer, &rect);
+          SDL_RenderPresent(renderer);
+        }
 
         SDL_Delay(5000);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
       }
     }
+
+    
+    
     SDL_Quit();
 
-    return return_status;
+    return error;
 }
 
 int main(int argc, char const *argv[])
