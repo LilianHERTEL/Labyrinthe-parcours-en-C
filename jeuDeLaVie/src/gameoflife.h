@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+
+#define GOLERRORCODE 1
 
 #include <SDL2/sdl.h>
 
 typedef bool** Grid_t;
-
-const Rule_t ruleLife = ; 
 
 Grid_t createGrid(int x, int y);
 void initializeSDL(void);
