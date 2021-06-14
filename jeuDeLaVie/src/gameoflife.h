@@ -7,7 +7,7 @@
 
 #define GOLERRORCODE 1
 
-#include <SDL2/sdl.h>
+#include <SDL2/SDL.h>
 
 typedef bool** Grid_t;
 
@@ -17,3 +17,4 @@ void initializeBlankGrid(Grid_t grid);
 void initializeRandomGrid(Grid_t grid);
 void displayGrid(Grid_t grid);
 void nextIteration(Grid_t grid);
+void freeGrid(Grid_t grid, int x);
