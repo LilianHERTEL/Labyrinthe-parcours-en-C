@@ -29,19 +29,32 @@ Grid_t createGrid(int x, int y) {
 	return grid;
 }
 
+
+bool initializeSDL(void) {
+	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
+    	fprintf(stderr, "Erreur d'initialisation de la SDL : %s\n", SDL_GetError()); 
+    	return false; 
+	}
+	return true;
+}
+
 /*
-void initializeSDL(void);
 void initializeBlankGrid(Grid_t grid);
 void initializeRandomGrid(Grid_t grid);
 void displayGrid(Grid_t grid);
 void nextIteration(Grid_t grid);
 */
+void quitSDL(void) {
+	SDL_Quit();
+}
 
 int main(int argc, char **argv) {
 	Grid_t grid;
 	int x = 10, y = 10, i, iterations = 30;
 	
-//	initializeSDL();
+	if(!initializeSDL()) {
+		return GOLERRORCODE;
+	}
 	grid = createGrid(x, y);
 	if(grid == NULL) {
 		fputs("error in grid creation", stderr);

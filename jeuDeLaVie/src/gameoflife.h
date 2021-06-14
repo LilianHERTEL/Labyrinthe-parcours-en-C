@@ -12,7 +12,8 @@
 typedef bool** Grid_t;
 
 Grid_t createGrid(int x, int y);
-void initializeSDL(void);
+bool initializeSDL(void);
+void quitSDL(void);
 void initializeBlankGrid(Grid_t grid);
 void initializeRandomGrid(Grid_t grid);
 void displayGrid(Grid_t grid);
