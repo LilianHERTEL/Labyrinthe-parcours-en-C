@@ -38,11 +38,18 @@ bool initializeSDL(void) {
 	return true;
 }
 
+
+void initializeBlankGrid(Grid_t grid, int x, int y) {
+	int i;
+	
+	for(i = 0; i < x; ++i) {
+		memset(grid[i], false, y);
+	}
+}
 /*
-void initializeBlankGrid(Grid_t grid);
-void initializeRandomGrid(Grid_t grid);
-void displayGrid(Grid_t grid);
-void nextIteration(Grid_t grid);
+void initializeRandomGrid(Grid_t grid, int x, int y);
+void displayGrid(Grid_t grid, int x, int y);
+void nextIteration(Grid_t grid, int x, int y);
 */
 void quitSDL(void) {
 	SDL_Quit();
@@ -60,11 +67,12 @@ int main(int argc, char **argv) {
 		fputs("error in grid creation", stderr);
 		return GOLERRORCODE;
 	}
-/*	initializeBlankGrid(grid);
+	initializeBlankGrid(grid);
 	if(grid == NULL) {
 		fputs("error in grid blank initialization", stderr);
 		return GOLERRORCODE;
 	}
+	/*
 	displayGrid(grid);
 	initializeRandomGrid(grid);
 	if(grid == NULL) {
@@ -77,5 +85,6 @@ int main(int argc, char **argv) {
 	}
 */
 	freeGrid(grid, x);
+	quitSDL();
 	return 0;
 }
