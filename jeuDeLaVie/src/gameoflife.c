@@ -1,36 +1,40 @@
 #include "gameoflife.h"
 
-void freeGrid(Grid_t grid, int x) {
+void freeGrid(Grid_t *grid) {
 	int i;
 	
-	for(i = x-1; i >= 0 ; --i) {
-		free(grid[i]);
+	for(i = grid->x - 1; i >= 0 ; --i) {
+		free(grid->grid[i]);
 	}
 	free(grid);
 }
 
-Grid_t createGrid(int x, int y) {
-	Grid_t grid;
+void createGrid(Grid_t* grid, int x, int y) {
 	int i;
-	
-	grid = malloc(sizeof(booleen*) * x);
 	
 	if(grid == NULL) {
 		fputs("error initializing grid\n", stderr);
 	}
 	else {
-		for(i = 0; i < x; ++i) {
-			grid[i] = malloc(sizeof(booleen) * y);
-			if(grid[i] == NULL) {
-				fprintf(stderr, "error initializing line %d\n", i);
+		grid->x = x;
+		grid->y = y;
+		
+		grid->grid = malloc(sizeof(bool *) * x);
+		if(grid->grid != NULL) {
+			for(i = 0; i < x; ++i) {
+				grid->grid[i] = (bool *)malloc(sizeof(bool) * y);
+				if(grid->grid[i] == NULL) {
+					fprintf(stderr, "error initializing line %d\n", i);
+				}
 			}
 		}
+		else {
+			fputs("error initializing rows\n", stderr);
+		}
 	}
-	return grid;
 }
 
-
-booleen initializeSDL(void) {
+bool initializeSDL(void) {
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
     	fprintf(stderr, "Erreur d'initialisation de la SDL : %s\n", SDL_GetError()); 
     	return 0; 
@@ -39,21 +43,23 @@ booleen initializeSDL(void) {
 }
 
 
-void initializeBlankGrid(Grid_t grid, int x, int y) {
-	int i;
+void initializeBlankGrid(Grid_t *grid) {
+	int i, j;
 	
-	for(i = 0; i < x; ++i) {
-		memset(grid[i], 0, y);
+	for(i = 0; i < grid->x; ++i) {
+		for(j = 0; j < grid->y; ++j) {
+			grid->grid[i][j] = 0;
+		}
 	}
 }
 
 //implementation provisoire
-void displayGrid(Grid_t grid, int x, int y) {
+void displayGrid(Grid_t *grid) {
 	int i, j;
 	
-	for(i = 0; i < x; ++i) {
-		for(j = 0; j < y; ++j) {
-			printf("%d ", grid[i][j]);
+	for(i = 0; i < grid->x; ++i) {
+		for(j = 0; j < grid->y; ++j) {
+			printf("%d ", grid->grid[i][j]);
 		}
 		puts("");
 	}
@@ -61,49 +67,49 @@ void displayGrid(Grid_t grid, int x, int y) {
 }
 
 
-void initializeRandomGrid(Grid_t grid, int x, int y) {
+void initializeRandomGrid(Grid_t *grid) {
 	int i, j;
 	
-	for(i = 0; i < x; ++i) {
-		for(j = 0; j < y; ++j) {
-			grid[i][j] = rand()%2;
+	for(i = 0; i < grid->x; ++i) {
+		for(j = 0; j < grid->y; ++j) {
+			grid->grid[i][j] = rand()%2;
 		}
 	}
 }
 
-void nextIteration(Grid_t grid, int x, int y, Rule_t *rule) {
+void nextIteration(Grid_t *grid, Rule_t *rule) {
 	Grid_t result;
 	int i, j, k, l, m, n, neighbours;
 	
-	result = createGrid(x, y);
+	createGrid(&result, grid->x, grid->y);
 	
-	for(i = 0; i < x; ++i) {
-		for(j = 0; j < y; ++j) {
+	for(i = 0; i < grid->x; ++i) {
+		for(j = 0; j < grid->y; ++j) {
 			neighbours = 0;
 			for(k = -1; k < 2; ++k) {
 				for(l = -1; l < 2; ++l) {
-					m = i+k % x;
-					n = j+l % y;
+					m = i+k % grid->x;
+					n = j+l % grid->y;
 					if(m < 0) {
-						m = x-1;
+						m = grid->x - 1;
 					}
 					if(n < 0) {
-						n = y-1;
+						n = grid->y - 1;
 					}
-					neighbours = neighbours + (int)grid[m][n];
+					neighbours = neighbours - (int)grid->grid[m][n];
 				}
 			}
-			neighbours -= grid[i][j];
-			if(grid[i][j]) {
-				result[i][j] = rule->survie[neighbours];
+			neighbours -= grid->grid[i][j];
+			if(grid->grid[i][j]) {
+				result.grid[i][j] = rule->survie[neighbours];
 			}
 			else {
-				result[i][j] = rule->naissance[neighbours];
+				result.grid[i][j] = rule->naissance[neighbours];
 			}
 		}
 	}
-	freeGrid(grid, x);
-	grid = result;
+	freeGrid(grid);
+	*grid = result;
 }
 
 void quitSDL(void) {
@@ -127,17 +133,18 @@ void initLife(Rule_t *life) {
 	}
 }
 
-int main(int argc, char **argv) {
+int main() {
 	Grid_t grid;
 	int x = 10, y = 10, i, iterations = 3;
 	Rule_t *life;
 	
 	life = malloc(sizeof(Rule_t));
-	initLife(life);
 	
 	if(life == NULL) {
 		return GOLERRORCODE;
 	}
+	
+	initLife(life);
 	
 	//initialisation de l'aleatoire
 	srand(time(0));
@@ -146,33 +153,25 @@ int main(int argc, char **argv) {
 		return GOLERRORCODE;
 	}
 	
-	grid = createGrid(x, y);
-	if(grid == NULL) {
+	createGrid(&grid, x, y);
+	if(grid.grid == NULL) {
 		fputs("error in grid creation", stderr);
 		return GOLERRORCODE;
 	}
 	
-	initializeBlankGrid(grid, x, y);
-	if(grid == NULL) {
-		fputs("error in grid blank initialization", stderr);
-		return GOLERRORCODE;
-	}
-	displayGrid(grid, x, y);
+	initializeBlankGrid(&grid);
+	displayGrid(&grid);
 	
-	initializeRandomGrid(grid, x, y);
-	if(grid == NULL) {
-		fputs("error in grid blank initialization", stderr);
-		return GOLERRORCODE;
-	}
-	displayGrid(grid, x, y);
+	initializeRandomGrid(&grid);
+	displayGrid(&grid);
 	
 	for(i = 0; i < iterations; ++i) {
-		nextIteration(grid, x, y, life);
-		displayGrid(grid, x, y);
+		nextIteration(&grid, life);
+		displayGrid(&grid);
 	}
 	
 	free(life);
-	freeGrid(grid, x);
+	freeGrid(&grid);
 	quitSDL();
 	return 0;
 }

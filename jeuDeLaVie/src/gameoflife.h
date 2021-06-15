@@ -9,20 +9,25 @@
 
 #include <SDL2/SDL.h>
 
-typedef enum { True, False } booleen;
+typedef enum { true, false } bool;
 
-typedef booleen** Grid_t;
 typedef struct {
-	booleen survie[9];
-	booleen naissance[9];
+	bool **grid;
+	int x;
+	int y;
+} Grid_t;
+
+typedef struct {
+	bool survie[9];
+	bool naissance[9];
 } Rule_t;
 
 void initLife(Rule_t *life);
-Grid_t createGrid(int x, int y);
-booleen initializeSDL(void);
+void createGrid(Grid_t *grid, int x, int y);
+bool initializeSDL(void);
 void quitSDL(void);
-void initializeBlankGrid(Grid_t grid, int x, int y);
-void initializeRandomGrid(Grid_t grid, int x, int y);
-void displayGrid(Grid_t grid, int x, int y);
-void nextIteration(Grid_t grid, int x, int y, Rule_t *rule);
-void freeGrid(Grid_t grid, int x);
+void initializeBlankGrid(Grid_t *grid);
+void initializeRandomGrid(Grid_t *grid);
+void displayGrid(Grid_t *grid);
+void nextIteration(Grid_t *grid, Rule_t *rule);
+void freeGrid(Grid_t *grid);
