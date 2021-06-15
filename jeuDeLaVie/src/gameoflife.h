@@ -31,3 +31,4 @@ void initializeRandomGrid(Grid_t grid);
 void displayGrid(Grid_t grid);
 void nextIteration(Grid_t *grid, Rule_t *rule);
 void freeGrid(Grid_t grid);
+int tailleEcran(int *height, int *width);

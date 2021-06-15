@@ -2,8 +2,9 @@
 
 int main() {
 	Grid_t grid;
-	int x = 10, y = 10, i, iterations = 30;
+	int x = 10, y = 10, i, iterations = 30, sheight, swidth;
 	Rule_t *life;
+	SDL_Window *window;
 	
 	life = malloc(sizeof(Rule_t));
 	
@@ -16,9 +17,27 @@ int main() {
 	//initialisation de l'aleatoire
 	srand(time(0));
 	
-	if(!initializeSDL()) {
-		return GOLERRORCODE;
-	}
+	/* Initialisation de la SDL  + gestion de l'échec possible */
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError());      // l'initialisation de la SDL a échoué 
+        exit(EXIT_FAILURE);
+    }
+    
+    
+    if(tailleEcran(&sheight, &swidth) != 0)
+    {
+        SDL_Log("Error : SDL Display Mode - %s\n", SDL_GetError()); 
+        SDL_Quit();
+        exit(EXIT_FAILURE);
+    }
+	
+	//creation de la fenetre
+    window = SDL_CreateWindow("Jeu de la vie", 0, sheight/2 - sheight/10, swidth/5, sheight/5, SDL_WINDOW_RESIZABLE);
+    if (window == NULL) {
+        SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
+        SDL_Quit();
+        exit(EXIT_FAILURE);
+    }
 	
 	grid = createGrid(x, y);
 	if(grid.grid == NULL) {
@@ -26,21 +45,37 @@ int main() {
 		return GOLERRORCODE;
 	}
 	
-	initializeBlankGrid(grid);
-	displayGrid(grid);
-	
 	initializeRandomGrid(grid);
 	displayGrid(grid);
 	
 	for(i = 0; i < iterations; ++i) {
 		nextIteration(&grid, life);
 		displayGrid(grid);
+		SDL_Delay(500);
 	}
 	
+	SDL_DestroyWindow(window);
 	free(life);
 	freeGrid(grid);
-	quitSDL();
+	SDL_Quit();
 	return 0;
+}
+
+int tailleEcran(int *h, int* w)
+{
+    SDL_DisplayMode current;
+    int code = 0;
+
+    if(SDL_GetCurrentDisplayMode(0, &current) != 0)
+   {
+       code = 1;
+   }
+   else
+   {
+        *h = current.h;
+        *w = current.w;
+   }
+    return code;
 }
 
 void freeGrid(Grid_t grid) {
@@ -150,10 +185,6 @@ void nextIteration(Grid_t *grid, Rule_t *rule) {
 	}
 	freeGrid(*grid);
 	*grid = result;
-}
-
-void quitSDL(void) {
-	SDL_Quit();
 }
 
 void initLife(Rule_t *life) {
