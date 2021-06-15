@@ -1,11 +1,55 @@
 #include "gameoflife.h"
 
+int main() {
+	Grid_t grid;
+	int x = 10, y = 10, i, iterations = 30;
+	Rule_t *life;
+	
+	life = malloc(sizeof(Rule_t));
+	
+	if(life == NULL) {
+		return GOLERRORCODE;
+	}
+	
+	initLife(life);
+	
+	//initialisation de l'aleatoire
+	srand(time(0));
+	
+	if(!initializeSDL()) {
+		return GOLERRORCODE;
+	}
+	
+	grid = createGrid(x, y);
+	if(grid.grid == NULL) {
+		fputs("error in grid creation", stderr);
+		return GOLERRORCODE;
+	}
+	
+	initializeBlankGrid(grid);
+	displayGrid(grid);
+	
+	initializeRandomGrid(grid);
+	displayGrid(grid);
+	
+	for(i = 0; i < iterations; ++i) {
+		nextIteration(&grid, life);
+		displayGrid(grid);
+	}
+	
+	free(life);
+	freeGrid(grid);
+	quitSDL();
+	return 0;
+}
+
 void freeGrid(Grid_t grid) {
 	int i;
 	
 	for(i = grid.x - 1; i >= 0 ; --i) {
 		free(grid.grid[i]);
 	}
+	free(grid.grid);
 }
 
 Grid_t createGrid(int x, int y) {
@@ -129,45 +173,3 @@ void initLife(Rule_t *life) {
 	}
 }
 
-int main() {
-	Grid_t grid;
-	int x = 10, y = 10, i, iterations = 30;
-	Rule_t *life;
-	
-	life = malloc(sizeof(Rule_t));
-	
-	if(life == NULL) {
-		return GOLERRORCODE;
-	}
-	
-	initLife(life);
-	
-	//initialisation de l'aleatoire
-	srand(time(0));
-	
-	if(!initializeSDL()) {
-		return GOLERRORCODE;
-	}
-	
-	grid = createGrid(x, y);
-	if(grid.grid == NULL) {
-		fputs("error in grid creation", stderr);
-		return GOLERRORCODE;
-	}
-	
-	initializeBlankGrid(grid);
-	displayGrid(grid);
-	
-	initializeRandomGrid(grid);
-	displayGrid(grid);
-	
-	for(i = 0; i < iterations; ++i) {
-		nextIteration(&grid, life);
-		displayGrid(grid);
-	}
-	
-	free(life);
-	freeGrid(grid);
-	quitSDL();
-	return 0;
-}
