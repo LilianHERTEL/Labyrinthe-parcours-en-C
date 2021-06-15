@@ -31,11 +31,57 @@ int main(int argc, char const *argv[])
   SDL_Rect rectangle = {0, 0, 100, 100};
 
   //Change la couleur de rendu à rouge
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
   //Dessine le rectangle rouge
   SDL_RenderFillRect( renderer, &rectangle);
   SDL_RenderPresent(renderer);
+
+  SDL_Delay(1000);
+
+  int speed = 5;
+  int i;
+  int limit_x;
+  SDL_GetWindowSize(window, &limit_x, NULL);
+  printf("%d\n", limit_x);
+  limit_x = (limit_x - rectangle.w)/speed;
+  printf("%d\n", limit_x);
+  for (i = 0; i < limit_x; i++){
+    //Met le fond blanc
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+    rectangle.x = rectangle.x + speed;
+    //Change la couleur de rendu à rouge
+    SDL_SetRenderDrawColor(renderer, 255*i/limit_x, 0, 0, 255);
+    //Dessine le rectangle rouge
+    SDL_RenderFillRect( renderer, &rectangle);
+    SDL_RenderPresent(renderer);
+    //SDL_Delay(200);
+  }
+  int j;
+  int limit_y;
+  SDL_GetWindowSize(window, NULL, &limit_y);
+  printf("%d\n", limit_y);
+  limit_y = (limit_y - rectangle.h)/speed;
+  printf("%d\n", limit_y);
+  for (j = 0; j < limit_y; j++) {
+    //Met le fond blanc
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+    rectangle.y = rectangle.y + speed;
+    //Change la couleur de rendu à rouge
+    SDL_SetRenderDrawColor(renderer, 255-(255*j/limit_y), 255*j/limit_y, 0, 255);
+    //Dessine le rectangle rouge
+    SDL_RenderFillRect( renderer, &rectangle);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(10);
+  }
+
+  SDL_Delay(1000);
+
+  SDL_RenderClear(renderer);
+  rectangle.x = rectangle.x + 100;
+
 
   SDL_Event event;
   SDL_bool exit = SDL_FALSE;
