@@ -23,11 +23,11 @@ typedef struct {
 } Rule_t;
 
 void initLife(Rule_t *life);
-void createGrid(Grid_t *grid, int x, int y);
+Grid_t createGrid(int x, int y);
 bool initializeSDL(void);
 void quitSDL(void);
-void initializeBlankGrid(Grid_t *grid);
-void initializeRandomGrid(Grid_t *grid);
-void displayGrid(Grid_t *grid);
+void initializeBlankGrid(Grid_t grid);
+void initializeRandomGrid(Grid_t grid);
+void displayGrid(Grid_t grid);
 void nextIteration(Grid_t *grid, Rule_t *rule);
-void freeGrid(Grid_t *grid);
+void freeGrid(Grid_t grid);
