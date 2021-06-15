@@ -2,17 +2,18 @@
 
 int main() {
 	Grid_t grid;
-	int x = 10, y = 10, i, iterations = 30, sheight, swidth;
+	int x = 10, y = 10, i, iterations = 5, sheight, swidth, delay = 3000;
 	Rule_t *life;
 	SDL_Window *window;
-	
+	SDL_Renderer *renderer;
+
 	life = malloc(sizeof(Rule_t));
 	
 	if(life == NULL) {
 		return GOLERRORCODE;
 	}
 	
-	initLife(life);
+	initLife(life);	
 	
 	//initialisation de l'aleatoire
 	srand(time(0));
@@ -20,6 +21,7 @@ int main() {
 	/* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError());      // l'initialisation de la SDL a échoué 
+        free(life);
         exit(EXIT_FAILURE);
     }
     
@@ -28,13 +30,25 @@ int main() {
     {
         SDL_Log("Error : SDL Display Mode - %s\n", SDL_GetError()); 
         SDL_Quit();
+        free(life);
         exit(EXIT_FAILURE);
     }
 	
 	//creation de la fenetre
-    window = SDL_CreateWindow("Jeu de la vie", 0, sheight/2 - sheight/10, swidth/5, sheight/5, SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("Jeu de la vie", 0, sheight/2 - sheight/4, swidth/2, sheight/2, SDL_WINDOW_RESIZABLE);
     if (window == NULL) {
         SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
+        free(life);
+        SDL_Quit();
+        exit(EXIT_FAILURE);
+    }
+    
+    //creation du renderer
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == NULL) {
+        SDL_Log("Error : SDL renderer creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
+        free(life);
+        SDL_DestroyWindow(window);
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
@@ -47,18 +61,50 @@ int main() {
 	
 	initializeRandomGrid(grid);
 	displayGrid(grid);
-	
+	drawGrid(renderer, grid);
+	/*
 	for(i = 0; i < iterations; ++i) {
 		nextIteration(&grid, life);
+		drawGrid(renderer, grid);
 		displayGrid(grid);
-		SDL_Delay(500);
+		SDL_Delay(delay);
 	}
+	*/
+	SDL_Delay(delay);
 	
+	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	free(life);
 	freeGrid(grid);
 	SDL_Quit();
 	return 0;
+}
+
+void drawGrid(SDL_Renderer *renderer, Grid_t grid) {
+	int i, j, width, height;
+	SDL_Rect rectangle;
+	
+	SDL_GetRendererOutputSize(renderer, &width, &height);
+	//SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+	//rectangle.w = height / grid.x;
+	rectangle.w = 10;
+	//rectangle.h = height / grid.y;
+	rectangle.h = 10;
+	for(i = 0; i < grid.x; ++i) {
+		rectangle.x = rectangle.w * i;
+		for(j = 0; j < grid.y; ++j) {
+			rectangle.y = rectangle.h * i;
+			if(!grid.grid[i][j]) {
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			}
+			else {
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			}
+			SDL_RenderFillRect(renderer, &rectangle);
+			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+			SDL_RenderPresent(renderer);
+		}
+	}
 }
 
 int tailleEcran(int *h, int* w)
