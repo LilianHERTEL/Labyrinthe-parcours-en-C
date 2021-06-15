@@ -1,4 +1,6 @@
-# Présentation du projet (Groupe 35)
+# Présentation du projet 
+
+(Groupe 35 - Meunier - Chandeze - Hertel)
 
 Projet réalisé en fin de première année ISIMA sur le thème du Labyrinthe, en lanagge C avec l'utilisation de la SDL2 pour la partie graphique.
 
