@@ -4,29 +4,42 @@
 #include "bool.h"
 #include "color.h"
 
-void translateRectangle(SDL_Renderer* renderer, SDL_Rect* rectangle, int limit_x, int speed, int step, char direction, SDL_Color beforeColor, SDL_Color afterColor) {
-  SDL_Rect new_rect = *rectangle;
+void translateRectangle(SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* rectangle2[], int limit_x, int speed, int step, char direction, SDL_Color beforeColor, SDL_Color afterColor, int w, int h) {
+  SDL_Rect new_rect1 = *rectangle;
+  SDL_Rect new_rect2 = *rectangle2;
   int i;
+  int limit_1 = (w - new_rect1.w)/speed;
+  int limit_2_w = (w - 3*new_rect2.w)/speed;
+  int limit_2_h = (h - 3*new_rect2.h)/speed;
   for (i = 0; i < limit_x; i++) {
-    int r = beforeColor.r == 255 ? 255-(255*i/limit_x) : afterColor.r*i/limit_x;
-    int g = beforeColor.g == 255 ? 255-(255*i/limit_x) : afterColor.g*i/limit_x;
-    int b = beforeColor.b == 255 ? 255-(255*i/limit_x) : afterColor.b*i/limit_x;
+    int r = beforeColor.r == 255 ? 255-(255*i/limit_1) : afterColor.r*i/limit_1;
+    int g = beforeColor.g == 255 ? 255-(255*i/limit_1) : afterColor.g*i/limit_1;
+    int b = beforeColor.b == 255 ? 255-(255*i/limit_1) : afterColor.b*i/limit_1;
     //Met le fond blanc
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    if (direction == 'x') new_rect.x = new_rect.x + step*speed;
-    else new_rect.y = new_rect.y + step*speed;
+    if (direction == 'x') {
+      new_rect1.x = new_rect1.x + step*speed;
+      if (i <= limit_2_w) new_rect2.x = new_rect2.x - step*speed;
+    }
+    else {
+      new_rect1.y = new_rect1.y + step*speed;
+      if (i <= limit_2_h) new_rect2.y = new_rect2.y + step*speed;
+    }
 
     printf("%d\n", r);
     
     //Change la couleur de rendu à rouge
     SDL_SetRenderDrawColor(renderer, r, g, b, 255);
     //Dessine le rectangle rouge
-    SDL_RenderFillRect(renderer, &new_rect);
+    SDL_RenderFillRect(renderer, &new_rect1);
+
+    SDL_RenderFillRect(renderer, &new_rect2);
     SDL_RenderPresent(renderer);
     //SDL_Delay(200);
   }
-  *rectangle = new_rect;
+  *rectangle = new_rect1;
+  *rectangle2 = new_rect2;
   SDL_Delay(500);
 }
 
@@ -58,12 +71,19 @@ int main(int argc, char const *argv[])
   SDL_GetWindowSize(window, &winWidth, &winHeight);
   //Création du rectangle
   SDL_Rect rectangle = {0, 0, winWidth/10, winHeight/10};
+  
+  //TEST
+  SDL_Rect rectangle2 = {winWidth-2*winWidth/10,winHeight/10, winWidth/10, winHeight/10};
 
   //Change la couleur de rendu à rouge
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
   //Dessine le rectangle rouge
   SDL_RenderFillRect( renderer, &rectangle);
+
+  //TEST
+  SDL_RenderFillRect( renderer, &rectangle2);
+
   SDL_RenderPresent(renderer);
 
   SDL_Delay(1000);
@@ -149,19 +169,19 @@ int main(int argc, char const *argv[])
   */
   SDL_Color beforeColor = {0,0,0,0};
   SDL_Color afterColor = {255,0,0,0};
-  translateRectangle(renderer, &rectangle, limit_x, speed, step, 'x', beforeColor, afterColor);
+  translateRectangle(renderer, &rectangle, &rectangle2, limit_x, speed, step, 'x', beforeColor, afterColor, winWidth, winHeight);
   beforeColor = afterColor;
   afterColor.r = 0;
   afterColor.g = 255;
-  translateRectangle(renderer, &rectangle, limit_y, speed, step, 'y', beforeColor, afterColor);
+  translateRectangle(renderer, &rectangle, &rectangle2, limit_y, speed, step, 'y', beforeColor, afterColor, winWidth, winHeight);
   beforeColor = afterColor;
   afterColor.g = 0;
   afterColor.b = 255;
   step = -step;
-  translateRectangle(renderer, &rectangle, limit_x, speed, step, 'x', beforeColor, afterColor);
+  translateRectangle(renderer, &rectangle, &rectangle2, limit_x, speed, step, 'x', beforeColor, afterColor, winWidth, winHeight);
   beforeColor = afterColor;
   afterColor.b = 0;
-  translateRectangle(renderer, &rectangle, limit_y, speed, step, 'y', beforeColor, afterColor);
+  translateRectangle(renderer, &rectangle, &rectangle2, limit_y, speed, step, 'y', beforeColor, afterColor, winWidth, winHeight);
 
   SDL_Delay(1000);
 
