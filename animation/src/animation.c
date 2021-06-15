@@ -99,7 +99,7 @@ int main(int argc, char **argv)
   SDL_DisplayMode screen;
 
   /* INITIALISATIONS */
-  if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(0, "ERROR SDL INIT", window, renderer);
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(1, "ERROR SDL INIT", window, renderer);
 
   SDL_GetCurrentDisplayMode(0, &screen);
   window = SDL_CreateWindow("Animation",
@@ -108,22 +108,22 @@ int main(int argc, char **argv)
                         screen.w * 0.8,
                         screen.h * 0.8,
                         SDL_WINDOW_RESIZABLE);
-  if (window == NULL) end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
+  if (window == NULL) end_sdl(1, "ERROR WINDOW CREATION", window, renderer);
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-  if (renderer == NULL) end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
+  if (renderer == NULL) end_sdl(1, "ERROR RENDERER CREATION", window, renderer);
 
   /*TRAITEMENT*/
   SDL_Texture * perso; 
   perso = IMG_LoadTexture(renderer,"../img/adventurer_tilesheet.png");
-  if (perso == NULL) end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+  if (perso == NULL) end_sdl(1, "Echec du chargement de l'image dans la texture", window, renderer);
 
   SDL_Texture * fond; 
   fond = IMG_LoadTexture(renderer,"../img/background.png");
   if (fond == NULL) 
   {
     SDL_DestroyTexture(perso); 
-    end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+    end_sdl(1, "Echec du chargement de l'image dans la texture", window, renderer);
   }
 
   SDL_Texture * sol; 
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
   {
     SDL_DestroyTexture(perso); 
     SDL_DestroyTexture(fond); 
-    end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+    end_sdl(1, "Echec du chargement de l'image dans la texture", window, renderer);
   }
 
   animation(sol, fond, perso, window, renderer);
@@ -140,6 +140,6 @@ int main(int argc, char **argv)
   SDL_DestroyTexture(perso); 
   SDL_DestroyTexture(fond); 
   SDL_DestroyTexture(sol); 
-  end_sdl(1, "Normal ending", window, renderer);
+  end_sdl(0, "Normal ending", window, renderer);
   return EXIT_SUCCESS;
 }
