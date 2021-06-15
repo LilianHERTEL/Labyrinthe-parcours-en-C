@@ -3,6 +3,22 @@
 #include "paveSerpents.h"
 #include "bool.h"
 
+void translateRectangle(SDL_Renderer* renderer, SDL_Rect rectangle, int limit_x, int speed, int step, int color) {
+  SDL_Rect new_rect = rectangle;
+  int i;
+  for (i = 0; i < limit_x; i++){
+    //Met le fond blanc
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+    new_rect.x = new_rect.x + step*speed;
+    //Change la couleur de rendu à rouge
+    SDL_SetRenderDrawColor(renderer, 255*i/limit_x, 0, 0, 255);
+    //Dessine le rectangle rouge
+    SDL_RenderFillRect(renderer, &new_rect);
+    SDL_RenderPresent(renderer);
+    //SDL_Delay(200);
+  }
+}
 
 int main(int argc, char const *argv[])
 {
@@ -39,18 +55,20 @@ int main(int argc, char const *argv[])
 
   SDL_Delay(1000);
 
+  int step = 1;
   int speed = 5;
   int i;
   int limit_x;
   SDL_GetWindowSize(window, &limit_x, NULL);
   printf("%d\n", limit_x);
   limit_x = (limit_x - rectangle.w)/speed;
+  /*
   printf("%d\n", limit_x);
   for (i = 0; i < limit_x; i++){
     //Met le fond blanc
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    rectangle.x = rectangle.x + speed;
+    rectangle.x = rectangle.x + step*speed;
     //Change la couleur de rendu à rouge
     SDL_SetRenderDrawColor(renderer, 255*i/limit_x, 0, 0, 255);
     //Dessine le rectangle rouge
@@ -68,7 +86,7 @@ int main(int argc, char const *argv[])
     //Met le fond blanc
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    rectangle.y = rectangle.y + speed;
+    rectangle.y = rectangle.y + step*speed;
     //Change la couleur de rendu à rouge
     SDL_SetRenderDrawColor(renderer, 255-(255*j/limit_y), 255*j/limit_y, 0, 255);
     //Dessine le rectangle rouge
@@ -76,6 +94,42 @@ int main(int argc, char const *argv[])
     SDL_RenderPresent(renderer);
     SDL_Delay(10);
   }
+
+  step = -step;
+  SDL_GetWindowSize(window, &limit_x, NULL);
+  printf("%d\n", limit_x);
+  limit_x = (limit_x - rectangle.w)/speed;
+  printf("%d\n", limit_x);
+  for (i = 0; i < limit_x; i++){
+    //Met le fond blanc
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+    rectangle.x = rectangle.x + step*speed;
+    //Change la couleur de rendu à rouge
+    SDL_SetRenderDrawColor(renderer, 255*i/limit_x, 0, 0, 255);
+    //Dessine le rectangle rouge
+    SDL_RenderFillRect( renderer, &rectangle);
+    SDL_RenderPresent(renderer);
+    //SDL_Delay(200);
+  }
+  SDL_GetWindowSize(window, NULL, &limit_y);
+  printf("%d\n", limit_y);
+  limit_y = (limit_y - rectangle.h)/speed;
+  printf("%d\n", limit_y);
+  for (j = 0; j < limit_y; j++) {
+    //Met le fond blanc
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+    rectangle.y = rectangle.y + step*speed;
+    //Change la couleur de rendu à rouge
+    SDL_SetRenderDrawColor(renderer, 255-(255*j/limit_y), 255*j/limit_y, 0, 255);
+    //Dessine le rectangle rouge
+    SDL_RenderFillRect( renderer, &rectangle);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(10);
+  }
+  */
+ translateRectangle(renderer, rectangle, limit_x, speed, step);
 
   SDL_Delay(1000);
 
