@@ -1,11 +1,17 @@
 #include "gameoflife.h"
 
-int main() {
+int main(int argc, char **argv) {
 	Grid_t grid;
-	int x = 10, y = 10, i, iterations = 5, sheight, swidth, delay = 3000;
+	int x = 100, y = 100, i, iterations = 500, sheight, swidth, delay = 100;
 	Rule_t *life;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
+
+	(void)argc;
+	(void)argv;
+
+// initialisation
+/*************************************************************************************/
 
 	life = malloc(sizeof(Rule_t));
 	
@@ -24,7 +30,6 @@ int main() {
         free(life);
         exit(EXIT_FAILURE);
     }
-    
     
     if(tailleEcran(&sheight, &swidth) != 0)
     {
@@ -59,17 +64,19 @@ int main() {
 		return GOLERRORCODE;
 	}
 	
+/*************************************************************************************/
+	
 	initializeRandomGrid(grid);
 	displayGrid(grid);
 	drawGrid(renderer, grid);
-	/*
+
 	for(i = 0; i < iterations; ++i) {
 		nextIteration(&grid, life);
 		drawGrid(renderer, grid);
 		displayGrid(grid);
 		SDL_Delay(delay);
 	}
-	*/
+	
 	SDL_Delay(delay);
 	
 	SDL_DestroyRenderer(renderer);
@@ -86,25 +93,24 @@ void drawGrid(SDL_Renderer *renderer, Grid_t grid) {
 	
 	SDL_GetRendererOutputSize(renderer, &width, &height);
 	//SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-	//rectangle.w = height / grid.x;
-	rectangle.w = 10;
-	//rectangle.h = height / grid.y;
-	rectangle.h = 10;
+	rectangle.w = height / grid.x;
+	//rectangle.w = 10;
+	rectangle.h = height / grid.y;
+	//rectangle.h = 10;
 	for(i = 0; i < grid.x; ++i) {
 		rectangle.x = rectangle.w * i;
 		for(j = 0; j < grid.y; ++j) {
-			rectangle.y = rectangle.h * i;
-			if(!grid.grid[i][j]) {
+			rectangle.y = rectangle.h * j;
+			if(grid.grid[i][j]) {
 				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			}
 			else {
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			}
 			SDL_RenderFillRect(renderer, &rectangle);
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-			SDL_RenderPresent(renderer);
 		}
 	}
+	SDL_RenderPresent(renderer);
 }
 
 int tailleEcran(int *h, int* w)
