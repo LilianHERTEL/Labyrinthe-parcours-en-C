@@ -23,6 +23,7 @@ typedef struct {
 } Rule_t;
 
 void initLife(Rule_t *life);
+void initMaze(Rule_t *life);
 Grid_t createGrid(int x, int y);
 bool initializeSDL(void);
 void quitSDL(void);

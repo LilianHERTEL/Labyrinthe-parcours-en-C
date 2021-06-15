@@ -2,8 +2,8 @@
 
 int main(int argc, char **argv) {
 	Grid_t grid;
-	int x = 100, y = 100, i, iterations = 500, sheight, swidth, delay = 100;
-	Rule_t *life;
+	int x = 100, y = 100, i, iterations = 100, sheight, swidth, delay = 100;
+	Rule_t *rule;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 
@@ -12,14 +12,12 @@ int main(int argc, char **argv) {
 
 // initialisation
 /*************************************************************************************/
-
-	life = malloc(sizeof(Rule_t));
-	
-	if(life == NULL) {
+	//initialisation de la regle
+	rule = malloc(sizeof(Rule_t));
+	if(rule == NULL) {
 		return GOLERRORCODE;
 	}
-	
-	initLife(life);	
+	initLife(rule);	
 	
 	//initialisation de l'aleatoire
 	srand(time(0));
@@ -27,7 +25,7 @@ int main(int argc, char **argv) {
 	/* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError());      // l'initialisation de la SDL a échoué 
-        free(life);
+        free(rule);
         exit(EXIT_FAILURE);
     }
     
@@ -35,7 +33,7 @@ int main(int argc, char **argv) {
     {
         SDL_Log("Error : SDL Display Mode - %s\n", SDL_GetError()); 
         SDL_Quit();
-        free(life);
+        free(rule);
         exit(EXIT_FAILURE);
     }
 	
@@ -43,7 +41,7 @@ int main(int argc, char **argv) {
     window = SDL_CreateWindow("Jeu de la vie", 0, sheight/2 - sheight/4, swidth/2, sheight/2, SDL_WINDOW_RESIZABLE);
     if (window == NULL) {
         SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
-        free(life);
+        free(rule);
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
@@ -52,7 +50,7 @@ int main(int argc, char **argv) {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (renderer == NULL) {
         SDL_Log("Error : SDL renderer creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
-        free(life);
+        free(rule);
         SDL_DestroyWindow(window);
         SDL_Quit();
         exit(EXIT_FAILURE);
@@ -61,9 +59,11 @@ int main(int argc, char **argv) {
 	grid = createGrid(x, y);
 	if(grid.grid == NULL) {
 		fputs("error in grid creation", stderr);
-		return GOLERRORCODE;
+		free(rule);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        exit(EXIT_FAILURE);
 	}
-	
 /*************************************************************************************/
 	
 	initializeRandomGrid(grid);
@@ -71,20 +71,52 @@ int main(int argc, char **argv) {
 	drawGrid(renderer, grid);
 
 	for(i = 0; i < iterations; ++i) {
-		nextIteration(&grid, life);
+		nextIteration(&grid, rule);
+		drawGrid(renderer, grid);
+		displayGrid(grid);
+		SDL_Delay(delay);
+	}
+
+	SDL_Delay(delay);
+	initMaze(rule);
+	
+	for(i = 0; i < iterations; ++i) {
+		nextIteration(&grid, rule);
 		drawGrid(renderer, grid);
 		displayGrid(grid);
 		SDL_Delay(delay);
 	}
 	
-	SDL_Delay(delay);
-	
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-	free(life);
+	free(rule);
 	freeGrid(grid);
 	SDL_Quit();
 	return 0;
+}
+
+void initMaze(Rule_t *maze) {
+	int i;
+	
+	for(i = 0; i < 9; ++i) {
+		switch(i) {
+			case 0:
+				maze->survie[i] = 0;
+				maze->naissance[i] = 0;
+				break;
+			case 5:
+				maze->survie[i] = 0;
+				maze->naissance[i] = 0;
+				break;
+			case 3:
+				maze->naissance[i] = 1;
+				maze->survie[i] = 1;
+				break;
+			default:
+				maze->survie[i] = 1;
+				maze->naissance[i] = 0;
+		}
+	}
 }
 
 void drawGrid(SDL_Renderer *renderer, Grid_t grid) {
@@ -180,7 +212,6 @@ void initializeBlankGrid(Grid_t grid) {
 	}
 }
 
-//implementation provisoire
 void displayGrid(Grid_t grid) {
 	int i, j;
 	
@@ -246,6 +277,8 @@ void initLife(Rule_t *life) {
 		switch(i) {
 			case 3:
 				life->naissance[i] = 1;
+				life->survie[i] = 1;
+				break;
 			case 2:
 				life->survie[i] = 1;
 				break;
