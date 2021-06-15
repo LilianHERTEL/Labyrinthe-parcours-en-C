@@ -2,21 +2,25 @@
 #include <stdio.h>
 #include "paveSerpents.h"
 #include "bool.h"
+#include "color.h"
 
-void translateRectangle(SDL_Renderer* renderer, SDL_Rect rectangle, int limit_x, int speed, int step, int color) {
-  SDL_Rect new_rect = rectangle;
+void translateRectangle(SDL_Renderer* renderer, SDL_Rect* rectangle, int limit_x, int speed, int step, char direction, SDL_Color beforeColor, SDL_Color c) {
+  SDL_Rect new_rect = *rectangle;
   int i;
-  for (i = 0; i < limit_x; i++){
+  for (i = 0; i < limit_x; i++) {
     //Met le fond blanc
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    new_rect.x = new_rect.x + step*speed;
+    if (direction == 'x') new_rect.x = new_rect.x + step*speed;
+    else new_rect.y = new_rect.y + step*speed;
+    
     //Change la couleur de rendu à rouge
-    SDL_SetRenderDrawColor(renderer, 255*i/limit_x, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, (c.r)*i/limit_x, (c.g)*i/limit_x, (c.b)*i/limit_x, 255);
     //Dessine le rectangle rouge
     SDL_RenderFillRect(renderer, &new_rect);
     SDL_RenderPresent(renderer);
     //SDL_Delay(200);
+    *rectangle = new_rect;
   }
 }
 
@@ -56,12 +60,17 @@ int main(int argc, char const *argv[])
   SDL_Delay(1000);
 
   int step = 1;
-  int speed = 5;
+  int speed = 1;
   int i;
   int limit_x;
   SDL_GetWindowSize(window, &limit_x, NULL);
   printf("%d\n", limit_x);
   limit_x = (limit_x - rectangle.w)/speed;
+
+  int limit_y;
+  SDL_GetWindowSize(window, NULL, &limit_y);
+  printf("%d\n", limit_y);
+  limit_y = (limit_y - rectangle.h)/speed;
   /*
   printf("%d\n", limit_x);
   for (i = 0; i < limit_x; i++){
@@ -129,7 +138,11 @@ int main(int argc, char const *argv[])
     SDL_Delay(10);
   }
   */
- translateRectangle(renderer, rectangle, limit_x, speed, step);
+  SDL_Color c = {255,0,0,0};
+  translateRectangle(renderer, &rectangle, limit_x, speed, step, 'x', c, c);
+  c.r = 0;
+  c.g = 255;
+  translateRectangle(renderer, &rectangle, limit_y, speed, step, 'y', c, c);
 
   SDL_Delay(1000);
 
