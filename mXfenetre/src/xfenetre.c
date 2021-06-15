@@ -1,7 +1,7 @@
 #include "xfenetre.h"
 
 int main(int argc, char **argv) {	
-	SDL_Windows *windows[4];
+	SDL_Windows *windows[NB];
 	int delay = 100;
 
 	(void)argc;
@@ -17,4 +17,22 @@ int main(int argc, char **argv) {
 	SDL_Quit();
 
 	return 0;
+}
+
+SDL_Window** createWindows(SDL_Windows *windows[], int delay) {
+	int i = 0, cont = 1;
+	
+	while(i < NB && cont) {
+		windows[i] = SDL_CreateWindow(i);
+		if(windows[i] == NULL) {
+			cont = 0;
+		}
+		++i;
+	}
+	if(cont == 0) {
+		while(--i <= 0) {
+			SDL_DestroyWindow(windows[i]);
+			fputs("error windows", stderr);
+		}
+	}
 }
