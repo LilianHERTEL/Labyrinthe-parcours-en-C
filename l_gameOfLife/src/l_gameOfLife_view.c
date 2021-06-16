@@ -3,26 +3,29 @@
 #include "grid.h"
 #include "l_gameOfLife.h"
 
-void drawGrid(SDL_Renderer *renderer, grid_t grid) {
-	int i, j, width, height;
-	SDL_Rect rectangle;
+void drawGrid(SDL_Window * window, SDL_Renderer *renderer, grid_t grid) {
+	int               i,
+                      j,
+                      poseX,
+                      poseY;
+	SDL_Rect          window_dimensions = {0},
+                      rectangle;
 	
-	SDL_GetRendererOutputSize(renderer, &width, &height);
-	//SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-	rectangle.w = height / grid.x;
-	//rectangle.w = 10;
-	rectangle.h = height / grid.y;
-	//rectangle.h = 10;
-	for(i = 0; i < grid.x; ++i) {
-		rectangle.x = rectangle.w * i;
-		for(j = 0; j < grid.y; ++j) {
-			rectangle.y = rectangle.h * j;
-			if(grid.grid[i][j]) {
-				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-			}
-			else {
-				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			}
+	SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); 
+
+    SDL_SetRenderDrawColor(renderer, 200, 200, 200, 0);
+	SDL_RenderClear(renderer);
+	
+	rectangle.w = window_dimensions.w / grid.x ;
+	rectangle.h = window_dimensions.h / grid.y ;
+    poseX = (window_dimensions.w - rectangle.w * grid.x) / 2 ;
+    poseY = (window_dimensions.h - rectangle.h * grid.y) / 2 ;
+
+	for(i = 0; i < grid.x; i++) {
+		rectangle.y = poseY + rectangle.w * i;
+		for(j = 0; j < grid.y; j++) {
+			rectangle.x = poseX + rectangle.h * j;
+			SDL_SetRenderDrawColor(renderer, !grid.grid[i][j]*255, !grid.grid[i][j]*255, !grid.grid[i][j]*255, 255);
 			SDL_RenderFillRect(renderer, &rectangle);
 		}
 	}
@@ -43,11 +46,11 @@ int screenSize(int *h, int* w) {
 	return code;
 }
 
-void startGoL(grid_t grid, rules_t* rules, int iterations, int delay, SDL_Renderer* renderer) {
+void startGoL(grid_t grid, rules_t* rules, int iterations, int delay, SDL_Window* window, SDL_Renderer* renderer) {
 	int i;
 	for(i = 0; i < iterations; ++i) {
 		nextIteration(&grid, rules);
-		drawGrid(renderer, grid);
+		drawGrid(window, renderer, grid);
 		displayGrid(grid);
 		SDL_Delay(delay);
 	}

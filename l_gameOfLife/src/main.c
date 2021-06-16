@@ -6,7 +6,7 @@
 
 int main(int argc, char const *argv[]) {
     grid_t grid;
-	int x = 100, y = 100, iterations = 100, sheight, swidth, delay = 100;
+	int x = 20, y = 20, iterations = 30, sheight, swidth, delay = 100;
 	rules_t *rules;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
@@ -34,7 +34,7 @@ int main(int argc, char const *argv[]) {
     }
 	
 	// Création de la fenetre
-    window = SDL_CreateWindow("Jeu de la vie", 0, sheight/2 - sheight/4, swidth/2, sheight/2, SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("Jeu de la vie", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, swidth/2, swidth/2, SDL_WINDOW_SHOWN);
     if (window == NULL) {
 		free(rules);
 		quitSDL(false, "Error : SDL window creation", window, NULL);
@@ -55,13 +55,13 @@ int main(int argc, char const *argv[]) {
 	
 	initializeRandomGrid(grid);
 	displayGrid(grid);
-	drawGrid(renderer, grid);
+	drawGrid(window, renderer, grid);
 
-	startGoL(grid, rules, iterations, delay, renderer);
+	startGoL(grid, rules, iterations, delay, window, renderer);
 
 	SDL_Delay(delay);
 	initMaze(rules);
-	startGoL(grid, rules, iterations, delay, renderer);
+	startGoL(grid, rules, iterations, delay, window, renderer);
 
 	waitForQuitSDL();
 	
