@@ -1,6 +1,6 @@
 FIC = $(shell ls *.c)
 EXEC = ../bin/
-BIN = minijeu
+BIN = animation
 DEBUG = -DDEBUG
 LFLAGS = -lSDL2 -lSDL2_image
 OPTIONS = -Wall -Wextra -g
