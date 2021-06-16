@@ -1,6 +1,6 @@
 FIC = $(shell ls *.c)
-EXEC = ./
-BIN = a.out
+EXEC = ../bin/
+BIN = mxfenetres
 DEBUG = -DDEBUG
 LFLAGS = -lSDL2
 OPTIONS = -Wall -Wextra -g
