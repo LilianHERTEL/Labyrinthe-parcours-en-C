@@ -1,7 +1,7 @@
 #pragma once 
 #include <SDL2/SDL.h>
 #include "grid.h"
-#include "l_gameOfLife.h"
+#include "gameOfLife.h"
 
 //void drawGrid(SDL_Renderer *renderer, grid_t grid);
 void drawGrid(SDL_Window * window, SDL_Renderer *renderer, grid_t grid);

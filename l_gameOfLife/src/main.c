@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <time.h>
-#include "l_gameOfLife_view.h"
-#include "l_gameOfLife.h"
+#include "gameOfLife_view.h"
+#include "gameOfLife.h"
 #include "mySDL.h"
 
 int main(int argc, char const *argv[]) {

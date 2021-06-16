@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
-#include "l_gameOfLife.h"
+#include "gameOfLife.h"
 #include "bool.h"
 
 /* REGLES PAS BONNES ? */
