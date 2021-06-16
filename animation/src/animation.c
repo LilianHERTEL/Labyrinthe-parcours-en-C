@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include "animation.h"
 
 /**
  * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
