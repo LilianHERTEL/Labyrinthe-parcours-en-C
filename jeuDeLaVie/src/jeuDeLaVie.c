@@ -1,17 +1,14 @@
 #include "jeuDeLaVie.h"
 
 /**
- * @brief Termine en quittant la sdl
+ * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
  * 
- * @param ok 
- * @param msg 
- * @param window 
- * @param renderer 
+ * @param ok 0 : erreur, 1 :normal
+ * @param msg message de fin
+ * @param window fenetre a fermer
+ * @param renderer rendu a fermer
  */
-void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
-                      char const* msg,                                      // message à afficher
-                      SDL_Window* window,                         // fenêtre à fermer
-                      SDL_Renderer* renderer)                      // renderer à fermer
+void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* renderer)
 {                           
   char msg_formated[255];                                         
   int l;                                                          
@@ -27,12 +24,9 @@ void end_sdl(char ok,                                                     // fin
   if (renderer != NULL) SDL_DestroyRenderer(renderer);                            
   if (window != NULL)   SDL_DestroyWindow(window);                                        
 
-  SDL_Quit();                                                     
-
-  if (!ok) {                                                      
-         exit(EXIT_FAILURE);                                              
-  }                                                               
+  SDL_Quit();                                                            
 }
+
 
 /**
  * @brief Affiche une matrice d'entiers dans la fenetre
@@ -142,31 +136,44 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    SDL_Window* window = NULL;
-    SDL_Renderer* renderer = NULL;
-    SDL_DisplayMode screen;
+    SDL_Window       * window = NULL;
+    SDL_Renderer     * renderer = NULL;
+    SDL_DisplayMode    screen;
+    int             ** grid,
+                       n = 50,
+                       m = 50;
+    rule_t           * rule;
 
     /* INITIALISATIONS */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(1, "ERROR SDL INIT", window, renderer);
 
-    SDL_GetCurrentDisplayMode(0, &screen);
-    window = SDL_CreateWindow("Jeu de la vie",
-                        SDL_WINDOWPOS_CENTERED,
-                        SDL_WINDOWPOS_CENTERED, 
-                        screen.w * 0.8,
-                        screen.h * 0.8,
-                        SDL_WINDOW_RESIZABLE);
-    if (window == NULL) end_sdl(1, "ERROR WINDOW CREATION", window, renderer);
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+    {
+        end_sdl(0, "ERROR SDL INIT", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
+
+    if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
+    {
+        end_sdl(0, "ERROR GET_DISPLAY_MODE", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
+
+    window = SDL_CreateWindow("Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+                                screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
+    if (window == NULL) 
+    {
+        end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == NULL) end_sdl(1, "ERROR RENDERER CREATION", window, renderer);
+    if (renderer == NULL) 
+    {
+        end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
 
     /*TRAITEMENT*/
-
-    int **grid,
-             n = 50,
-             m = 50;
-    rule_t *rule;
 
     rule = malloc(sizeof(rule_t));
 	if(rule) 
