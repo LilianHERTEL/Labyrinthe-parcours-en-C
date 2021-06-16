@@ -1,5 +1,13 @@
 #include "jeuDeLaVie.h"
 
+/**
+ * @brief Termine en quittant la sdl
+ * 
+ * @param ok 
+ * @param msg 
+ * @param window 
+ * @param renderer 
+ */
 void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
                       char const* msg,                                      // message à afficher
                       SDL_Window* window,                         // fenêtre à fermer
@@ -26,6 +34,15 @@ void end_sdl(char ok,                                                     // fin
   }                                                               
 }
 
+/**
+ * @brief Affiche une matrice d'entiers dans la fenetre
+ * 
+ * @param window 
+ * @param renderer 
+ * @param grille 
+ * @param n 
+ * @param m 
+ */
 void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n, int m) 
 {
 	int               i,
@@ -64,7 +81,13 @@ void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n,
 	SDL_RenderPresent(renderer);
 }
 
-
+/**
+ * @brief Affiche une execution du jeu de la vie
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
 int main(int argc, char **argv) 
 {
     (void)argc;

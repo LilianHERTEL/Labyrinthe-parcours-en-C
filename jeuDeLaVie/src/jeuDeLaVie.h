@@ -7,6 +7,23 @@
 #include "matrice.h"
 #include "rules.h"
 
-//void end_sdl(char ok,char const* msg,SDL_Window* window,SDL_Renderer* renderer); 
+/**
+ * @brief Termine en quittant la sdl
+ * 
+ * @param ok 
+ * @param msg 
+ * @param window 
+ * @param renderer 
+ */
+void end_sdl(char ok,char const* msg,SDL_Window* window,SDL_Renderer* renderer); 
 
-//void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n, int m); 
+/**
+ * @brief Affiche une matrice d'entiers dans la fenetre
+ * 
+ * @param window 
+ * @param renderer 
+ * @param grille 
+ * @param n 
+ * @param m 
+ */
+void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n, int m); 
