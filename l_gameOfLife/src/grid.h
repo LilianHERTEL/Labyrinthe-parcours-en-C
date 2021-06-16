@@ -1,8 +1,9 @@
 #pragma once
 #include <stdio.h>
+#include "bool.h"
 
 typedef struct grid {
-    bool **grid;
+    bool_t **grid;
 	int x;
 	int y;
 } grid_t;
