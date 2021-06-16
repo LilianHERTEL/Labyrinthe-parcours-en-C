@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <SDL2/SDL.h>
+#include "matrice.h"
 
 void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
                       char const* msg,                                      // message à afficher
@@ -28,71 +28,6 @@ void end_sdl(char ok,                                                     // fin
   if (!ok) {                                                      
          exit(EXIT_FAILURE);                                              
   }                                                               
-}
-
-void liberation_grille(int ** grille, int n)
-{
-    int     i;
-
-    for(i=0; i < n; i++)
-    {
-        free(grille[i]);
-    }
-    free(grille);
-}
-
-int ** allocGrid(int n, int m)
-{
-   int  ** grille,
-            i = 0;
-
-    grille = malloc(n * sizeof(int *));
-
-    if(grille)
-    {	
-        do {
-            grille[i] = (int *)malloc(m * sizeof(int));
-	        i++;
-        } while(i < n && grille[i-1] != NULL);
-
-        if(grille[i-1] == NULL)
-        {
-            liberation_grille(grille, i-1);
-            grille = NULL;
-        }
-    } 
-    return grille;
-}
-
-int ** createGrid(int ** grille, int n, int m)
-{
-    int i,
-          j;
-    
-    srand (time (NULL));
-    for(i=0; i<n; i++)
-    {
-        for(j=0; j<m; j++)
-        {
-            grille[i][j] = rand() % 2;
-        }
-    }
-    return grille;
-}
-
-void afficherGrille(int ** grille, int n, int m)
-{
-    int i,
-          j;
-    
-    for(i=0; i<n; i++)
-    {
-        for(j=0; j<m; j++)
-        {
-            printf("%d ", grille[i][j]);
-        }
-        printf("\n");
-    }
 }
 
 void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n, int m) {
@@ -156,10 +91,10 @@ int main(int argc, char **argv)
     if(grille)
     {
         grille = createGrid(grille, n, m);
-        //afficherGrille(grille, n, m);
+        //displayGrid(grille, n, m);
         drawGrid(window, renderer, grille, n, m);
         SDL_Delay(2000);
-        liberation_grille(grille, n);
+        freeGrid(grille, n);
     }
 
     end_sdl(0, "Normal ending", window, renderer);
