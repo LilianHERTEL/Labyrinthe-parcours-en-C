@@ -8,12 +8,12 @@
 #include "rules.h"
 
 /**
- * @brief Termine en quittant la sdl
+ * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
  * 
- * @param ok 
- * @param msg 
- * @param window 
- * @param renderer 
+ * @param ok 0 : erreur, 1 :normal
+ * @param msg message de fin
+ * @param window fenetre a fermer
+ * @param renderer rendu a fermer
  */
 void end_sdl(char ok,char const* msg,SDL_Window* window,SDL_Renderer* renderer); 
 
