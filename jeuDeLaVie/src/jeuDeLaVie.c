@@ -1,6 +1,6 @@
 #include "jeuDeLaVie.h"
 
-void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
+/*void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
                       char const* msg,                                      // message à afficher
                       SDL_Window* window,                         // fenêtre à fermer
                       SDL_Renderer* renderer)                      // renderer à fermer
@@ -59,7 +59,7 @@ void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n,
 		}
 	}
 	SDL_RenderPresent(renderer);
-}
+}*/
 
 
 int main(int argc, char **argv) 
@@ -67,12 +67,12 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    SDL_Window* window = NULL;
+    /*SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
-    SDL_DisplayMode screen;
+    SDL_DisplayMode screen;*/
 
     /* INITIALISATIONS */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(1, "ERROR SDL INIT", window, renderer);
+    /*if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(1, "ERROR SDL INIT", window, renderer);
 
     SDL_GetCurrentDisplayMode(0, &screen);
     window = SDL_CreateWindow("Jeu de la vie",
@@ -84,14 +84,14 @@ int main(int argc, char **argv)
     if (window == NULL) end_sdl(1, "ERROR WINDOW CREATION", window, renderer);
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == NULL) end_sdl(1, "ERROR RENDERER CREATION", window, renderer);
+    if (renderer == NULL) end_sdl(1, "ERROR RENDERER CREATION", window, renderer);*/
 
     /*TRAITEMENT*/
 
     int **grid,
-             n = 5,
-             m = 5;
-    int i, iterations = 20;
+             n = 3,
+             m = 3;
+    //int i, iterations = 20;
     rule_t *rule;
 
     rule = malloc(sizeof(rule_t));
@@ -104,12 +104,13 @@ int main(int argc, char **argv)
         {
             grid = createRandomGrid(grid, n, m);
             displayGrid(grid, n, m);
-            drawGrid(window, renderer, grid, n, m);
+
+            //drawGrid(window, renderer, grid, n, m);
             printf("\n\n");
-            SDL_Delay(1000);
+            //SDL_Delay(1000);
             nextIteration(&grid, n, m, rule);
             displayGrid(grid, n, m);
-            drawGrid(window, renderer, grid, n, m);
+            //drawGrid(window, renderer, grid, n, m);
             
             /*for(i = 0; i < iterations; ++i) {
                 nextIteration(&grid, n, m, rule);
@@ -118,12 +119,12 @@ int main(int argc, char **argv)
                 SDL_Delay(300);
             }*/
 
-            SDL_Delay(1000);
+            //SDL_Delay(1000);
             free(rule);
             freeGrid(grid, n);
         }
     }
 
-    end_sdl(0, "Normal ending", window, renderer);
+    //end_sdl(0, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
 }
