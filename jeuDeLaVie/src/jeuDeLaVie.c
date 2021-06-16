@@ -37,7 +37,7 @@ void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n,
 	
 	SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); 
 
-    SDL_SetRenderDrawColor(renderer, 200, 200, 200, 0);
+    SDL_SetRenderDrawColor(renderer, 150, 150, 255, 0);
 	SDL_RenderClear(renderer);
 
 	rectangle.w = window_dimensions.h / m ;
@@ -92,27 +92,36 @@ int main(int argc, char **argv)
     /*TRAITEMENT*/
 
     int **grid,
-             n = 100,
-             m = 100;
-    int i, iterations = 40;
+             n = 50,
+             m = 50;
+    int i, iterations = 30;
     rule_t *rule;
 
     rule = malloc(sizeof(rule_t));
-	if(rule) {
-		
-        initLife(rule);	
-
+	if(rule) 
+    {
         grid = allocGrid(n,m);
         if(grid)
         {
             grid = createRandomGrid(grid, n, m);
             drawGrid(window, renderer, grid, n, m);
+
+            initLife(rule);	
             
             for(i = 0; i < iterations; ++i) {
                 nextIteration(&grid, n, m, rule);
                 drawGrid(window, renderer, grid, n, m);
-                SDL_Delay(200);
+                SDL_Delay(100);
             }
+
+            SDL_Delay(1000);
+            /*initMaze(rule);	
+            
+            for(i = 0; i < iterations; ++i) {
+                nextIteration(&grid, n, m, rule);
+                drawGrid(window, renderer, grid, n, m);
+                SDL_Delay(100);
+            }*/
 
             //SDL_Delay(1000);
             free(rule);
