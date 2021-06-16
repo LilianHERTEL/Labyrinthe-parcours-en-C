@@ -1,14 +1,16 @@
 #include <stdio.h>
+#include <time.h>
 #include "l_gameOfLife_view.h"
 #include "l_gameOfLife.h"
-#include <time.h>
+#include "mySDL.h"
 
 int main(int argc, char const *argv[]) {
     grid_t grid;
-	int x = 100, y = 100, i, iterations = 100, sheight, swidth, delay = 100;
+	int x = 100, y = 100, iterations = 100, sheight, swidth, delay = 100;
 	rules_t *rules;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
+	bool_t status;
 
 	(void)argc;
 	(void)argv;
@@ -22,75 +24,50 @@ int main(int argc, char const *argv[]) {
 	
 	srand(time(0));
 	
-	/* Initialisation de la SDL  + gestion de l'échec possible */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError());
-        free(rules);
-        exit(EXIT_FAILURE);
-    }
+	status = initializeSDL();
+	if (!status) quitSDL(false, "Error : SDL initialization", NULL, NULL);
+	
     
-    if(screenSize(&sheight, &swidth) != 0)
-    {
-        SDL_Log("Error : SDL Display Mode - %s\n", SDL_GetError()); 
-        SDL_Quit();
-        free(rules);
-        exit(EXIT_FAILURE);
+    if(screenSize(&sheight, &swidth) != 0) {
+		free(rules);
+		quitSDL(false, "Error : SDL display mode", NULL, NULL);
     }
 	
-	//creation de la fenetre
+	// Création de la fenetre
     window = SDL_CreateWindow("Jeu de la vie", 0, sheight/2 - sheight/4, swidth/2, sheight/2, SDL_WINDOW_RESIZABLE);
     if (window == NULL) {
-        SDL_Log("Error : SDL window 1 creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
-        free(rules);
-        SDL_Quit();
-        exit(EXIT_FAILURE);
+		free(rules);
+		quitSDL(false, "Error : SDL window creation", window, NULL);
     }
     
-    //creation du renderer
+    // Création du renderer
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (renderer == NULL) {
-        SDL_Log("Error : SDL renderer creation - %s\n", SDL_GetError());   // échec de la création de la fenêtre
         free(rules);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        exit(EXIT_FAILURE);
+		quitSDL(false, "Error : SDL renderer creation", window, renderer);
     }
 	
 	grid = createGrid(x, y);
 	if(grid.grid == NULL) {
-		fputs("error in grid creation", stderr);
 		free(rules);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        exit(EXIT_FAILURE);
+		quitSDL(false, "Error : Grid creation", window, renderer);
 	}
 	
 	initializeRandomGrid(grid);
 	displayGrid(grid);
 	drawGrid(renderer, grid);
 
-	for(i = 0; i < iterations; ++i) {
-		nextIteration(&grid, rules);
-		drawGrid(renderer, grid);
-		displayGrid(grid);
-		SDL_Delay(delay);
-	}
+	startGoL(grid, rules, iterations, delay, renderer);
 
 	SDL_Delay(delay);
 	initMaze(rules);
+	startGoL(grid, rules, iterations, delay, renderer);
+
+	waitForQuitSDL();
 	
-	for(i = 0; i < iterations; ++i) {
-		nextIteration(&grid, rules);
-		drawGrid(renderer, grid);
-		displayGrid(grid);
-		SDL_Delay(delay);
-	}
-	
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
 	free(rules);
 	freeGrid(grid);
-	SDL_Quit();
+	quitSDL(true, "SDL END", window, renderer);
 
 	return 0;
 }

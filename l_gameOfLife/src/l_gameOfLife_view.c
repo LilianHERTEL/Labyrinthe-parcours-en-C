@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "grid.h"
+#include "l_gameOfLife.h"
 
 void drawGrid(SDL_Renderer *renderer, grid_t grid) {
 	int i, j, width, height;
@@ -28,19 +29,26 @@ void drawGrid(SDL_Renderer *renderer, grid_t grid) {
 	SDL_RenderPresent(renderer);
 }
 
-int screenSize(int *h, int* w)
-{
-    SDL_DisplayMode current;
-    int code = 0;
+int screenSize(int *h, int* w) {
+	SDL_DisplayMode current;
+	int code = 0;
 
-    if(SDL_GetCurrentDisplayMode(0, &current) != 0)
-   {
-       code = 1;
-   }
-   else
-   {
-        *h = current.h;
-        *w = current.w;
-   }
-    return code;
+	if(SDL_GetCurrentDisplayMode(0, &current) != 0) {
+		code = 1;
+	}
+	else {
+		*h = current.h;
+		*w = current.w;
+	}
+	return code;
+}
+
+void startGoL(grid_t grid, rules_t* rules, int iterations, int delay, SDL_Renderer* renderer) {
+	int i;
+	for(i = 0; i < iterations; ++i) {
+		nextIteration(&grid, rules);
+		drawGrid(renderer, grid);
+		displayGrid(grid);
+		SDL_Delay(delay);
+	}
 }

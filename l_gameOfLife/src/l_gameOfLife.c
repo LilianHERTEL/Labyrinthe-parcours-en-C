@@ -3,21 +3,22 @@
 #include "l_gameOfLife.h"
 #include "bool.h"
 
+/* REGLES PAS BONNES ? */
 void initLife(rules_t *life) {
 	int i;
 	
 	for(i = 0; i < 9; ++i) {
 		switch(i) {
 			case 3:
-				life->naissance[i] = 1;
-				life->survie[i] = 1;
+				life->naissance[i] = true;
+				life->survie[i] = true;
 				break;
 			case 2:
-				life->survie[i] = 1;
+				life->survie[i] = true;
 				break;
 			default:
-				life->naissance[i] = 0;
-				life->survie[i] = 0;
+				life->naissance[i] = false;
+				life->survie[i] = false;
 		}
 	}
 }
@@ -28,20 +29,20 @@ void initMaze(rules_t *maze) {
 	for(i = 0; i < 9; ++i) {
 		switch(i) {
 			case 0:
-				maze->survie[i] = 0;
-				maze->naissance[i] = 0;
+				maze->survie[i] = false;
+				maze->naissance[i] = false;
 				break;
 			case 5:
-				maze->survie[i] = 0;
-				maze->naissance[i] = 0;
+				maze->survie[i] = false;
+				maze->naissance[i] = false;
 				break;
 			case 3:
-				maze->naissance[i] = 1;
-				maze->survie[i] = 1;
+				maze->naissance[i] = true;
+				maze->survie[i] = true;
 				break;
 			default:
-				maze->survie[i] = 1;
-				maze->naissance[i] = 0;
+				maze->survie[i] = true;
+				maze->naissance[i] = false;
 		}
 	}
 }

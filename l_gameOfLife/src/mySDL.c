@@ -11,18 +11,18 @@ bool_t initializeSDL(void) {
 	return status;
 }
 
-void quitSDL(char ok,                                    // fin normale : ok = 0 ; anormale ok = 1
+void quitSDL(bool_t status,                              // fin normale : ok = 0 ; anormale ok = 1
              char const* msg,                            // message à afficher
              SDL_Window* window,                         // fenêtre à fermer
              SDL_Renderer* renderer) {                   // renderer à fermer                           
-  char msg_formated[255];                                         
-  int l;                                                          
+  char msg_formated[255];
+  int l;
 
-  if (!ok) {                                                      
-	strncpy(msg_formated, msg, 250);                                 
-	l = strlen(msg_formated);                                        
-	strcpy(msg_formated + l, " : %s\n");                     
-	SDL_Log(msg_formated, SDL_GetError());                   
+  if (!status) {
+    strncpy(msg_formated, msg, 250);                                 
+    l = strlen(msg_formated);                                        
+    strcpy(msg_formated + l, " : %s\n");                     
+    SDL_Log(msg_formated, SDL_GetError());                   
   }                                                               
 
   if (renderer != NULL) SDL_DestroyRenderer(renderer);                            
@@ -30,7 +30,18 @@ void quitSDL(char ok,                                    // fin normale : ok = 0
 
   SDL_Quit();                                                     
 
-  if (!ok) {
-	exit(EXIT_FAILURE);                                              
+  if (!status) {
+	  exit(EXIT_FAILURE);                                              
   }                                                               
+}
+
+void waitForQuitSDL(void) {
+  SDL_Event event;
+  SDL_bool exit = SDL_FALSE;
+  // Attente de la fermeture de la fenêtre
+  while(!exit) {
+    SDL_WaitEvent(&event);
+    if (event.type == SDL_QUIT) exit = SDL_TRUE;    
+  }
+
 }
