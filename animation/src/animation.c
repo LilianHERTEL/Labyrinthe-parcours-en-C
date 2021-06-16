@@ -5,10 +5,15 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
-                      char const* msg,                                      // message à afficher
-                      SDL_Window* window,                         // fenêtre à fermer
-                      SDL_Renderer* renderer)                      // renderer à fermer
+/**
+ * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
+ * 
+ * @param ok 0 : erreur, 1 :normal
+ * @param msg message de fin
+ * @param window fenetre a fermer
+ * @param renderer rendu a fermer
+ */
+void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* renderer)
 {                           
   char msg_formated[255];                                         
   int l;                                                          
@@ -22,14 +27,12 @@ void end_sdl(char ok,                                                     // fin
   }                                                               
 
   if (renderer != NULL) SDL_DestroyRenderer(renderer);                            
-  if (window != NULL)   SDL_DestroyWindow(window);                                        
-  IMG_Quit();
-  SDL_Quit();                                                     
+  if (window != NULL)   SDL_DestroyWindow(window); 
 
-  if (!ok) {                                                      
-         exit(EXIT_FAILURE);                                              
-  }                                                               
+  IMG_Quit();
+  SDL_Quit();                                                            
 }
+
 
 void placerImage(SDL_Texture* my_texture,SDL_Window* window,SDL_Renderer* renderer, float zoom, float destX, float destY) 
 {
@@ -89,57 +92,82 @@ void animation(SDL_Texture *sol,SDL_Texture * fond, SDL_Texture * my_texture, SD
   SDL_RenderClear(renderer);       
 }
 
+
 int main(int argc, char **argv) 
 {
   (void)argc;
   (void)argv;
 
-  SDL_Window* window = NULL;
-  SDL_Renderer* renderer = NULL;
-  SDL_DisplayMode screen;
+  SDL_Window       * window = NULL;
+  SDL_Renderer     * renderer = NULL;
+  SDL_DisplayMode    screen;
+  SDL_Texture      * perso,
+                   * fond,
+                   * sol;
 
   /* INITIALISATIONS */
-  if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(1, "ERROR SDL INIT", window, renderer);
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+  {
+      end_sdl(0, "ERROR SDL INIT", window, renderer);
+      exit(EXIT_FAILURE); 
+  }
 
-  SDL_GetCurrentDisplayMode(0, &screen);
-  window = SDL_CreateWindow("Animation",
-                        SDL_WINDOWPOS_CENTERED,
-                        SDL_WINDOWPOS_CENTERED, 
-                        screen.w * 0.8,
-                        screen.h * 0.8,
-                        SDL_WINDOW_RESIZABLE);
-  if (window == NULL) end_sdl(1, "ERROR WINDOW CREATION", window, renderer);
+  if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
+  {
+      end_sdl(0, "ERROR GET_DISPLAY_MODE", window, renderer);
+      exit(EXIT_FAILURE); 
+  }
+
+  window = SDL_CreateWindow("Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+                              screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
+  if (window == NULL) 
+  {
+      end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
+      exit(EXIT_FAILURE); 
+  }
 
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-  if (renderer == NULL) end_sdl(1, "ERROR RENDERER CREATION", window, renderer);
+  if (renderer == NULL) 
+  {
+      end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
+      exit(EXIT_FAILURE); 
+  }
 
   /*TRAITEMENT*/
-  SDL_Texture * perso; 
-  perso = IMG_LoadTexture(renderer,"../img/adventurer_tilesheet.png");
-  if (perso == NULL) end_sdl(1, "Echec du chargement de l'image dans la texture", window, renderer);
 
-  SDL_Texture * fond; 
+  //Creation de toutes les textures
+  perso = IMG_LoadTexture(renderer,"../img/adventurer_tilesheet.png");
+  if (perso == NULL) 
+  {
+    end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+    exit(EXIT_FAILURE);
+  }
+
   fond = IMG_LoadTexture(renderer,"../img/background.png");
   if (fond == NULL) 
   {
     SDL_DestroyTexture(perso); 
-    end_sdl(1, "Echec du chargement de l'image dans la texture", window, renderer);
+    end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+    exit(EXIT_FAILURE);
   }
 
-  SDL_Texture * sol; 
   sol = IMG_LoadTexture(renderer,"../img/groundDirt.png");
   if (sol == NULL) 
   {
     SDL_DestroyTexture(perso); 
     SDL_DestroyTexture(fond); 
-    end_sdl(1, "Echec du chargement de l'image dans la texture", window, renderer);
+    end_sdl(0, "Echec du chargement de l'image dans la texture", window, renderer);
+    exit(EXIT_FAILURE);
   }
 
+  //Jouer l'animation
   animation(sol, fond, perso, window, renderer);
 
+  //Destruction des textures utilisees
   SDL_DestroyTexture(perso); 
   SDL_DestroyTexture(fond); 
   SDL_DestroyTexture(sol); 
-  end_sdl(0, "Normal ending", window, renderer);
+
+  end_sdl(1, "Normal ending", window, renderer);
   return EXIT_SUCCESS;
 }
