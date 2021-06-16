@@ -92,8 +92,8 @@ int main(int argc, char **argv)
     /*TRAITEMENT*/
 
     int **grid,
-             n = 50,
-             m = 50;
+             n = 10,
+             m = 10;
     int i, iterations = 30;
     rule_t *rule;
 

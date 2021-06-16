@@ -1,5 +1,10 @@
 #include "rules.h"
 
+/**
+ * @brief Initialise les regles de vie
+ * 
+ * @param life regles
+ */
 void initLife(rule_t *life) {
 	int i;
 	
@@ -12,6 +17,11 @@ void initLife(rule_t *life) {
 	life->survie[3] = true;
 }
 
+/**
+ * @brief Initialise les regles de labyrinthe
+ * 
+ * @param maze regles
+ */
 void initMaze(rule_t *maze) 
 {
 	int i;
@@ -37,63 +47,47 @@ void initMaze(rule_t *maze)
 	}
 }
 
-
+/**
+ * @brief Donne le nombre de voisins d'une cellule
+ * 
+ * @param grid matrice d'entiers
+ * @param n nombre de lignes
+ * @param m nombre de colonnes
+ * @param i indice ligne de la cellule
+ * @param j indice colonne de la cellule
+ * @return int 
+ */
 int getNeighbours(int ** grid, int n, int m, int i, int j)
 {
 	int neighbours = 0;
 
-	if(i - 1 >= 0)
+	if(grid[(i-1 + n) % n][j] == 1)
 	{
-		if(grid[i-1][j] == 1)
-			neighbours++;
+		neighbours++;
 	}
-	else
+	if(grid[(i+1 + n) % n][j] == 1)
 	{
-		if(grid[n-1][j] == 1) 
-		{
-			neighbours++;
-		}
+		neighbours++;
 	}
-	if(i + 1 < n )
+	if(grid[i][(j-1 + m)%m] == 1)
 	{
-		if(grid[i+1][j] == 1)
-			neighbours++;
+		neighbours++;
 	}
-	else
+	if(grid[i][(j+1 + m)%m] == 1)
 	{
-		if(grid[0][j] == 1) 
-		{
-			neighbours++;
-		}
-	}
-
-	if(j - 1 >= 0 )
-	{
-		if(grid[i][j-1] == 1)
-			neighbours++;
-	}
-	else
-	{
-		if(grid[i][m-1] == 1) 
-		{
-			neighbours++;
-		}
-	}
-	if(j + 1 < m)
-	{
-		if(grid[i][j+1] == 1)
-			neighbours++;
-	}
-	else
-	{
-		if(grid[i][0] == 1) 
-		{
-			neighbours++;
-		}
+		neighbours++;
 	}
 	return neighbours;
 }
 
+/**
+ * @brief Fait evoluer la matrice selon les regles
+ * 
+ * @param grid matrice d'entiers
+ * @param n nombre de lignes
+ * @param m nombre de colonnes
+ * @param rule regles
+ */
 void nextIteration(int *** grid, int n, int m, rule_t *rule) {
 	int ** result;
 	int    i, 
