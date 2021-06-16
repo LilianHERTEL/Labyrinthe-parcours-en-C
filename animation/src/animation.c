@@ -28,7 +28,16 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
   SDL_Quit();                                                            
 }
 
-
+/**
+ * @brief Place une image a un endroit indique dans le render
+ * 
+ * @param my_texture la texture (image) a placer
+ * @param window la fenetre
+ * @param renderer le rendu de la fenetre
+ * @param zoom le niveau de zoom a appliquer
+ * @param destX la position x de l'image
+ * @param destY la position y de l'image
+ */
 void placerImage(SDL_Texture* my_texture,SDL_Window* window,SDL_Renderer* renderer, float zoom, float destX, float destY) 
 {
   SDL_Rect  source = {0},                // Rectangle définissant la zone de la texture à récupérer
@@ -46,6 +55,15 @@ void placerImage(SDL_Texture* my_texture,SDL_Window* window,SDL_Renderer* render
   SDL_RenderCopy(renderer, my_texture, &source, &destination);            
 }
 
+/**
+ * @brief Joue une animation avec un personnage, un sol et un fond
+ * 
+ * @param sol la texture du sol
+ * @param fond la texture du fond
+ * @param perso la planche de vignettes du personnage
+ * @param window la fenetre
+ * @param renderer le rendu de la fenetre
+ */
 void animation(SDL_Texture *sol,SDL_Texture * fond, SDL_Texture * perso, SDL_Window * window, SDL_Renderer * renderer)
 {
   SDL_Rect    source = {0},                // Rectangle définissant la zone totale de la planche
@@ -90,7 +108,13 @@ void animation(SDL_Texture *sol,SDL_Texture * fond, SDL_Texture * perso, SDL_Win
   SDL_RenderClear(renderer);       
 }
 
-
+/**
+ * @brief Joue une animation avec un personnage qui se deplace dans un decor
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
 int main(int argc, char **argv) 
 {
   (void)argc;
