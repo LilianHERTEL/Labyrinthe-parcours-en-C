@@ -106,7 +106,7 @@ int main(int argc, char **argv)
             displayGrid(grid, n, m);
 
             //drawGrid(window, renderer, grid, n, m);
-            printf("\n\n");
+            
             //SDL_Delay(1000);
             nextIteration(&grid, n, m, rule);
             displayGrid(grid, n, m);
