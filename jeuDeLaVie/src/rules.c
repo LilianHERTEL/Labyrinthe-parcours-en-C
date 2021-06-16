@@ -20,30 +20,6 @@ void initLife(rule_t *life) {
 	}
 }
 
-void initMaze(rule_t *maze) {
-	int i;
-	
-	for(i = 0; i < TAILLE; ++i) {
-		switch(i) {
-			case 0:
-				maze->survie[i] = false;
-				maze->naissance[i] = false;
-				break;
-			case 5:
-				maze->survie[i] = false;
-				maze->naissance[i] = false;
-				break;
-			case 3:
-				maze->naissance[i] = true;
-				maze->survie[i] = true;
-				break;
-			default:
-				maze->survie[i] = true;
-				maze->naissance[i] = false;
-		}
-	}
-}
-
 void nextIteration(int *** grid, int n, int m, rule_t *rule) {
 	int ** result;
 	int i, j, k, l, ma, na, neighbours;

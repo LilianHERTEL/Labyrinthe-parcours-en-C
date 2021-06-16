@@ -10,5 +10,4 @@ typedef struct {
 } rule_t;
 
 void initLife(rule_t *life);
-void initMaze(rule_t *life);
 void nextIteration(int *** grid, int n, int m, rule_t *rule);

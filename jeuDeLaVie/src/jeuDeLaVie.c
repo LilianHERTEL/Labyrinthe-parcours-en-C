@@ -119,14 +119,6 @@ int main(int argc, char **argv)
             }*/
 
             SDL_Delay(1000);
-            /*initMaze(rule);
-            
-            for(i = 0; i < iterations; ++i) {
-                nextIteration(&grid, n, m, rule);
-                drawGrid(window, renderer, grid, n, m);
-                //displayGrid(grid, n, m);
-                SDL_Delay(100);
-            }*/
             free(rule);
             freeGrid(grid, n);
         }
