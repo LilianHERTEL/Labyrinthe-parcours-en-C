@@ -1,9 +1,6 @@
 #include "snake.h"
 
-void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
-                      char const* msg,                                      // message à afficher
-                      SDL_Window* window,                         // fenêtre à fermer
-                      SDL_Renderer* renderer)                      // renderer à fermer
+void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* renderer)
 {                           
   char msg_formated[255];                                         
   int l;                                                          
@@ -19,11 +16,7 @@ void end_sdl(char ok,                                                     // fin
   if (renderer != NULL) SDL_DestroyRenderer(renderer);                            
   if (window != NULL)   SDL_DestroyWindow(window);                                        
 
-  SDL_Quit();                                                     
-
-  if (!ok) {                                                      
-         exit(EXIT_FAILURE);                                              
-  }                                                               
+  SDL_Quit();                                                            
 }
 
 void animationRectangles(SDL_Window * window, SDL_Renderer * renderer)
@@ -95,24 +88,37 @@ int main(int argc, char **argv)
     SDL_DisplayMode screen;
 
     /* INITIALISATIONS */
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(1, "ERROR SDL INIT", window, renderer);
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+    {
+        end_sdl(0, "ERROR SDL INIT", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
 
-    SDL_GetCurrentDisplayMode(0, &screen);
-    window = SDL_CreateWindow("Animation",
-                        SDL_WINDOWPOS_CENTERED,
-                        SDL_WINDOWPOS_CENTERED, 
-                        screen.w * 0.8,
-                        screen.h * 0.8,
-                        SDL_WINDOW_RESIZABLE);
-    if (window == NULL) end_sdl(1, "ERROR WINDOW CREATION", window, renderer);
+    if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
+    {
+        end_sdl(0, "ERROR GET_DISPLAY_MODE", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
+
+    window = SDL_CreateWindow("Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+                                screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
+    if (window == NULL) 
+    {
+        end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == NULL) end_sdl(1, "ERROR RENDERER CREATION", window, renderer);
+    if (renderer == NULL) 
+    {
+        end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
 
     /*TRAITEMENT*/
 
     animationRectangles(window, renderer);
 
-    end_sdl(0, "Normal ending", window, renderer);
+    end_sdl(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
 }
