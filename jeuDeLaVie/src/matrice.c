@@ -81,7 +81,7 @@ int ** createRandomGrid(int ** grid, int n, int m)
 void displayGrid(int ** grid, int n, int m)
 {
     int i,
-          j;
+        j;
     
     for(i=0; i<n; i++)
     {
