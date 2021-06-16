@@ -79,7 +79,7 @@ void nextIteration(int *** grid, int n, int m, rule_t *rule) {
 	for(i = 0; i < n; i++) {
 		for(j = 0; j < m; j++) {
 			neighbours = getNeighbours(*grid, n, m, i, j);
-			printf("cellule %d,%d : %d voisins\n", i, j, neighbours);
+			//printf("cellule %d,%d : %d voisins\n", i, j, neighbours);
 			
 			if((*grid)[i][j] == 1) {
 				result[i][j] = rule->survie[neighbours];
