@@ -1,8 +1,4 @@
+#pragma once
 #include <stdio.h>
 
-#ifndef BOOL_H
-#define BOOL_H
-
-typedef enum {false, true} bool;
-
-#endif
+typedef enum {false, true} bool_t;
