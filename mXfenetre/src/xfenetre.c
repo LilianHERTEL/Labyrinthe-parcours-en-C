@@ -1,7 +1,7 @@
 #include "xfenetre.h"
 
 int main(int argc, char **argv) {	
-	SDL_Windows *windows[NB];
+	SDL_Window *windows[NB];
 	int delay = 100;
 
 	(void)argc;
@@ -19,7 +19,18 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-SDL_Window** createWindows(SDL_Windows *windows[], int delay) {
+/*
+void moveWindows(SDL_Window *windows[], int delay) {
+	int x0, y0, x1, y1, x2, y2, x3, y3, i;
+	
+	for(i = 0; i < NB; ++i) {
+		
+	}
+	SDL_GetWindowPosition(windows[]
+	SDL_SetWindowsP
+}
+*/
+void createWindows(SDL_Window *windows[]) {
 	int i = 0, cont = 1;
 	
 	while(i < NB && cont) {
@@ -34,5 +45,13 @@ SDL_Window** createWindows(SDL_Windows *windows[], int delay) {
 			SDL_DestroyWindow(windows[i]);
 			fputs("error windows", stderr);
 		}
+	}
+}
+
+void destroyWindows(SDL_Window *windows[]) {
+	int i;
+	
+	for(i = 0; i < NB; ++i) {
+		SDL_DestroyWindow(windows[i]);
 	}
 }

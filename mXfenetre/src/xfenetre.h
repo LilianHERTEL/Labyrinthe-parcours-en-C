@@ -1,9 +1,9 @@
 #pragma once
 
-#include <STD2/STD.h>
+#include <SDL2/SDL.h>
 
 #define NB 4
 
-void moveWindows(SDL_Windows *windows[], int delay);
-SDL_Window** createWindows(void);
+void moveWindows(SDL_Window *windows[], int delay);
+void createWindows(SDL_Window *windows[]);
 void destroyWindows(SDL_Window *windows[]);
