@@ -1,5 +1,11 @@
 #include "X_fenetre.h"
 
+/**
+ * @brief Permet de deplacer une fenetre selon un pas
+ * 
+ * @param window la fenetre
+ * @param pas entier
+ */
 void deplacerFenetre(SDL_Window  * window, int pas)
 {
     SDL_Rect window_dimensions = {0};
@@ -8,6 +14,12 @@ void deplacerFenetre(SDL_Window  * window, int pas)
     SDL_SetWindowPosition(window, window_dimensions.x, window_dimensions.y + pas);
 }
 
+/**
+ * @brief Permet de redimensionner une fenetre selon un pas
+ * 
+ * @param window la fenetre
+ * @param pas entier
+ */
 void redimensionnerFenetre(SDL_Window  * window, int pas)
 {
     SDL_Rect window_dimensions = {0};
@@ -16,6 +28,13 @@ void redimensionnerFenetre(SDL_Window  * window, int pas)
     SDL_SetWindowSize(window, window_dimensions.w + pas, window_dimensions.h + pas);
 }
 
+/**
+ * @brief Affiche plusieurs fenetres a l'ecran, les fait bouger, puis les redimensionnent
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
 int main(int argc, char **argv) 
 {
     (void)argc;
@@ -33,7 +52,7 @@ int main(int argc, char **argv)
 
     /* Initialisation de la SDL  + gestion de l'échec possible */
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError());      // l'initialisation de la SDL a échoué 
+        SDL_Log("Error : SDL initialisation - %s\n", SDL_GetError()); 
         exit(EXIT_FAILURE);
     }
 
@@ -65,11 +84,9 @@ int main(int argc, char **argv)
         {
             SDL_DestroyWindow(window[i]);
         }
-
     }
     else
     {
-
         //On descend
         for(i=0; i<50; i++)
         {
@@ -92,7 +109,6 @@ int main(int argc, char **argv)
                 pas = -pas;
             }
         }
-
         //On agrandi
         for(i=0; i<50; i++)
         {
@@ -115,5 +131,5 @@ int main(int argc, char **argv)
     }
 
     SDL_Quit();
-    return 0;
+    return EXIT_SUCCESS;
 }

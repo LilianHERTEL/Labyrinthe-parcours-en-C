@@ -6,6 +6,18 @@
 
 #define NB_FENETRES 6
 
-int taileEcran(int *h, int* w);
-
+/**
+ * @brief Permet de deplacer une fenetre selon un pas
+ * 
+ * @param window la fenetre
+ * @param pas entier
+ */
 void deplacerFenetre(SDL_Window  * window, int pas);
+
+/**
+ * @brief Permet de redimensionner une fenetre selon un pas
+ * 
+ * @param window la fenetre
+ * @param pas entier
+ */
+void redimensionnerFenetre(SDL_Window  * window, int pas);
