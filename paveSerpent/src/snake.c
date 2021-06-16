@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <SDL2/SDL.h>
+#include "snake.h"
 
 void end_sdl(char ok,                                                     // fin normale : ok = 0 ; anormale ok = 1
                       char const* msg,                                      // message à afficher
