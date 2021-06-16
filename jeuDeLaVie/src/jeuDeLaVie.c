@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     grille = allocGrid(n,m);
     if(grille)
     {
-        grille = createGrid(grille, n, m);
+        grille = createRandomGrid(grille, n, m);
         //displayGrid(grille, n, m);
         drawGrid(window, renderer, grille, n, m);
         SDL_Delay(2000);

@@ -1,5 +1,11 @@
 #include "matrice.h"
 
+/**
+ * @brief Libere une matrice d'entiers
+ * 
+ * @param grid matrice d'entier
+ * @param n nombre de lignes de la matrice
+ */
 void freeGrid(int ** grid, int n)
 {
     int     i;
@@ -11,6 +17,13 @@ void freeGrid(int ** grid, int n)
     free(grid);
 }
 
+/**
+ * @brief Alloue l'espace pour une matrice d'entiers de taille n*m
+ * 
+ * @param n nombre de lignes
+ * @param m nombre de colonnes
+ * @return int** 
+ */
 int ** allocGrid(int n, int m)
 {
    int  ** grid,
@@ -34,7 +47,15 @@ int ** allocGrid(int n, int m)
     return grid;
 }
 
-int ** createGrid(int ** grid, int n, int m)
+/**
+ * @brief Creer une matrice avec des 0 et des 1 aleatoirement
+ * 
+ * @param grid matrice d'entiers
+ * @param n nombre de lignes
+ * @param m nombre de colonnes
+ * @return int** 
+ */
+int ** createRandomGrid(int ** grid, int n, int m)
 {
     int i,
           j;
@@ -50,6 +71,13 @@ int ** createGrid(int ** grid, int n, int m)
     return grid;
 }
 
+/**
+ * @brief Affiche la matrice dans le terminal
+ * 
+ * @param grid matrice d'entiers
+ * @param n nombre de lignes
+ * @param m nombre de colonnes
+ */
 void displayGrid(int ** grid, int n, int m)
 {
     int i,
