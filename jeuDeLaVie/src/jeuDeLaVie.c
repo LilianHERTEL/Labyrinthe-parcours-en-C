@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     if (SDL_Init(SDL_INIT_VIDEO) != 0) end_sdl(1, "ERROR SDL INIT", window, renderer);
 
     SDL_GetCurrentDisplayMode(0, &screen);
-    window = SDL_CreateWindow("Animation",
+    window = SDL_CreateWindow("Jeu de la vie",
                         SDL_WINDOWPOS_CENTERED,
                         SDL_WINDOWPOS_CENTERED, 
                         screen.w * 0.8,
