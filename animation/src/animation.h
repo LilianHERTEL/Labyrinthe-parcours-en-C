@@ -19,4 +19,4 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
 
 void placerImage(SDL_Texture* my_texture,SDL_Window* window,SDL_Renderer* renderer, float zoom, float destX, float destY);
 
-void animation(SDL_Texture *sol,SDL_Texture * fond, SDL_Texture * my_texture, SDL_Window * window, SDL_Renderer * renderer);
+void animation(SDL_Texture *sol,SDL_Texture * fond, SDL_Texture * perso, SDL_Window * window, SDL_Renderer * renderer);

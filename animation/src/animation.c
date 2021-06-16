@@ -31,56 +31,59 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
 
 void placerImage(SDL_Texture* my_texture,SDL_Window* window,SDL_Renderer* renderer, float zoom, float destX, float destY) 
 {
-     SDL_Rect  source = {0},                      // Rectangle définissant la zone de la texture à récupérer
-                        window_dimensions = {0},           // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
-                        destination = {0};                 // Rectangle définissant où la zone_source doit être déposée dans le renderer
+  SDL_Rect  source = {0},                // Rectangle définissant la zone de la texture à récupérer
+            window_dimensions = {0},     // Rectangle définissant la fenêtre
+            destination = {0};           // Rectangle définissant où la zone_source doit être déposée dans le renderer
 
-     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);         
-     SDL_QueryTexture(my_texture, NULL, NULL,&source.w, &source.h); 
+  SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);         
+  SDL_QueryTexture(my_texture, NULL, NULL,&source.w, &source.h); 
 
-     destination.w = source.w * zoom;      
-     destination.h = source.h * zoom;        
-     destination.x = destX;  
-     destination.y = destY;  
+  destination.w = source.w * zoom;      
+  destination.h = source.h * zoom;        
+  destination.x = destX;  
+  destination.y = destY;  
 
-     SDL_RenderCopy(renderer, my_texture, &source, &destination);            
-   }
+  SDL_RenderCopy(renderer, my_texture, &source, &destination);            
+}
 
-void animation(SDL_Texture *sol,SDL_Texture * fond, SDL_Texture * my_texture, SDL_Window * window, SDL_Renderer * renderer)
+void animation(SDL_Texture *sol,SDL_Texture * fond, SDL_Texture * perso, SDL_Window * window, SDL_Renderer * renderer)
 {
-  SDL_Rect    source = {0},                    // Rectangle définissant la zone totale de la planche
-                       window_dimensions = {0},         // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
-                       destination = {0},               // Rectangle définissant où la zone_source doit être déposée dans le renderer
-                       state = {0};                     // Rectangle de la vignette en cours dans la planche 
+  SDL_Rect    source = {0},                // Rectangle définissant la zone totale de la planche
+              window_dimensions = {0},     // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+              destination = {0},           // Rectangle définissant où la zone_source doit être déposée dans le renderer
+              state = {0};                 // Rectangle de la vignette en cours dans la planche 
+  int         offset_y,
+              offset_x,
+              x,
+              speed = 15, 
+              nb_images = 9;               // 9 Images sur la premiere ligne de la planche     
+  float       zoom = 2;  
 
   SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
-  SDL_QueryTexture(my_texture, NULL, NULL, &source.w, &source.h);
+  SDL_QueryTexture(perso, NULL, NULL, &source.w, &source.h);  
 
-  int           nb_images = 9;                 
-  float        zoom = 2.5;                      
-  int           offset_x = source.w / nb_images, 
-                 offset_y = source.h / 3;     
-
-  state.x = 0 ;                    
-  state.y = 0;        
+  // Dimensions de la vignette dans la planche
+  offset_x = source.w / nb_images, 
+  offset_y = source.h / 3;                 // 3 lignes sur la planche
+  // Dimensions de la vignette
   state.w = offset_x;             
   state.h = offset_y;             
-
+  // Dimensions du sprite a l'ecran
   destination.w = offset_x * zoom;       
   destination.h = offset_y * zoom;     
-
+  // Position du debut de l'animation 
   destination.y = window_dimensions.h - offset_y*zoom;
 
-  int speed = 20;
-  for (int x = 0; x < window_dimensions.w - destination.w; x += speed) {
-    destination.x = x;                 
-    state.x += offset_x;                
-    state.x %= source.w;                
+  for (x = 0; x < window_dimensions.w - destination.w; x += speed) 
+  {
+    destination.x = x;              // Position x de la vignette (elle bouge horizontalement)
+    state.x += offset_x;            // Vignette suivante
+    state.x %= source.w;            // Pour revenir a la vignette du debut        
     
     SDL_RenderClear(renderer);      
-    placerImage(fond, window, renderer, 4, 0 - x*0.8, - window_dimensions.w/2);
+    placerImage(fond, window, renderer, 3.5, 0 - x*0.8, - window_dimensions.w/2);
     placerImage(sol, window, renderer, 4, 0 - x * 1.5, window_dimensions.h - 150 );
-    SDL_RenderCopy(renderer, my_texture, &state, &destination);  
+    SDL_RenderCopy(renderer, perso, &state, &destination);  
     SDL_RenderPresent(renderer);        
     SDL_Delay(80);              
   }
