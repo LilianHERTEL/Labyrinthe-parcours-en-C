@@ -40,22 +40,26 @@ void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n,
     SDL_SetRenderDrawColor(renderer, 200, 200, 200, 0);
 	SDL_RenderClear(renderer);
 
-    rectangle.w = 10;
-    rectangle.h = 10;
-	//rectangle.w = window_dimensions.h / m ;
-	//rectangle.h = window_dimensions.h / n ;
+	rectangle.w = window_dimensions.h / m ;
+	rectangle.h = window_dimensions.h / n ;
     poseX = (window_dimensions.w - rectangle.w * m) / 2 ;
     poseY = (window_dimensions.h - rectangle.h * n) / 2 ;
 
 	for(i = 0; i < n; i++) {
-		rectangle.x = 0 + rectangle.w * i;
+		rectangle.y = poseY + rectangle.h * i;
 		for(j = 0; j < m; j++) {
-			rectangle.y = 0 + rectangle.h * j;
-            //printf("%d ", grille[i][j]);
-            SDL_SetRenderDrawColor(renderer, grille[i][j] * 255, grille[i][j] *255, grille[i][j] *255, 255);
+			rectangle.x = poseX + rectangle.w * j;
+            if(grille[i][j] == 0)
+            {
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            }
+            else
+            {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            }
+                
 			SDL_RenderFillRect(renderer, &rectangle);
 		}
-        //printf("\n");
 	}
 	SDL_RenderPresent(renderer);
 }
@@ -88,9 +92,9 @@ int main(int argc, char **argv)
     /*TRAITEMENT*/
 
     int **grid,
-             n = 5,
-             m = 5;
-    int i, iterations = 20;
+             n = 100,
+             m = 100;
+    int i, iterations = 40;
     rule_t *rule;
 
     rule = malloc(sizeof(rule_t));
@@ -102,18 +106,13 @@ int main(int argc, char **argv)
         if(grid)
         {
             grid = createRandomGrid(grid, n, m);
-            displayGrid(grid, n, m);
-            printf("\n");
             drawGrid(window, renderer, grid, n, m);
             
-            SDL_Delay(1000);
-            
-            /*for(i = 0; i < iterations; ++i) {
+            for(i = 0; i < iterations; ++i) {
                 nextIteration(&grid, n, m, rule);
                 drawGrid(window, renderer, grid, n, m);
-                //displayGrid(grid, n, m);
-                SDL_Delay(300);
-            }*/
+                SDL_Delay(200);
+            }
 
             //SDL_Delay(1000);
             free(rule);
