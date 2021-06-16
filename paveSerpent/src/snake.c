@@ -35,28 +35,30 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
  */
 void animationRectangles(SDL_Window * window, SDL_Renderer * renderer)
 {
-    SDL_Rect  window_dimensions = {0},
-                       r1 = {0},
-                       r2 = {0},
-                       r3 = {0};
-    int              pasXr1 = 35,
-                      pasYr1 = 25, 
-                      green1 = 255,
-                      pasR3 = 50;
+    SDL_Rect    window_dimensions = {0},
+                r1 = {0},
+                r2 = {0},
+                r3 = {0};
+    int         pasXr1 = 35,
+                pasYr1 = 25, 
+                green1 = 255,
+                pasR3 = 50;
 
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);      
     
+    //Dimensions r1
     r1.w = r1.h = window_dimensions.h/4;
     r1.x = (window_dimensions.w - r1.w)/2; 
     r1.y = (window_dimensions.h - r1.w)/2;
-
+    //Dimensions r2
     r2.w = r2.h = window_dimensions.h/3;
-
+    //Dimensions r3
     r3.w = r3.h = window_dimensions.h/7;
     r3.y = (window_dimensions.h - r3.w)/2;
 
     for(int i = 0; i< 200 ; i++)
     {
+        //Faire "rebondir" r1 sur les bords de la fenetre 
         if(! (r1.x + r1.w + pasXr1 <= window_dimensions.w && r1.x >= 0))
         {
             pasXr1 = -pasXr1;
@@ -67,9 +69,14 @@ void animationRectangles(SDL_Window * window, SDL_Renderer * renderer)
             pasYr1 = -pasYr1; 
             green1 = (green1 -25)%255;
         }
-        if(! (r3.x + r3.w + pasR3 <= window_dimensions.w && r3.x >= 0))
-            pasR3 = -pasR3;
 
+        //Faire "rebondir" r3 sur les bords de la fenetre
+        if(! (r3.x + r3.w + pasR3 <= window_dimensions.w && r3.x >= 0))
+        {
+            pasR3 = -pasR3;
+        }
+
+        //Avancer les rectangles
         r1.x = r1.x + pasXr1 ;
         r1.y = r1.y + pasYr1 ;
 
@@ -78,11 +85,12 @@ void animationRectangles(SDL_Window * window, SDL_Renderer * renderer)
        
         r3.x = (r3.x + pasR3) ;
        
+        //Afficher les rectangles dans le rendu
         SDL_SetRenderDrawColor(renderer,65, green1, 0,255);
         SDL_RenderFillRect(renderer, &r1);
         SDL_SetRenderDrawColor(renderer,255, 255, 0,255);
         SDL_RenderFillRect(renderer, &r2);
-         SDL_SetRenderDrawColor(renderer,255, 0, 0,255);
+        SDL_SetRenderDrawColor(renderer,255, 0, 0,255);
         SDL_RenderFillRect(renderer, &r3);
         SDL_SetRenderDrawColor(renderer,255, 255, 255,255);
         
