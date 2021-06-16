@@ -1,5 +1,13 @@
 #include "snake.h"
 
+/**
+ * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
+ * 
+ * @param ok 0 : erreur, 1 :normal
+ * @param msg message de fin
+ * @param window fenetre a fermer
+ * @param renderer rendu a fermer
+ */
 void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* renderer)
 {                           
   char msg_formated[255];                                         
@@ -19,6 +27,12 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
   SDL_Quit();                                                            
 }
 
+/**
+ * @brief Affiche 3 rectangles sur une fenetre, qui bougent
+ * 
+ * @param window La fenetre ou seront les rectangles
+ * @param renderer Le rendu de la fenetre ou seront les rectangles
+ */
 void animationRectangles(SDL_Window * window, SDL_Renderer * renderer)
 {
     SDL_Rect  window_dimensions = {0},
@@ -78,6 +92,13 @@ void animationRectangles(SDL_Window * window, SDL_Renderer * renderer)
     }
 }
 
+/**
+ * @brief Affiche et fait bouger 3 rectangles  l'ecran
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
 int main(int argc, char **argv) 
 {
     (void)argc;
