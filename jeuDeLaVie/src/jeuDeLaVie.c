@@ -66,15 +66,8 @@ void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n,
 		rectangle.y = poseY + rectangle.h * i;
 		for(j = 0; j < m; j++) {
 			rectangle.x = poseX + rectangle.w * j;
-            if(grille[i][j] == 0)
-            {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            }
-            else
-            {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            }
-                
+            
+            SDL_SetRenderDrawColor(renderer, !grille[i][j] * 255, !grille[i][j] * 255, !grille[i][j] * 255, 255);
 			SDL_RenderFillRect(renderer, &rectangle);
 		}
 	}
@@ -115,8 +108,8 @@ int main(int argc, char **argv)
     /*TRAITEMENT*/
 
     int **grid,
-             n = 10,
-             m = 10;
+             n = 50,
+             m = 50;
     int i, iterations = 30;
     rule_t *rule;
 
@@ -130,23 +123,21 @@ int main(int argc, char **argv)
             drawGrid(window, renderer, grid, n, m);
 
             initLife(rule);	
-            
             for(i = 0; i < iterations; ++i) {
                 nextIteration(&grid, n, m, rule);
                 drawGrid(window, renderer, grid, n, m);
                 SDL_Delay(100);
             }
-
             SDL_Delay(1000);
-            /*initMaze(rule);	
-            
+
+            initMaze(rule);	
             for(i = 0; i < iterations; ++i) {
                 nextIteration(&grid, n, m, rule);
                 drawGrid(window, renderer, grid, n, m);
                 SDL_Delay(100);
-            }*/
+            }
+            SDL_Delay(1000);
 
-            //SDL_Delay(1000);
             free(rule);
             freeGrid(grid, n);
         }

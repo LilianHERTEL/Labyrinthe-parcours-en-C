@@ -48,68 +48,50 @@ void initMaze(rule_t *maze)
 }
 
 /**
- * @brief Donne le nombre de voisins d'une cellule
- * 
- * @param grid matrice d'entiers
- * @param n nombre de lignes
- * @param m nombre de colonnes
- * @param i indice ligne de la cellule
- * @param j indice colonne de la cellule
- * @return int 
- */
-int getNeighbours(int ** grid, int n, int m, int i, int j)
-{
-	int neighbours = 0;
-
-	if(grid[(i-1 + n) % n][j] == 1)
-	{
-		neighbours++;
-	}
-	if(grid[(i+1 + n) % n][j] == 1)
-	{
-		neighbours++;
-	}
-	if(grid[i][(j-1 + m)%m] == 1)
-	{
-		neighbours++;
-	}
-	if(grid[i][(j+1 + m)%m] == 1)
-	{
-		neighbours++;
-	}
-	return neighbours;
-}
-
-/**
  * @brief Fait evoluer la matrice selon les regles
  * 
  * @param grid matrice d'entiers
  * @param n nombre de lignes
  * @param m nombre de colonnes
  * @param rule regles
+ * @return int** la nouvelle matrice
  */
 void nextIteration(int *** grid, int n, int m, rule_t *rule) {
 	int ** result;
 	int    i, 
 	       j, 
+		   k,
+		   l,
 		   neighbours;
 	
 	result = allocGrid(n, m);
 	
-	for(i = 0; i < n; i++) {
-		for(j = 0; j < m; j++) {
-			neighbours = getNeighbours(*grid, n, m, i, j);
-			
+	for(i = 0; i < n; i++) 
+	{
+		for(j = 0; j < m; j++) 
+		{
+			neighbours = 0;
+			for(k = -1; k < 2; ++k) 
+			{
+				for(l = -1; l < 2; ++l) 
+				{
+					neighbours += (*grid)[(i+k + n) % n][(j+l + m) % m];
+				}
+			}
+			neighbours -= (*grid)[i][j];
+
+
 			if((*grid)[i][j] == 1) 
 			{
-				result[i][j] = rule->survie[neighbours];
+				result[i][j] = (int)rule->survie[neighbours];
 			}
 			else 
 			{
-				result[i][j] = rule->naissance[neighbours];
+				result[i][j] = (int)rule->naissance[neighbours];
 			}
 		}
 	}
 	freeGrid(*grid, n);
 	*grid = result;
+
 }
