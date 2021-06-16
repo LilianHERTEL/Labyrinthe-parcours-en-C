@@ -1,17 +1,39 @@
 #include <stdio.h>
 #include "mySDL.h"
 
+void createWindows(SDL_Window* windows[], int nbWindows) {
+	SDL_DisplayMode display;
+	SDL_GetCurrentDisplayMode(0, &display);
+	int winWidth = display.h/10;
+	int winHeight = winWidth;
+	int windowsShift = winHeight;
+	int i;
+	for (i = 0; i < nbWindows; i++) {
+		windows[i] = SDL_CreateWindow("Jeu de la vie", (display.w/2 - winWidth/2) + i*windowsShift - (nbWindows*winWidth)/2, (display.h/2 - winHeight/2) + i*windowsShift - (nbWindows*winWidth)/2, winWidth, winHeight, SDL_WINDOW_SHOWN);
+		if (windows[i] == NULL) {
+			quitSDL(false, "Error : SDL window creation", windows[i], NULL);
+		}
+	}
+}
+
+void moveWindows(SDL_Window* windows[], int nbWindows) {
+	SDL_DisplayMode display;
+	SDL_GetCurrentDisplayMode(0, &display);
+	int winWidth = display.h/10;
+	int winHeight = winWidth;
+	int windowsShift = winHeight;
+	int i, winPosX, winPosY;
+	for (i = 0; i < nbWindows; i++) {
+		SDL_GetWindowPosition(windows[i], &winPosX, &winPosY);
+		SDL_SetWindowPosition(windows[i], winPosX, (display.h/2 - winHeight/2) - i*windowsShift + (nbWindows*winWidth)/2 - winHeight);
+	}
+}
+
 int main(int argc, char const *argv[]) {
-	int winWidth, 
-		winHeight,
-		i, 
-		j = 0,
-		nbWindows = 5,
-		windowsShift;
-	SDL_Window *window[nbWindows*4];
+	int nbWindows = 5, i;
+	SDL_Window *windows[nbWindows*4];
 	SDL_Renderer *renderer = NULL;
 	bool_t status;
-	SDL_DisplayMode display;
 
 	(void)argc;
 	(void)argv;
@@ -19,33 +41,13 @@ int main(int argc, char const *argv[]) {
 	status = initializeSDL();
 	if (!status) quitSDL(false, "Error : SDL initialization", NULL, NULL);
 
-	SDL_GetCurrentDisplayMode(0, &display);
-	winWidth = display.h/10;
-	winHeight = winWidth;
-	windowsShift = winHeight;
-	
-	// Création des fenêtres
-	for (i = 0; i < nbWindows; i++) {
-		window[i] = SDL_CreateWindow("Jeu de la vie", (display.w/2 - winWidth/2) + i*windowsShift - (nbWindows*winWidth)/2, (display.h/2 - winHeight/2) + i*windowsShift - (nbWindows*winWidth)/2, winWidth, winHeight, SDL_WINDOW_SHOWN);
-		if (window[i] == NULL) {
-			quitSDL(false, "Error : SDL window creation", window[i], NULL);
-		}
-	}
+	createWindows(windows, nbWindows);
 	SDL_Delay(1000);
-    
-    // Création du renderer
-	/*
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == NULL) {
-		quitSDL(false, "Error : SDL renderer creation", window, renderer);
-    }*/
-	
-	//waitForQuitSDL();
-
+	moveWindows(windows, nbWindows);
 	SDL_Delay(1000);
 
 	for (i = 0; i < nbWindows*4; i++) {
-		quitSDL(true, "SDL END", window[i], renderer);
+		quitSDL(true, "SDL END", windows[i], renderer);
 	}
 
 	return 0;
