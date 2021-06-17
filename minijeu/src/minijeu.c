@@ -30,11 +30,13 @@ bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *rendere
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     if(texture == NULL) {
         fputs("erreur transformation de la surface de la police en texture\n", stderr);
+        SDL_FreeSurface(surface);
         return false;
     }
-
+    SDL_FreeSurface(surface);
     SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
     SDL_RenderCopy(renderer, texture, &source, &dest);
+    SDL_DestroyTexture(texture);
     return true;
 }
 
