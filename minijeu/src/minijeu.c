@@ -184,7 +184,6 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
 }
 
 void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
-    printf("x = %d\n", paddle->x);
     int new_x = paddle->x + 20*step;
     if (new_x >= cell.x && new_x < cell.w*m - paddle->w) {
         paddle->x = new_x;
