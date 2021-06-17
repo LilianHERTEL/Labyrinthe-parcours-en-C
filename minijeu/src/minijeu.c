@@ -1,7 +1,7 @@
 #include "minijeu.h"
 
 /**
- * @brief Boucle de jeu du jeu de la vie facon labyrinthe
+ * @brief Boucle de jeu du casse-briques
  * 
  * @param window 
  * @param renderer 
@@ -42,7 +42,12 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer)
                 case SDL_KEYDOWN:                              
                     switch (event.key.keysym.sym) 
                     {             
-                        case SDLK_p:                                // 'p'
+                        case SDLK_LEFT:                                // 'fleche gauche'
+                        	//bouger la plateforme a gauche
+                        	break;
+                        case SDLK_RIGHT:
+                        	//bouger la plateforme a droite
+                        	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
                             break;
@@ -88,7 +93,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer)
 }
 
 /**
- * @brief Affiche le jeu de la vie facon labyrinthe
+ * @brief Affiche le casse-briques
  * 
  * @param argc 
  * @param argv 
