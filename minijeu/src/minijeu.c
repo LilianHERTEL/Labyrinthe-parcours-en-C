@@ -1,5 +1,38 @@
 #include "minijeu.h"
 
+bool_t drawText(char *text, int x, int y, TTF_Font *font, SDL_Renderer *renderer) {
+    SDL_Color color = {0};
+    SDL_Rect source = {0}, dest = {0};
+    SDL_Texture *texture;
+    SDL_Surface *surface;
+
+    color.a = 255;
+    color.r = 0;
+    color.g = 0;
+    color.b = 0;
+
+    surface = TTF_RenderText_Solid(font, text, color);
+    if(surface == NULL) {
+        fputs("erreur ouverture de la police\n", stderr);
+        return false;
+    }
+
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if(texture == NULL) {
+        fputs("erreur transformation de la surface de la police en texture\n", stderr);
+        return false;
+    }
+
+    SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
+    SDL_GetRendererOutputSize(renderer, &dest.w, &dest.h);
+    dest.w = dest.w / 40;
+    dest.h = dest.h / 30;
+    dest.x = x;
+    dest.y = y;
+    SDL_RenderCopy(renderer, texture, &source, &dest);
+    return true;
+}
+
 /**
  * @brief Permet de calculer les dimensions d'une cellule par rapport a la taille de la fenetre
  * 
@@ -171,9 +204,8 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
  * @param m 
  * @param rule 
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m)
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, TTF_Font *font, SDL_Texture *texture)
 {
-	SDL_Texture *texture;									// texture des sprites du jeu
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
@@ -191,7 +223,6 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     int score = 0;
     int remainingBricks = n*m;
 
-	texture = loadTextureFromImage("../res/sprites.png", renderer);
 	//SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
 	//SDL_QueryTexture(texture, NULL, NULL, NULL/*&paddleSource.w*/, /*&paddleSource.h*/NULL);
     // Initialisation des coordonnees
@@ -302,6 +333,8 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
+    TTF_Font         *font;
+    SDL_Texture      *texture;
     SDL_Window       * window = NULL;
     SDL_Renderer     * renderer = NULL;
     SDL_DisplayMode    screen;
@@ -315,6 +348,16 @@ int main(int argc, char **argv)
     {
         quitSDL(0, "ERROR SDL INIT", window, renderer);
         exit(EXIT_FAILURE); 
+    }
+/*
+    if(IMG_init(0) != 0) {
+        quitSDL(0, "ERROR IMG INIT", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+*/
+    if(TTF_Init() != 0) {
+        quitSDL(0, "ERROR TTF INIT", window, renderer);
+        exit(EXIT_FAILURE);
     }
 
     if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
@@ -338,15 +381,29 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE); 
     }
 
+
+    font = TTF_OpenFont("../res/font.ttf", 300);
+    if(font == NULL) {
+        quitSDL(0, " error font\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
+	texture = loadTextureFromImage("../res/sprites.png", renderer);
+    if(texture == NULL) {
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
     /*TRAITEMENT*/
 
     bricks = allocGrid(n, m);
     if(bricks)
     {
         bricks = createRandomGrid(bricks, n, m);
-        gameLoop(window, renderer, bricks, n, m);
+        gameLoop(window, renderer, bricks, n, m, font, texture);
     }
 
+    TTF_Quit();
     quitSDL(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
 }
