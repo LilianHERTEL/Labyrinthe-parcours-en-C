@@ -62,13 +62,26 @@ void drawGrid(SDL_Renderer *renderer, int ** grille, int n, int m, SDL_Rect cell
 	SDL_RenderPresent(renderer);
 }
 
+void cellDimensions(SDL_Window * window, SDL_Rect * cell, int n, int m)
+{
+    SDL_Rect window_dimensions = {0};
+
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    cell->w = window_dimensions.h / m ;
+    cell->h = window_dimensions.h / n ;    
+    cell->x = (window_dimensions.w - cell->w * m) / 2 ;
+    cell->y = (window_dimensions.h - cell->h * n) / 2 ;
+}
+
 void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, int m, rule_t * rule)
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
-              cell = {0},
-              window_dimensions = {0};
+              cell = {0};
+
+    // Initialisation des coordonnees
+    cellDimensions(window, &cell, n, m);
 
     while (program_on) 
     {                                   // La boucle des évènements
@@ -78,7 +91,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
         {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
                                         // terminé le programme Défiler l'élément en tête de file dans 'event'
             switch (event.type) 
-            {                               
+            {      
+                case SDL_WINDOWEVENT:
+                    if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+                    {
+                        // Calcul des dimensions d'une cellule quand la fenetre change de taille
+                        cellDimensions(window, &cell, n, m);
+                    }
+                    break;
                 case SDL_QUIT:                             
                     program_on = SDL_FALSE;                   
                     break;
@@ -115,13 +135,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
                     break;
             }
         }
-        // Calcul des dimensions d'une cellule quand la fenetre change de taille
-        SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
-        cell.w = window_dimensions.h / m ;
-        cell.h = window_dimensions.h / n ;    
-        cell.x = (window_dimensions.w - cell.w * m) / 2 ;
-        cell.y = (window_dimensions.h - cell.h * n) / 2 ;
-
+        // Changement du fond en fonction de la position de la souris
         SDL_GetMouseState(&mouse.x, &mouse.y);
         SDL_SetRenderDrawColor(renderer, (mouse.x/3) % 255, ((mouse.x + mouse.y) / 3) % 255, (mouse.y/3) % 255, 255);
 	    SDL_RenderClear(renderer);
