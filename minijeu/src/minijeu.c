@@ -79,6 +79,18 @@ void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect ce
 	}
 }
 
+void paddleDimensions(SDL_Rect * paddle, SDL_Rect cell, int m)
+{
+    paddle->w = cell.w * m * 0.25;
+    paddle->h = cell.h * 0.5;
+}
+
+void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddle)
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &paddle);
+}
+
 void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_dimensions)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -103,11 +115,15 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
               cell = {0},
-              window_dimensions = {0};
+              window_dimensions = {0},
+              paddle = {0};
 
     // Initialisation des coordonnees
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     cellDimensions(&cell, n, m, window_dimensions);
+    paddleDimensions(&paddle, cell, m);
+    paddle.x = (cell.w * m - paddle.w) / 2; 
+    paddle.y = window_dimensions.h - paddle.h;
 
     while (program_on) 
     {                                   // La boucle des évènements
@@ -124,6 +140,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                         // Calcul des dimensions d'une cellule quand la fenetre change de taille
                         SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
                         cellDimensions(&cell, n, m, window_dimensions);
+                        paddleDimensions(&paddle, cell, m);
                     }
                     break;
                 case SDL_QUIT:                         
@@ -169,6 +186,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 
         drawBricks(renderer, bricks, n, m, cell); 
         drawLimits(renderer, cell, m, window_dimensions); 
+        drawPaddle(renderer, paddle);
              
         if (!paused) 
         {      
