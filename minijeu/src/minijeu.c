@@ -197,16 +197,20 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
     else
     {
         int ballI, ballJ;
+        SDL_Rect futureBall;
+        
+        
         ballI = (ball.y-cell.y)/cell.h ;
         ballJ = (ball.x - cell.x)/cell.w ;
+		moveBall(&ball, *speed);
 
-        //printf("%d, %d\n", ballI, ballJ);
+        printf("%d, %d\n", ballI, ballJ);
         if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
         {   
-            leftBrick = cell.x + ballJ * cell.w;
-            rightBrick = cell.x + (ballJ + 1) * cell.w;
-            topBrick = cell.y + ballI * cell.h;
-            bottomBrick = cell.y + (ballI + 1) * cell.h;
+            leftBrick = cell.x + (ballJ - 1) * cell.w;
+            rightBrick = cell.x + (ballJ) * cell.w;
+            topBrick = cell.y + (ballI - 1) * cell.h;
+            bottomBrick = cell.y + (ballI) * cell.h;
             // avec le cote droit d'une brique                                                   
             if(leftBall <= rightBrick)
             {
@@ -278,9 +282,13 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     
     bool_t gameIsOver = false;
 
+	/*
     speed.x = 18;
     speed.y = -18;
-              
+    */
+    speed.x = 9 * 2;
+    speed.y = -9 * 2;
+    
     int score = 0;
     int remainingBricks = n*m;
     SDL_Rect text, title;
@@ -370,9 +378,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         }
         // Changement du fond en fonction de la position de la souris
         SDL_GetMouseState(&mouse.x, &mouse.y);
+        /*
         int ballI, ballJ;
         ballI = (mouse.y-cell.y)/cell.h;
         ballJ = (mouse.x - cell.x)/cell.w ;
+        */
         printf("%d,%d\n",mouse.x, mouse.y);
 
         drawBricks(renderer, bricks, n, m, cell, texture); 
