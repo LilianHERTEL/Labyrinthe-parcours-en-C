@@ -1,8 +1,8 @@
 #include "minijeu.h"
 
-bool_t drawText(char *text, int x, int y, TTF_Font *font, SDL_Renderer *renderer) {
+bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer) {
     SDL_Color color = {0};
-    SDL_Rect source = {0}, dest = {0};
+    SDL_Rect source = {0};
     SDL_Texture *texture;
     SDL_Surface *surface;
 
@@ -24,11 +24,13 @@ bool_t drawText(char *text, int x, int y, TTF_Font *font, SDL_Renderer *renderer
     }
 
     SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
+    /*
     SDL_GetRendererOutputSize(renderer, &dest.w, &dest.h);
     dest.w = dest.w / 4;
     dest.h = dest.h / 10;
     dest.x = x;
     dest.y = y;
+    */
     SDL_RenderCopy(renderer, texture, &source, &dest);
     return true;
 }
@@ -253,7 +255,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               
     int score = 0;
     int remainingBricks = n*m;
-    int textx, texty;
+    SDL_Rect text, title;
+    
 
 	//SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
 	//SDL_QueryTexture(texture, NULL, NULL, NULL/*&paddleSource.w*/, /*&paddleSource.h*/NULL);
@@ -266,8 +269,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     paddle.y = window_dimensions.h - paddle.h;
     ball.x = (cell.w * m - ball.w) / 2; 
     ball.y = paddle.y - ball.h;
-    textx = 7 * window_dimensions.w / 10;
-    texty = window_dimensions.h / 10;
+    title.x = 7 * window_dimensions.w / 10;
+    title.y = window_dimensions.h / 10;
+    text.x = 6 * window_dimensions.w / 10;
+    text.y = window_dimensions.h / 3;
+    text.w = window_dimensions.w / 4;
+    text.h = window_dimensions.h / 15;
+    title.w = window_dimensions.w / 4;
+    title.h = window_dimensions.h / 10;
 
     while (program_on && !gameIsOver) 
     {                                   // La boucle des évènements
@@ -347,7 +356,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        if(!(drawText("CASSE-BRIQUES", textx, texty, font, renderer))) {
+        if(!(drawText("CASSE-BRIQUES", title, font, renderer) && drawText("Lorem Ipsum", text, font, renderer))) {
         	SDL_DestroyTexture(texture);
         	quitSDL(0, "(gameloop) Erreur de texture", window, renderer);
         	//sortir proprement
