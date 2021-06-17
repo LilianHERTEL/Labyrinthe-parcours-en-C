@@ -165,10 +165,10 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
         topWall,
         topPaddle;
 
-    leftBall = ball.x + speed + cell.x;
-    rightBall = ball.x + speed + ball.w + cell.x;
-    topBall = ball.y + speed + cell.y;
-    bottomBall = ball.y + speed - ball.h + cell.y;
+    leftBall = ball.x + speed->x + cell.x;
+    rightBall = ball.x + speed->x + ball.w + cell.x;
+    topBall = ball.y + speed->y + cell.y;
+    bottomBall = ball.y + speed->y - ball.h + cell.y;
 
     rightWall = cell.x + cell.w * m;
     leftWall = cell.x;
@@ -197,7 +197,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
         {   
             leftBrick = cell.x + ballJ * cell.w;
             rightBrick = cell.x + (ballJ + 1) * cell.w;
-            topBrick = cell.y + BallI * cell.h;
+            topBrick = cell.y + ballI * cell.h;
             bottomBrick = cell.y + (ballI + 1) * cell.h;
             // avec le cote droit d'une brique                                                   
             if(leftBall <= rightBrick)
