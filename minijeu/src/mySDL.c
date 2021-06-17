@@ -28,12 +28,13 @@ SDL_Texture* loadTextureFromImage(char *name, SDL_Renderer *renderer) {
 	
 	surface = IMG_Load(name);
 	if(surface == NULL) {
+    IMG_Quit();
 		return NULL;
 	}
 	texture = SDL_CreateTextureFromSurface(renderer, surface);
+  IMG_Quit();
 	return texture;
 }
-
 
 /**
  * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
