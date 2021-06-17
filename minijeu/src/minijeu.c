@@ -120,8 +120,9 @@ void breakBrick(int *** bricks, int n, int m) {
     (*bricks)[n][m] = 0;
 }
 
-void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
+bool_t ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
 {
+    bool_t brokenBrick = false;
     //Collisions murs
     if(ball.x + speed->x <= cell.x)
     {
@@ -154,12 +155,14 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
                 speed->y = -speed->y;
             }
             breakBrick(bricks, ballI, ballJ);
+            brokenBrick = true;
         }
         if(ball.y + speed->y <= cell.y) // mur du haut
         {
             speed->y = - speed->y;
         }
     }
+    return brokenBrick;
 }
 
 void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
@@ -169,15 +172,24 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
     }
 }
 
-bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight) {
+bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight, bool_t brokenBrick) {
     bool_t gameIsOver = false;
     if (ball.y > winHeight)
     {
         //gameIsOver = true;
         printf("GAME OVER\n");
     }
+    if (brokenBrick) {
+        (*score)++;
+        (*remainingBricks)--;
+    }
+    if (*remainingBricks <= 0) {
+        gameIsOver = true;
+    }
     
-
+    printf("SCORE = %d\n", *score);
+    printf("BRICKS = %d\n", *remainingBricks);
+    
     return gameIsOver;
 }
 
@@ -191,7 +203,7 @@ bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeigh
  * @param m 
  * @param rule 
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m)
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks)
 {
 	SDL_Texture *texture;									// texture des sprites du jeu
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
@@ -205,13 +217,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               ball = {0},
               speed = {0};
     
-    bool_t gameIsOver = false;
+    bool_t gameIsOver = false,
+           brokenBrick = false;
 
     speed.x = 20;
     speed.y = -20;
               
     int score = 0;
-    int remainingBricks = n*m;
+    int remainingBricks = nbBricks;
 
 	texture = loadTextureFromImage("../res/sprites.png", renderer);
 	//SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
@@ -297,8 +310,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
-        ballCollision(ball, cell, &bricks, n, m, paddle, &speed);
-        gameIsOver = updateScore(&score, &remainingBricks, ball, window_dimensions.h);
+        brokenBrick = ballCollision(ball, cell, &bricks, n, m, paddle, &speed);
+        gameIsOver = updateScore(&score, &remainingBricks, ball, window_dimensions.h, brokenBrick);
 
         moveBall(&ball, speed);
         drawPaddle(renderer, paddle, texture);
@@ -314,6 +327,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         SDL_Delay(50);                                  
     }
     SDL_DestroyTexture(texture);
+
+    if (remainingBricks == 0) {
+        /* GERER VICTOIRE A FAIRE */
+    }
+    else {
+        printf("SCORE : %d\n", score);
+        /* GERER DEFAITE A FAIRE */
+    }
 }
 
 /**
@@ -332,6 +353,7 @@ int main(int argc, char **argv)
     SDL_Renderer     * renderer = NULL;
     SDL_DisplayMode    screen;
     int             ** bricks,
+                       nbBricks,
                        n = 3,
                        m = 10;
 
@@ -369,8 +391,8 @@ int main(int argc, char **argv)
     bricks = allocGrid(n, m);
     if(bricks)
     {
-        bricks = createRandomGrid(bricks, n, m);
-        gameLoop(window, renderer, bricks, n, m);
+        bricks = createRandomGrid(bricks, n, m, &nbBricks);
+        gameLoop(window, renderer, bricks, n, m, nbBricks);
     }
 
     quitSDL(1, "Normal ending", window, renderer);
