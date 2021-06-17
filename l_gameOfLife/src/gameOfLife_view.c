@@ -3,6 +3,13 @@
 #include "grid.h"
 #include "gameOfLife.h"
 
+/**
+ * @brief Affiche une grille dans la fenêtre
+ * 
+ * @param window le fenêtre à utiliser
+ * @param renderer le renderer à utiliser
+ * @param grid la grille à afficher
+ */
 void drawGrid(SDL_Window * window, SDL_Renderer *renderer, grid_t grid) {
 	int               i,
                       j,
@@ -32,6 +39,13 @@ void drawGrid(SDL_Window * window, SDL_Renderer *renderer, grid_t grid) {
 	SDL_RenderPresent(renderer);
 }
 
+/**
+ * @brief Récupère la taille de l'affichage courant
+ * 
+ * @param height la hauteur de l'éffichage
+ * @param width la largeur de l'affichage
+ * @return int 0 : erreur, 1 : succès
+ */
 int screenSize(int *h, int* w) {
 	SDL_DisplayMode current;
 	int code = 0;

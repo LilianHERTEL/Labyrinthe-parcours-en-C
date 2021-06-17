@@ -3,7 +3,11 @@
 #include "gameOfLife.h"
 #include "bool.h"
 
-/* REGLES PAS BONNES ? */
+/**
+ * @brief Initialise les règles de vie
+ * 
+ * @param life les règles
+ */
 void initLife(rules_t *life) {
 	int i;
 	
@@ -23,6 +27,11 @@ void initLife(rules_t *life) {
 	}
 }
 
+/**
+ * @brief Initialise les règles de labyrinthe
+ * 
+ * @param maze les règles
+ */
 void initMaze(rules_t *maze) {
   int i;
 	
@@ -47,6 +56,12 @@ void initMaze(rules_t *maze) {
 	}
 }
 
+/**
+ * @brief Gère l'évolution de la grille d'une itération i à l'itération suivante i+1 selon les règles
+ * 
+ * @param grid la grille
+ * @param rules les règles à utiliser
+ */
 void nextIteration(grid_t *grid, rules_t *rule) {
 	grid_t result;
 	int i, j, k, l, m, n, neighbours;

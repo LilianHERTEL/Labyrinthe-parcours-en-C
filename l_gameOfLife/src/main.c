@@ -4,6 +4,13 @@
 #include "gameOfLife.h"
 #include "mySDL.h"
 
+/**
+ * @brief Programme principal - Affiche une execution du jeu de la vie
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int
+ */
 int main(int argc, char const *argv[]) {
     grid_t grid;
 	int x = 20, y = 20, iterations = 30, sheight, swidth, delay = 100;
@@ -25,12 +32,16 @@ int main(int argc, char const *argv[]) {
 	srand(time(0));
 	
 	status = initializeSDL();
-	if (!status) quitSDL(false, "Error : SDL initialization", NULL, NULL);
+	if (!status) {
+		quitSDL(false, "Error : SDL initialization", NULL, NULL);
+		exit(EXIT_FAILURE);
+	}
 	
     
     if(screenSize(&sheight, &swidth) != 0) {
 		free(rules);
 		quitSDL(false, "Error : SDL display mode", NULL, NULL);
+		exit(EXIT_FAILURE);
     }
 	
 	// Création de la fenetre
@@ -38,6 +49,7 @@ int main(int argc, char const *argv[]) {
     if (window == NULL) {
 		free(rules);
 		quitSDL(false, "Error : SDL window creation", window, NULL);
+		exit(EXIT_FAILURE);
     }
     
     // Création du renderer
@@ -45,12 +57,14 @@ int main(int argc, char const *argv[]) {
     if (renderer == NULL) {
         free(rules);
 		quitSDL(false, "Error : SDL renderer creation", window, renderer);
+		exit(EXIT_FAILURE);
     }
 	
 	grid = createGrid(x, y);
 	if(grid.grid == NULL) {
 		free(rules);
 		quitSDL(false, "Error : Grid creation", window, renderer);
+		exit(EXIT_FAILURE);
 	}
 	
 	initializeRandomGrid(grid);
