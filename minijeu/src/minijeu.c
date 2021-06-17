@@ -78,11 +78,6 @@ void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect ce
                 source.y = 260;
                 SDL_RenderCopy(renderer, texture, &source, &rectangle);
             }
-            else {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderFillRect(renderer, &rectangle);
-            }
-			
 		}
 	}
 }
@@ -102,8 +97,6 @@ void paddleDimensions(SDL_Rect * paddle, SDL_Rect cell, int m)
  */
 void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddleDest, SDL_Texture *texture)
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &paddleDest);
     printf("coord x = %d\n", paddleDest.x);
     SDL_Rect paddleSource = {0};
 
@@ -310,9 +303,9 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawLimits(renderer, cell, m, window_dimensions); 
         ballCollision(ball, cell, bricks, n, m, paddle, &speed);
         moveBall(&ball, speed);
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
              
         if (!paused) 
         {      
