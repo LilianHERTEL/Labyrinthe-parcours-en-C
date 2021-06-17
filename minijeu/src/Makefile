@@ -2,7 +2,7 @@ FIC = $(shell ls *.c)
 EXEC = ../bin/
 BIN = minijeu
 DEBUG = -DDEBUG
-LFLAGS = -lSDL2 -lSDL2_image
+LFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 OPTIONS = -Wall -Wextra -g
 CC = gcc
 OBJ = $(FIC:.c=.o)
