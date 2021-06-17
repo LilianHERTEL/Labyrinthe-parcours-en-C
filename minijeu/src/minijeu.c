@@ -1,5 +1,88 @@
 #include "minijeu.h"
 
+
+/**
+ * @brief Affiche le casse-briques
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
+int main(int argc, char **argv) 
+{
+    (void)argc;
+    (void)argv;
+
+    TTF_Font         *font;
+    SDL_Texture      *texture;
+    SDL_Window       * window = NULL;
+    SDL_Renderer     * renderer = NULL;
+    SDL_DisplayMode    screen;
+    int             ** bricks,
+                       nbBricks,
+                       n = 3,
+                       m = 10;
+
+    /* INITIALISATIONS */
+
+    if (initializeSDL() == false) 
+    {
+        quitSDL(0, "ERROR SDL INIT", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
+
+    if(TTF_Init() != 0) {
+        quitSDL(0, "ERROR TTF INIT", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
+    if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
+    {
+        quitSDL(0, "ERROR GET_DISPLAY_MODE", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
+
+    window = SDL_CreateWindow("Minijeu", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+                                screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
+    if (window == NULL) 
+    {
+        quitSDL(0, "ERROR WINDOW CREATION", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == NULL) 
+    {
+        quitSDL(0, "ERROR RENDERER CREATION", window, renderer);
+        exit(EXIT_FAILURE); 
+    }
+
+    font = TTF_OpenFont("../res/font.ttf", 500);
+    if(font == NULL) {
+        quitSDL(0, " error font\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
+	texture = loadTextureFromImage("../res/sprites.png", renderer);
+    if(texture == NULL) {
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
+    /*TRAITEMENT*/
+
+    bricks = allocGrid(n, m);
+    if(bricks)
+    {
+        bricks = createRandomGrid(bricks, n, m, &nbBricks);
+        gameLoop(window, renderer, bricks, n, m, nbBricks, font, texture);
+    }
+
+    TTF_Quit();
+    quitSDL(1, "Normal ending", window, renderer);
+    return EXIT_SUCCESS;
+}
+
 /**
  * @brief Affiche du texte a l'ecran 
  * 
@@ -233,9 +316,7 @@ bool_t ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m,
     }
     else
     {
-        int ballI, ballJ;
-        SDL_Rect futureBall;
-        
+        int ballI, ballJ;        
         
         ballI = (ball.y-cell.y)/cell.h ;
         ballJ = (ball.x - cell.x)/cell.w ;
@@ -488,86 +569,4 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         printf("SCORE : %d\n", score);
         /* GERER DEFAITE A FAIRE */
     }
-}
-
-/**
- * @brief Affiche le casse-briques
- * 
- * @param argc 
- * @param argv 
- * @return int 
- */
-int main(int argc, char **argv) 
-{
-    (void)argc;
-    (void)argv;
-
-    TTF_Font         *font;
-    SDL_Texture      *texture;
-    SDL_Window       * window = NULL;
-    SDL_Renderer     * renderer = NULL;
-    SDL_DisplayMode    screen;
-    int             ** bricks,
-                       nbBricks,
-                       n = 3,
-                       m = 10;
-
-    /* INITIALISATIONS */
-
-    if (initializeSDL() == false) 
-    {
-        quitSDL(0, "ERROR SDL INIT", window, renderer);
-        exit(EXIT_FAILURE); 
-    }
-
-    if(TTF_Init() != 0) {
-        quitSDL(0, "ERROR TTF INIT", window, renderer);
-        exit(EXIT_FAILURE);
-    }
-
-    if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
-    {
-        quitSDL(0, "ERROR GET_DISPLAY_MODE", window, renderer);
-        exit(EXIT_FAILURE); 
-    }
-
-    window = SDL_CreateWindow("Minijeu", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-                                screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
-    if (window == NULL) 
-    {
-        quitSDL(0, "ERROR WINDOW CREATION", window, renderer);
-        exit(EXIT_FAILURE); 
-    }
-
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == NULL) 
-    {
-        quitSDL(0, "ERROR RENDERER CREATION", window, renderer);
-        exit(EXIT_FAILURE); 
-    }
-
-    font = TTF_OpenFont("../res/font.ttf", 500);
-    if(font == NULL) {
-        quitSDL(0, " error font\n", window, renderer);
-        exit(EXIT_FAILURE);
-    }
-
-	texture = loadTextureFromImage("../res/sprites.png", renderer);
-    if(texture == NULL) {
-        quitSDL(0, " error texture\n", window, renderer);
-        exit(EXIT_FAILURE);
-    }
-
-    /*TRAITEMENT*/
-
-    bricks = allocGrid(n, m);
-    if(bricks)
-    {
-        bricks = createRandomGrid(bricks, n, m, &nbBricks);
-        gameLoop(window, renderer, bricks, n, m, nbBricks, font, texture);
-    }
-
-    TTF_Quit();
-    quitSDL(1, "Normal ending", window, renderer);
-    return EXIT_SUCCESS;
 }

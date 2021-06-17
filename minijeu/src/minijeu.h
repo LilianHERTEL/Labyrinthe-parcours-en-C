@@ -124,3 +124,15 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect brick, int m, int step);
  * @return bool_t true : la partie est finie, false elle continue
  */
 bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHeight, bool_t brokenBrick);
+
+/**
+ * @brief Boucle de jeu du casse-briques
+ * 
+ * @param window 
+ * @param renderer 
+ * @param grid 
+ * @param n 
+ * @param m 
+ * @param rule 
+ */
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture);
