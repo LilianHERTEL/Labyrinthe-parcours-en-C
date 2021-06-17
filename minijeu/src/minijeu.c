@@ -38,7 +38,7 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
  * @param m 
  * @param rule 
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer)
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m)
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
@@ -130,6 +130,9 @@ int main(int argc, char **argv)
     SDL_Window       * window = NULL;
     SDL_Renderer     * renderer = NULL;
     SDL_DisplayMode    screen;
+    int             ** bricks,
+                       n = 3,
+                       m = 5;
 
     /* INITIALISATIONS */
 
@@ -162,7 +165,12 @@ int main(int argc, char **argv)
 
     /*TRAITEMENT*/
 
-    gameLoop(window, renderer);
+    bricks = allocGrid(n, m);
+    if(bricks)
+    {
+        bricks = createRandomGrid(bricks, n, m);
+        gameLoop(window, renderer, bricks, n, m);
+    }
 
     end_sdl(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
