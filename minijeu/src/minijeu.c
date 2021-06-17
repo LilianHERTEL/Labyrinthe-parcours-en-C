@@ -1,6 +1,16 @@
 #include "minijeu.h"
 
-bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer) {
+/**
+ * @brief Affiche du texte a l'ecran 
+ * 
+ * @param text Le texte a afficher
+ * @param dest Position et dimensions de destination
+ * @param font Police d'ecriture
+ * @param renderer Le rendu
+ * @return bool_t true si on a reussi, false sinon
+ */
+bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer) 
+{
     SDL_Color color = {0};
     SDL_Rect source = {0};
     SDL_Texture *texture;
@@ -24,85 +34,88 @@ bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *rendere
     }
 
     SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
-    /*
-    SDL_GetRendererOutputSize(renderer, &dest.w, &dest.h);
-    dest.w = dest.w / 4;
-    dest.h = dest.h / 10;
-    dest.x = x;
-    dest.y = y;
-    */
     SDL_RenderCopy(renderer, texture, &source, &dest);
     return true;
 }
 
 /**
- * @brief Permet de calculer les dimensions d'une cellule par rapport a la taille de la fenetre
+ * @brief Permet de calculer les dimensions d'une brique par rapport a la taille de la fenetre
  * 
  * @param window la fenetre
- * @param cell la cellule (SDL_Rect)
+ * @param brick la brique (SDL_Rect)
  * @param n nombre de lignes de la grille
  * @param m nombre de colonnes de la grille
  */
-void cellDimensions(SDL_Rect * cell, int n, int m, SDL_Rect window_dimensions)
+void brickDimensions(SDL_Rect * brick, int n, int m, SDL_Rect window_dimensions)
 {
-    cell->w = (window_dimensions.w * 0.6) / m;
-    cell->h = (window_dimensions.h * 0.3) / n ;    
-    cell->x = 0 ;
-    cell->y = 0 ;
+    brick->w = (window_dimensions.w * 0.6) / m;
+    brick->h = (window_dimensions.h * 0.3) / n ;    
+    brick->x = 0 ;
+    brick->y = 0 ;
 }
 
 /**
  * @brief Affiche les briques
  * 
- * @param renderer 
- * @param grille 
- * @param n 
- * @param m 
- * @param cell
+ * @param renderer Le rendu
+ * @param bricks La grille d'entier (represente les briques)
+ * @param n Nombre de lignes de la grille
+ * @param m Nombre de colonnes de la grille
+ * @param brick Dimensions d'une brique
  */
-void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect cell, SDL_Texture *texture) 
+void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect brick, SDL_Texture *texture) 
 {
 	int               i,
                       j,
                       poseX,
                       poseY;
-	SDL_Rect          rectangle,
+	SDL_Rect          dest,
                       source = {0};
 
-    rectangle.w = cell.w;
-    rectangle.h = cell.h;
-    poseX = cell.x;
-    poseY = cell.y;
+    dest.w = brick.w;
+    dest.h = brick.h;
+    poseX = brick.x;
+    poseY = brick.y;
     source.w = 390;
     source.h = 130;
     source.x = 770;
     source.y = 260;
 
-	for(i = 0; i < n; i++) {
-		rectangle.y = poseY + rectangle.h * i;
-		for(j = 0; j < m; j++) {
-			rectangle.x = poseX + rectangle.w * j;
-            if(bricks[i][j] == 1) {
-                SDL_RenderCopy(renderer, texture, &source, &rectangle);
+	for(i = 0; i < n; i++) 
+    {
+		dest.y = poseY + dest.h * i;
+		for(j = 0; j < m; j++) 
+        {
+			dest.x = poseX + dest.w * j;
+            if(bricks[i][j] == 1) 
+            {
+                SDL_RenderCopy(renderer, texture, &source, &dest);
             }
 		}
 	}
 }
 
-void paddleDimensions(SDL_Rect * paddle, SDL_Rect cell, int m)
+/**
+ * @brief Calcule les dimensions du paddle
+ * 
+ * @param paddle Le paddle
+ * @param brick Dimensions d'une brique
+ * @param m nombre de colonnes de la grille (de briques vu a l'horizontal)
+ */
+void paddleDimensions(SDL_Rect * paddle, SDL_Rect brick, int m)
 {
-    paddle->w = cell.w * m * 0.25;
-    paddle->h = cell.h * 0.5;
+    paddle->w = brick.w * m * 0.25;
+    paddle->h = brick.h * 0.5;
 }
 
 /**
  * @brief Affiche le paddle
  * 
- * @param renderer 
- * @param paddleDest 
- * @param texture
+ * @param renderer Le rendu
+ * @param paddleDest Dimensions du paddle
+ * @param texture Texture appliquee au paddle
  */
-void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddleDest, SDL_Texture *texture)
+void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddleDest, SDL_Texture * texture)
 {
     SDL_Rect paddleSource = {0};
 
@@ -113,18 +126,25 @@ void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddleDest, SDL_Texture *textu
     SDL_RenderCopy(renderer, texture, &paddleSource, &paddleDest);
 }
 
-void ballDimensions(SDL_Rect * ball, SDL_Rect cell, int m)
+/**
+ * @brief Calcule les dimensions de la balle
+ * 
+ * @param ball La balle
+ * @param brick Dimensions d'une brique 
+ * @param m Nombre de colonnes de la grille (de briques vu a l'horizontal)
+ */
+void ballDimensions(SDL_Rect * ball, SDL_Rect brick, int m)
 {
-    ball->w = cell.w * m * 0.05;
+    ball->w = brick.w * m * 0.05;
     ball->h = ball->w;
 }
 
 /**
  * @brief Affiche la balle
  * 
- * @param renderer 
- * @param paddleDest 
- * @param texture
+ * @param renderer Le rendu
+ * @param ball La balle
+ * @param texture La texture appliquee a la balle
  */
 void drawBall(SDL_Renderer * renderer, SDL_Rect ball, SDL_Texture *texture)
 {
@@ -137,21 +157,43 @@ void drawBall(SDL_Renderer * renderer, SDL_Rect ball, SDL_Texture *texture)
     SDL_RenderCopy(renderer, texture, &source, &ball);
 }
 
-void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_dimensions)
+/**
+ * @brief Dessine les bordure de l'espace jouable
+ * 
+ * @param renderer Le rendu
+ * @param brick Dimensions d'une brique
+ * @param m Nombre de colonnes de la grille (de briques vu a l'horizontal)
+ * @param window_dimensions Dimensions de la fenetre
+ */
+void drawLimits(SDL_Renderer *renderer, SDL_Rect brick, int m, SDL_Rect window_dimensions)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawLine(renderer, cell.x, cell.y, cell.x, window_dimensions.h);
-    SDL_RenderDrawLine(renderer, cell.x, cell.y, cell.x + cell.w * m, cell.y);
-    SDL_RenderDrawLine(renderer, cell.x + cell.w * m, cell.y, cell.x + cell.w * m, window_dimensions.h);
+    SDL_RenderDrawLine(renderer, brick.x, brick.y, brick.x, window_dimensions.h);
+    SDL_RenderDrawLine(renderer, brick.x, brick.y, brick.x + brick.w * m, brick.y);
+    SDL_RenderDrawLine(renderer, brick.x + brick.w * m, brick.y, brick.x + brick.w * m, window_dimensions.h);
 }
 
+/**
+ * @brief Fait bouger la balle
+ * 
+ * @param ball La balle
+ * @param speed Vitesse de la balle
+ */
 void moveBall(SDL_Rect *ball, SDL_Rect speed)
 {
     ball->x = ball->x + speed.x;
     ball->y = ball->y + speed.y;
 }
 
-void breakBrick(int *** bricks, int n, int m) {
+/**
+ * @brief "Casse" une brique
+ * 
+ * @param bricks La grille des briques (entiers)
+ * @param n Nombre de lignes de la grille
+ * @param m Nombre de colonnes de la grille
+ */
+void breakBrick(int *** bricks, int n, int m) 
+{
     (*bricks)[n][m] = 0;
 }
 
@@ -231,25 +273,48 @@ bool_t ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m,
     return brokenBrick;
 }
 
-void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
+/**
+ * @brief Fait bouger le paddle
+ * 
+ * @param paddle Le paddle
+ * @param brick Dimensions d'une brique
+ * @param m Nombre de colonnes de la grille (de briques vu a l'horizontal)
+ * @param step Pas pour le mouvement
+ */
+void movePaddle(SDL_Rect* paddle, SDL_Rect brick, int m, int step) 
+{
     int new_x = paddle->x + 20*step;
-    if (new_x >= cell.x && new_x < cell.w*m - paddle->w) {
+    if (new_x >= brick.x && new_x < brick.w*m - paddle->w) 
+    {
         paddle->x = new_x;
     }
 }
 
-bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight, bool_t brokenBrick) {
+/**
+ * @brief Met a jour le score de la partie
+ * 
+ * @param score Le score (entier)
+ * @param remainingBricks Le nombre de briques restantes
+ * @param ball La balle
+ * @param winHeight La hauteur de la fenetre
+ * @param brokenBrick Indique si une brique a ete cassee
+ * @return bool_t true : la partie est finie, false elle continue
+ */
+bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHeight, bool_t brokenBrick) 
+{
     bool_t gameIsOver = false;
     if (ball.y > winHeight)
     {
         gameIsOver = true;
         puts("GAME OVER\n");
     }
-    if (brokenBrick) {
+    if (brokenBrick) 
+    {
         (*score)++;
         (*remainingBricks)--;
     }
-    if (*remainingBricks <= 0) {
+    if (*remainingBricks <= 0) 
+    {
         gameIsOver = true;
     }
     
@@ -268,8 +333,8 @@ bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeigh
  */
 void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture)
 {
-    SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
-              paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
+    SDL_bool  program_on = SDL_TRUE,                          // Booleen pour dire que le programme doit continuer
+              paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
               cell = {0},
               window_dimensions = {0},
@@ -293,7 +358,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 	//SDL_QueryTexture(texture, NULL, NULL, NULL/*&paddleSource.w*/, /*&paddleSource.h*/NULL);
     // Initialisation des coordonnees
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
-    cellDimensions(&cell, n, m, window_dimensions);
+    brickDimensions(&cell, n, m, window_dimensions);
     paddleDimensions(&paddle, cell, m);
     ballDimensions(&ball, cell, m);
     paddle.x = (cell.w * m - paddle.w) / 2; 
@@ -323,7 +388,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     {
                         // Calcul des dimensions d'une cellule quand la fenetre change de taille
                         SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
-                        cellDimensions(&cell, n, m, window_dimensions);
+                        brickDimensions(&cell, n, m, window_dimensions);
                         paddleDimensions(&paddle, cell, m);
                         ballDimensions(&ball,cell, m);
                     }
