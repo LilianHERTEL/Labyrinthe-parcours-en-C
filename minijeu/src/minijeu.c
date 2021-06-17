@@ -1,33 +1,6 @@
 #include "minijeu.h"
 
 /**
- * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
- * 
- * @param ok 0 : erreur, 1 :normal
- * @param msg message de fin
- * @param window fenetre a fermer
- * @param renderer rendu a fermer
- */
-void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* renderer)
-{                           
-  char msg_formated[255];                                         
-  int l;                                                          
-
-  if (!ok) 
-  {                                                      
-         strncpy(msg_formated, msg, 250);                                 
-         l = strlen(msg_formated);                                        
-         strcpy(msg_formated + l, " : %s\n");                     
-         SDL_Log(msg_formated, SDL_GetError());                   
-  }                                                               
-
-  if (renderer != NULL) SDL_DestroyRenderer(renderer);                            
-  if (window != NULL)   SDL_DestroyWindow(window);                                        
-
-  SDL_Quit();                                                            
-}
-
-/**
  * @brief Permet de calculer les dimensions d'une cellule par rapport a la taille de la fenetre
  * 
  * @param window la fenetre
@@ -42,7 +15,6 @@ void cellDimensions(SDL_Rect * cell, int n, int m, SDL_Rect window_dimensions)
     cell->x = 0 ;
     cell->y = 0 ;
 }
-
 
 /**
  * @brief Affiche les briques
@@ -192,11 +164,21 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
     }
 }
 
-/*bool_t updateScore(int* score, int* remainingBricks) {
+void breakBrick(int ** bricks, int n, int m) {
+    bricks[n, m] = 0;
+}
+
+bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight) {
     bool_t gameIsOver = false;
+    if (ball.y > winHeight)
+    {
+        //gameIsOver = true;
+        printf("GAME OVER\n");
+    }
+    
 
     return gameIsOver;
-}*/
+}
 
 /**
  * @brief Boucle de jeu du casse-briques
@@ -221,6 +203,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               paddle = {0},
               ball = {0},
               speed = {0};
+    
+    bool_t gameIsOver = false;
 
     speed.x = 20;
     speed.y = -20;
@@ -241,11 +225,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     ball.x = (cell.w * m - ball.w) / 2; 
     ball.y = paddle.y - ball.h;
 
-    while (program_on) 
+    while (program_on && !gameIsOver) 
     {                                   // La boucle des évènements
         SDL_Event event;                // Evènement à traiter
 
-        while (program_on && SDL_PollEvent(&event)) 
+        while (program_on && SDL_PollEvent(&event) && !gameIsOver) 
         {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
                                         // terminé le programme Défiler l'élément en tête de file dans 'event'
             switch (event.type) 
@@ -313,6 +297,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
         ballCollision(ball, cell, bricks, n, m, paddle, &speed);
+        gameIsOver = updateScore(&score, &remainingBricks, ball, window_dimensions.h);
+
         moveBall(&ball, speed);
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
