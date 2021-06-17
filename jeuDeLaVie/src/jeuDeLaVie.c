@@ -117,8 +117,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
                         cellDimensions(window, &cell, n, m);
                     }
                     break;
-                case SDL_QUIT:                             
-                    program_on = SDL_FALSE;                   
+                case SDL_QUIT:                         
+                    program_on = 0;                   
                     break;
                 case SDL_KEYDOWN:                              
                     switch (event.key.keysym.sym) 
@@ -129,9 +129,9 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
                             break;
                         case SDLK_ESCAPE:                           // 'ESCAPE'  
                         case SDLK_q:                                // 'q'
-                            program_on = 0;                         // 'escape' ou 'q', d'autres façons de quitter le programme                                     
+                            program_on = 0;                                                         
                             break;
-                        default:                                    // Une touche appuyée qu'on ne traite pas
+                        default:                      
                             break;
                     }
                     break;
@@ -149,7 +149,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
                         change_state(&grid, n, m, mouse.x, mouse.y);          
                     }
                     break;
-                default:                                            // Les évènements qu'on n'a pas envisagé
+                default:                                            
                     break;
             }
         }
@@ -228,7 +228,7 @@ int main(int argc, char **argv)
             initMaze(rule);	
 
             gameLoop(window, renderer, grid, n, m, rule);
-
+            
             free(rule);
             freeGrid(grid, n);
         }
