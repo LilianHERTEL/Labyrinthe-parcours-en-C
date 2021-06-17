@@ -27,3 +27,25 @@ void end_sdl(char ok,char const* msg,SDL_Window* window,SDL_Renderer* renderer);
  * @param cell
  */
 void drawGrid(SDL_Renderer *renderer, int ** grille, int n, int m, SDL_Rect cell); 
+
+/**
+ * @brief Permet de calculer les dimensions d'une cellule par rapport a la taille de la fenetre
+ * 
+ * @param window la fenetre
+ * @param cell la cellule (SDL_Rect)
+ * @param n nombre de lignes de la grille
+ * @param m nombre de colonnes de la grille
+ */
+void cellDimensions(SDL_Window * window, SDL_Rect * cell, int n, int m);
+
+/**
+ * @brief Boucle de jeu du jeu de la vie facon labyrinthe
+ * 
+ * @param window 
+ * @param renderer 
+ * @param grid 
+ * @param n 
+ * @param m 
+ * @param rule 
+ */
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, int m, rule_t * rule);

@@ -62,6 +62,14 @@ void drawGrid(SDL_Renderer *renderer, int ** grille, int n, int m, SDL_Rect cell
 	SDL_RenderPresent(renderer);
 }
 
+/**
+ * @brief Permet de calculer les dimensions d'une cellule par rapport a la taille de la fenetre
+ * 
+ * @param window la fenetre
+ * @param cell la cellule (SDL_Rect)
+ * @param n nombre de lignes de la grille
+ * @param m nombre de colonnes de la grille
+ */
 void cellDimensions(SDL_Window * window, SDL_Rect * cell, int n, int m)
 {
     SDL_Rect window_dimensions = {0};
@@ -73,6 +81,16 @@ void cellDimensions(SDL_Window * window, SDL_Rect * cell, int n, int m)
     cell->y = (window_dimensions.h - cell->h * n) / 2 ;
 }
 
+/**
+ * @brief Boucle de jeu du jeu de la vie facon labyrinthe
+ * 
+ * @param window 
+ * @param renderer 
+ * @param grid 
+ * @param n 
+ * @param m 
+ * @param rule 
+ */
 void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, int m, rule_t * rule)
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
@@ -150,7 +168,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
 }
 
 /**
- * @brief Affiche une execution du jeu de la vie
+ * @brief Affiche le jeu de la vie facon labyrinthe
  * 
  * @param argc 
  * @param argv 
