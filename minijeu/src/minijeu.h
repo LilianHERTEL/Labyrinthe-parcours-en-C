@@ -104,6 +104,20 @@ void moveBall(SDL_Rect *ball, SDL_Rect speed);
 void breakBrick(int *** bricks, int n, int m);
 
 /**
+ * @brief Calcul les collisions de la balle dans son environnement et modifie sa vitesse en consequence
+ * 
+ * @param ball La balle
+ * @param brick Dimensions d'une brique
+ * @param bricks Grille d'entiers qui represente les briques
+ * @param n Nombre de lignes de la grille
+ * @param m Nombre de colonnes de la grille
+ * @param paddle Le paddle
+ * @param speed Vitesse de la balle
+ * @return bool_t true : une brique a ete cassee, false sinon
+ */
+bool_t ballCollision(SDL_Rect ball, SDL_Rect brick, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed);
+
+/**
  * @brief Fait bouger le paddle
  * 
  * @param paddle Le paddle
@@ -124,3 +138,17 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect brick, int m, int step);
  * @return bool_t true : la partie est finie, false elle continue
  */
 bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHeight, bool_t brokenBrick);
+
+/**
+ * @brief Boucle de jeu du casse-briques
+ * 
+ * @param window La fenetre du jeu
+ * @param renderer Le rendu de la fenetre
+ * @param bricks Grille d'entiers qui represente les briques
+ * @param n Nombre de ligne de la grille
+ * @param m Nombre de colonnes de la grille
+ * @param nbBricks Nombre de briques total
+ * @param font Police d'ecriture
+ * @param texture Texture pour les images
+ */
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture);
