@@ -4,7 +4,7 @@ int main(int argc, char **argv) {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Rect r1, r2, r3;
-	int i, x = 100, y = 100, width = 500, height = 300, delay = 100;
+	int i, x = 100, y = 100, width = 500, height = 300, delay = 100, n = 100;
 
 	(void)argc;
 	(void)argv;
@@ -39,12 +39,12 @@ int main(int argc, char **argv) {
 	r3.x = width / 2;
 	r3.y = 2 * height / 3;
 	
-	for(i = 0; i < 50; ++i) {
+	for(i = 0; i < n; ++i) {
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 		moveSquare1(renderer, &r1);
 		moveSquare2(renderer, &r2);
-		moveSquare3(renderer, &r3);
+		moveSquare3(renderer, &r3, 20 - i);
 		SDL_RenderPresent(renderer);
 		SDL_Delay(delay);
 	}
@@ -81,7 +81,17 @@ void moveSquare2(SDL_Renderer *renderer, SDL_Rect *rect) {
 	}
 	SDL_RenderFillRect(renderer, rect);	
 }
-void moveSquare3(SDL_Renderer *renderer, SDL_Rect *rect) {
-	(void)renderer;
-	(void)rect;
+void moveSquare3(SDL_Renderer *renderer, SDL_Rect *rect, int speed) {
+	int w, h;
+	
+	SDL_GetRendererOutputSize(renderer, &w, &h);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 50, 255);
+	rect->y += speed;
+	if(rect->y + rect->h > h) {
+		rect->y = 0;
+	}
+	else if(rect->y < 0) {
+		rect->y = h - rect->h;
+	}
+	SDL_RenderFillRect(renderer, rect);
 }
