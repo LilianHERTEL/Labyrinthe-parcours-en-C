@@ -448,8 +448,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     char      score_s[15];                                    // Chaine de caracteres pour afficher le score
 
     // Initialisation de la vitesse de la balle
-    speed.x = 18;
-    speed.y = -18;
+    speed.x = 20;
+    speed.y = -20;
 
     // Initialisation des coordonnees
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
