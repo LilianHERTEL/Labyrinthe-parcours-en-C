@@ -39,8 +39,8 @@ int main(int argc, char **argv) {
 	r3.x = width / 2;
 	r3.y = 2 * height / 3;
 	
-	for(i = 0; i < 100; ++i) {
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	for(i = 0; i < 50; ++i) {
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 		moveSquare1(renderer, &r1);
 		moveSquare2(renderer, &r2);
@@ -48,7 +48,6 @@ int main(int argc, char **argv) {
 		SDL_RenderPresent(renderer);
 		SDL_Delay(delay);
 	}
-	SDL_Delay(1000);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -71,8 +70,12 @@ void moveSquare1(SDL_Renderer *renderer, SDL_Rect *rect) {
 }
 
 void moveSquare2(SDL_Renderer *renderer, SDL_Rect *rect) {
-	(void)renderer;
-	(void)rect;
+	int w, h, speed = 10;
+	
+	SDL_GetRendererOutputSize(renderer, &w, &h);
+	SDL_SetRenderDrawColor(renderer, (55 * rect->w) % 256, rect->w % 256, (110 * rect->w) % 256, 255);
+
+	SDL_RenderFillRect(renderer, rect);	
 }
 void moveSquare3(SDL_Renderer *renderer, SDL_Rect *rect) {
 	(void)renderer;
