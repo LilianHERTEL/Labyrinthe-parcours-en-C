@@ -133,9 +133,9 @@ int main(int argc, char **argv)
 
     /* INITIALISATIONS */
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+    if (initializeSDL() == false) 
     {
-        end_sdl(0, "ERROR SDL INIT", window, renderer);
+        quitSDL(0, "ERROR SDL INIT", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
