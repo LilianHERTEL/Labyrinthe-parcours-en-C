@@ -73,14 +73,14 @@ void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect ce
     poseY = cell.y;
     source.w = 390;
     source.h = 130;
+    source.x = 770;
+    source.y = 260;
 
 	for(i = 0; i < n; i++) {
 		rectangle.y = poseY + rectangle.h * i;
 		for(j = 0; j < m; j++) {
 			rectangle.x = poseX + rectangle.w * j;
             if(bricks[i][j] == 1) {
-                source.x = 770;
-                source.y = 260;
                 SDL_RenderCopy(renderer, texture, &source, &rectangle);
             }
 		}
@@ -155,54 +155,74 @@ void breakBrick(int *** bricks, int n, int m) {
 
 void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
 {
+    int leftBall, leftBrick,
+        rightBall, rightBrick,
+        topBall, topBrick,
+        bottomBall, bottomBrick,
+        rightWall, leftWall,
+        topWall,
+        topPaddle;
+
+    leftBall = ball.x + speed + cell.x;
+    rightBall = ball.x + speed + ball.w + cell.x;
+    topBall = ball.y + speed + cell.y;
+    bottomBall = ball.y + speed - ball.h + cell.y;
+
+    rightWall = cell.x + cell.w * m;
+    leftWall = cell.x;
+    topWall = cell.y;
+
+    topPaddle = paddle.y - paddle.h;
+
     //Collisions murs
-    if(ball.x + speed->x <= cell.x || ball.x + ball.w + speed->x > cell.x + cell.w * m)
+    if(leftBall <= leftWall || rightBall > rightWall)
     {
         speed->x = - speed->x;
     }
     //Collisions paddle
-    if(ball.y + speed->y > paddle.y - paddle.h && ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
+    if(topBall >= topPaddle)//&& ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
     {
         speed->y = - speed->y;
     }
     else
     {
-        //Collisions briques
-        if(ball.y + speed->y < cell.y + cell.h * n - 1)
-        {
-            int ballI, ballJ;
-            ballI = (ball.y-cell.y)/cell.h ;
-            ballJ = (ball.x - cell.x)/cell.w ;
-            //printf("%d, %d\n", ballI, ballJ);
-            if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
-            {   
-                //               a droite                                                   
-                if(ball.x + speed->x < ballJ * (cell.w+1) + cell.x )
-                {
-                    speed->x = -speed->x;
-                } 
-                else
-                {   // a gauche ************************
-                    if(ball.x + ball.w + speed->x > ballJ* cell.w + cell.x)
-                        speed->x = -speed->x;
-                }
-                //             en bas                                                 
-                if(ball.y + speed-> y > ballI * cell.h + cell.y)
-                {
-                    speed->y = -speed->y;
-                }
-                else
-                {//         en haut **********************
-                    if(ball.y - ball.h + speed->y < ballI * (cell.h-1) + cell.y)
-                        speed->y = -speed->y;
-                }
-                breakBrick(bricks, ballI, ballJ);
-            }
-            if(ball.y + speed->y <= cell.y) // mur du haut
+        int ballI, ballJ;
+        ballI = (ball.y-cell.y)/cell.h ;
+        ballJ = (ball.x - cell.x)/cell.w ;
+
+        //printf("%d, %d\n", ballI, ballJ);
+        if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
+        {   
+            leftBrick = cell.x + ballJ * cell.w;
+            rightBrick = cell.x + (ballJ + 1) * cell.w;
+            topBrick = cell.y + BallI * cell.h;
+            bottomBrick = cell.y + (ballI + 1) * cell.h;
+            // avec le cote droit d'une brique                                                   
+            if(leftBall <= rightBrick)
             {
-                speed->y = - speed->y;
+                speed->x = -speed->x;
+            }  // avec le cote gauche d'une brique  
+            if(rightBall >= leftBrick)
+            {
+                speed->x = -speed->x;
             }
+            // Avec le bas d'une brique                                                
+            if(topBall <= bottomBrick)
+            {
+                speed->y = -speed->y;
+            }
+            // Avec le haut d'une brique
+            if(bottomBall >= topBrick)
+            {
+                speed->y = -speed->y;
+            }
+            breakBrick(bricks, ballI, ballJ);
         }
+        if(topBall <= topWall) // mur du haut
+        {
+            speed->y = - speed->y;
+        }
+        
     }
 }
 
@@ -240,8 +260,6 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
-              paddleSource = {0},
-              paddleDest = {0},
               cell = {0},
               window_dimensions = {0},
               paddle = {0},
@@ -250,8 +268,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     
     bool_t gameIsOver = false;
 
-    speed.x = 25;
-    speed.y = -25;
+    speed.x = 18;
+    speed.y = -18;
               
     int score = 0;
     int remainingBricks = n*m;
@@ -335,7 +353,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         int ballI, ballJ;
         ballI = (mouse.y-cell.y)/cell.h;
         ballJ = (mouse.x - cell.x)/cell.w ;
-        printf("%d,%d\n",ballI, ballJ);
+        printf("%d,%d\n",mouse.x, mouse.y);
 
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
