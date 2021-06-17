@@ -69,7 +69,6 @@ void paddleDimensions(SDL_Rect * paddle, SDL_Rect cell, int m)
  */
 void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddleDest, SDL_Texture *texture)
 {
-    printf("coord x = %d\n", paddleDest.x);
     SDL_Rect paddleSource = {0};
 
    	paddleSource.x = 0;
@@ -155,11 +154,21 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
     }
 }
 
-/*bool_t updateScore(int* score, int* remainingBricks) {
+void breakBrick(int ** bricks, int n, int m) {
+    bricks[n, m] = 0;
+}
+
+bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight) {
     bool_t gameIsOver = false;
+    if (ball.y > winHeight)
+    {
+        //gameIsOver = true;
+        printf("GAME OVER\n");
+    }
+    
 
     return gameIsOver;
-}*/
+}
 
 /**
  * @brief Boucle de jeu du casse-briques
@@ -184,6 +193,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               paddle = {0},
               ball = {0},
               speed = {0};
+    
+    bool_t gameIsOver = false;
 
     speed.x = 20;
     speed.y = -20;
@@ -204,11 +215,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     ball.x = (cell.w * m - ball.w) / 2; 
     ball.y = paddle.y - ball.h;
 
-    while (program_on) 
+    while (program_on && !gameIsOver) 
     {                                   // La boucle des évènements
         SDL_Event event;                // Evènement à traiter
 
-        while (program_on && SDL_PollEvent(&event)) 
+        while (program_on && SDL_PollEvent(&event) && !gameIsOver) 
         {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
                                         // terminé le programme Défiler l'élément en tête de file dans 'event'
             switch (event.type) 
@@ -274,6 +285,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
         ballCollision(ball, cell, bricks, n, m, paddle, &speed);
+        gameIsOver = updateScore(&score, &remainingBricks, ball, window_dimensions.h);
+
         moveBall(&ball, speed);
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
