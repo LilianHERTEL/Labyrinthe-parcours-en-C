@@ -129,14 +129,14 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
         speed->x = -speed->x;
     }
     //Collisions paddle
-    if(ball.y + speed->y > paddle.y)
+    if(ball.y + speed->y > paddle.y - paddle.h )//&& ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
     {
         speed->y = - speed->y;
     }
     //Collisions briques
     if(ball.y + speed->y < cell.y + cell.h * n)
     {
-        if(bricks[(ball.y-cell.y)/cell.h][(ball.x - cell.x)/cell.w] == 1)
+        if(bricks[(ball.y-cell.y)/cell.h -1][(ball.x - cell.x)/cell.w -1] == 1)
         {
             speed->y = - speed->y;
             //fonction de cassage de brique
@@ -170,8 +170,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               ball = {0},
               speed = {0};
 
-    speed.x = 10;
-    speed.y = -10;
+    speed.x = 20;
+    speed.y = -20;
 
 
 	texture = loadTextureFromImage("../res/sprites.png", renderer);
