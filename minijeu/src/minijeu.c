@@ -111,6 +111,10 @@ void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_di
     SDL_RenderDrawLine(renderer, cell.x + cell.w * m, cell.y, cell.x + cell.w * m, window_dimensions.h);
 }
 
+void movePaddle(SDL_Rect* paddle, char direction) {
+    printf("x = %d\n", paddle->x);
+}
+
 bool_t updateScore(int* score, int* remainingBricks) {
     bool_t gameIsOver = false;
 
@@ -179,9 +183,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     {             
                         case SDLK_LEFT:                                // 'fleche gauche'
                         	//bouger la plateforme a gauche
+                            movePaddle(&paddle, 'l');
                         	break;
                         case SDLK_RIGHT:
                         	//bouger la plateforme a droite
+                            movePaddle(&paddle, 'r');
                         	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
