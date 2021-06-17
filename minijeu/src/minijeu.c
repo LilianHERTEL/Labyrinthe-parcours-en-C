@@ -469,11 +469,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     title.w = window_dimensions.w / 4;
     title.h = window_dimensions.h / 10;
 
-    while (program_on && !gameIsOver) 
+    while (program_on) 
     {                                   // La boucle des évènements
         SDL_Event event;                // Evènement à traiter
 
-        while (program_on && SDL_PollEvent(&event) && !gameIsOver) 
+        while (program_on && SDL_PollEvent(&event)) 
         {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
                                         // terminé le programme Défiler l'élément en tête de file dans 'event'
             switch (event.type) 
@@ -517,6 +517,24 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     break;
             }
         } 
+
+        if(gameIsOver)
+        {
+            paused = SDL_TRUE;
+            title.x = (window_dimensions.w-title.w)/2;
+            title.y = (window_dimensions.h-title.h)/2;
+            if (remainingBricks == 0) 
+            {
+                drawText("Victoire !", title, font, renderer);
+            }
+            else 
+            {
+                drawText("Defaite !", title, font, renderer);
+            }
+            SDL_RenderPresent(renderer);  
+            SDL_RenderClear(renderer);
+        }
+
         if (!paused) 
         {      
             // Affichage du jeu et fonctions
@@ -542,14 +560,4 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         SDL_Delay(50);                                  
     }
     SDL_DestroyTexture(texture);
-
-    if (remainingBricks == 0) 
-    {
-        /* GERER VICTOIRE A FAIRE */
-    }
-    else 
-    {
-        printf("SCORE : %d\n", score);
-        /* GERER DEFAITE A FAIRE */
-    }
 }
