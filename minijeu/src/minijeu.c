@@ -53,28 +53,36 @@ void cellDimensions(SDL_Rect * cell, int n, int m, SDL_Rect window_dimensions)
  * @param m 
  * @param cell
  */
-void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect cell) 
+void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect cell, SDL_Texture *texture) 
 {
 	int               i,
                       j,
                       poseX,
                       poseY;
-	SDL_Rect          rectangle;
+	SDL_Rect          rectangle,
+                      source = {0};
 
-	rectangle.w = cell.w;
-	rectangle.h = cell.h;
+    rectangle.w = cell.w;
+    rectangle.h = cell.h;
     poseX = cell.x;
     poseY = cell.y;
+    source.w = 390;
+    source.h = 130;
 
 	for(i = 0; i < n; i++) {
 		rectangle.y = poseY + rectangle.h * i;
 		for(j = 0; j < m; j++) {
 			rectangle.x = poseX + rectangle.w * j;
-            if(bricks[i][j] == 1)
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            else
+            if(bricks[i][j] == 1) {
+                source.x = 770;
+                source.y = 260;
+                SDL_RenderCopy(renderer, texture, &source, &rectangle);
+            }
+            else {
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-			SDL_RenderFillRect(renderer, &rectangle);
+                SDL_RenderFillRect(renderer, &rectangle);
+            }
+			
 		}
 	}
 }
@@ -252,7 +260,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         //SDL_SetRenderDrawColor(renderer, (mouse.x/3) % 255, ((mouse.x + mouse.y) / 3) % 255, (mouse.y/3) % 255, 255);
 	    //SDL_RenderClear(renderer);
 
-        drawBricks(renderer, bricks, n, m, cell); 
+        drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
