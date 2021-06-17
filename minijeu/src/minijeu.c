@@ -129,7 +129,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
         speed->x = -speed->x;
     }
     //Collisions paddle
-    if(ball.y + speed->y > paddle.y - paddle.h )//&& ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
+    if(ball.y + speed->y > paddle.y - paddle.h && ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
     {
         speed->y = - speed->y;
     }
@@ -141,7 +141,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
             speed->y = - speed->y;
             //fonction de cassage de brique
         }
-        if(ball.y + speed->y <= 0)
+        if(ball.y + speed->y <= cell.y) // mur du haut
         {
             speed->y = - speed->y;
         }
