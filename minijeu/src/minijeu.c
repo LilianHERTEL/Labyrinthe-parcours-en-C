@@ -175,8 +175,12 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
     }
 }
 
-void movePaddle(SDL_Rect* paddle, char direction) {
+void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
     printf("x = %d\n", paddle->x);
+    int new_x = paddle->x + 20*step;
+    if (new_x >= cell.x && new_x < cell.w*m - paddle->w) {
+        paddle->x = new_x;
+    }
 }
 
 /*bool_t updateScore(int* score, int* remainingBricks) {
@@ -255,11 +259,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     {             
                         case SDLK_LEFT:                                // 'fleche gauche'
                         	//bouger la plateforme a gauche
-                            movePaddle(&paddle, 'l');
+                            movePaddle(&paddle, cell, m, -1);
                         	break;
                         case SDLK_RIGHT:
                         	//bouger la plateforme a droite
-                            movePaddle(&paddle, 'r');
+                            movePaddle(&paddle, cell, m, 1);
                         	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
