@@ -138,18 +138,52 @@ void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_di
     SDL_RenderDrawLine(renderer, cell.x + cell.w * m, cell.y, cell.x + cell.w * m, window_dimensions.h);
 }
 
-void movePaddle(SDL_Rect* paddle, char direction, SDL_Renderer* renderer) {
-    //printf("x = %d\n", paddle->x);
-    paddle->x = paddle->x -10;
-    //printf("x = %d\n", paddle->x);
-    drawPaddle(renderer, *paddle);
+void moveBall(SDL_Rect *ball, SDL_Rect speed)
+{
+    ball->x = ball->x + speed.x;
+    ball->y = ball->y + speed.y;
 }
 
-bool_t updateScore(int* score, int* remainingBricks) {
+void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
+{
+    //Collisions murs
+    if(ball.x + speed->x <= cell.x)
+    {
+        speed->x = - speed->x;
+    }
+    if(ball.x + ball.w + speed->x > cell.x + cell.w * m)
+    {
+        speed->x = -speed->x;
+    }
+    //Collisions paddle
+    if(ball.y + speed->y > paddle.y - paddle.h )//&& ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
+    {
+        speed->y = - speed->y;
+    }
+    //Collisions briques
+    if(ball.y + speed->y < cell.y + cell.h * n)
+    {
+        if(bricks[(ball.y-cell.y)/cell.h -1][(ball.x - cell.x)/cell.w -1] == 1)
+        {
+            speed->y = - speed->y;
+            //fonction de cassage de brique
+        }
+        if(ball.y + speed->y <= 0)
+        {
+            speed->y = - speed->y;
+        }
+    }
+}
+
+void movePaddle(SDL_Rect* paddle, char direction) {
+    printf("x = %d\n", paddle->x);
+}
+
+/*bool_t updateScore(int* score, int* remainingBricks) {
     bool_t gameIsOver = false;
 
     return gameIsOver;
-}
+}*/
 
 /**
  * @brief Boucle de jeu du casse-briques
@@ -167,13 +201,16 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
-              //cell = {0};
               paddleSource = {0},
               paddleDest = {0},
               cell = {0},
               window_dimensions = {0},
               paddle = {0},
-              ball = {0};
+              ball = {0},
+              speed = {0};
+
+    speed.x = 20;
+    speed.y = -20;
               
     int score = 0;
     int remainingBricks = n*m;
@@ -218,11 +255,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     {             
                         case SDLK_LEFT:                                // 'fleche gauche'
                         	//bouger la plateforme a gauche
-                            movePaddle(&paddle, 'l', renderer);
+                            movePaddle(&paddle, 'l');
                         	break;
                         case SDLK_RIGHT:
                         	//bouger la plateforme a droite
-                            movePaddle(&paddle, 'r', renderer);
+                            movePaddle(&paddle, 'r');
                         	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
@@ -260,13 +297,16 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 
         drawBricks(renderer, bricks, n, m, cell); 
         drawLimits(renderer, cell, m, window_dimensions); 
+        ballCollision(ball, cell, bricks, n, m, paddle, &speed);
+        moveBall(&ball, speed);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
              
         if (!paused) 
         {      
-            //printf("paddle x = %d\n", paddle.x);
-	        SDL_RenderPresent(renderer);                          
+	        SDL_RenderPresent(renderer);  
+            SDL_RenderClear(renderer);                        
             //nextIteration(&grid, n, m, rule);             // la vie continue... 
         }
         SDL_Delay(50);                                  
