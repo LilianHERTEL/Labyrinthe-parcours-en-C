@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "bool.h"
 #include "SDL2/SDL.h"
+#include <SDL2/SDL_image.h>
 
 /**
  * @brief Initialise la librairie SDL

@@ -39,7 +39,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer)
                 case SDL_QUIT:                         
                     program_on = 0;                   
                     break;
-                case SDL_KEYDOWN:                              
+                case SDL_KEYDOWN:
                     switch (event.key.keysym.sym) 
                     {             
                         case SDLK_LEFT:                                // 'fleche gauche'
@@ -53,7 +53,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer)
                             break;
                         case SDLK_ESCAPE:                           // 'ESCAPE'  
                         case SDLK_q:                                // 'q'
-                            program_on = 0;                                                         
+                            program_on = 0;
                             break;
                         default:                      
                             break;
