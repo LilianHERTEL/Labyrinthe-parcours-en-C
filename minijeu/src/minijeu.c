@@ -349,18 +349,18 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booleen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
-    SDL_Rect  brick = {0},
-              window_dimensions = {0},
-              paddle = {0},
-              ball = {0},
-              speed = {0},
-              text, 
-              title; 
-    bool_t    gameIsOver = false,
-              brokenBrick = false;
-    int       score = 0,
-              remainingBricks = nbBricks;
-    char      score_s[15];
+    SDL_Rect  brick = {0},                                    // Dimensions d'une brique
+              window_dimensions = {0},                        // Dimensions et position de la fenetre
+              paddle = {0},                                   // Dimensions et position du paddle
+              ball = {0},                                     // Dimensions et position de la balle
+              speed = {0},                                    // Valeurs de la vitesse de la balle
+              text = {0},                                     // Dimensions et position du texte
+              title = {0};                                    // Dimensions et position du titre
+    bool_t    gameIsOver = false,                             // Booleen pour savoir si le jeu est fini
+              brokenBrick = false;                            // Booleen pour savoir si une brique a ete cassee
+    int       score = 0,                                      // Score de la partie
+              remainingBricks = nbBricks;                     // Nombre de briques restants
+    char      score_s[15];                                    // Chaine de caracteres pour afficher le score
 
     // Initialisation de la vitesse de la balle
     speed.x = 18;
