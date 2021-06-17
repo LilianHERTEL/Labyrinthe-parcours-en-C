@@ -185,7 +185,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
                 } 
                 else
                 {   // a gauche ************************
-                    if(ball.x + speed->x > ballJ* cell.w + cell.x)
+                    if(ball.x + ball.w + speed->x > ballJ* cell.w + cell.x)
                         speed->x = -speed->x;
                 }
                 //             en bas                                                 
@@ -195,7 +195,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
                 }
                 else
                 {//         en haut **********************
-                    if(ball.y + speed-> y < ballI * (cell.h-1) + cell.y)
+                    if(ball.y - ball.h + speed->y < ballI * (cell.h-1) + cell.y)
                         speed->y = -speed->y;
                 }
                 breakBrick(bricks, ballI, ballJ);
