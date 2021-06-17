@@ -421,12 +421,7 @@ int main(int argc, char **argv)
         quitSDL(0, "ERROR SDL INIT", window, renderer);
         exit(EXIT_FAILURE); 
     }
-/*
-    if(IMG_init(0) != 0) {
-        quitSDL(0, "ERROR IMG INIT", window, renderer);
-        exit(EXIT_FAILURE);
-    }
-*/
+
     if(TTF_Init() != 0) {
         quitSDL(0, "ERROR TTF INIT", window, renderer);
         exit(EXIT_FAILURE);
@@ -452,7 +447,6 @@ int main(int argc, char **argv)
         quitSDL(0, "ERROR RENDERER CREATION", window, renderer);
         exit(EXIT_FAILURE); 
     }
-
 
     font = TTF_OpenFont("../res/font.ttf", 500);
     if(font == NULL) {
