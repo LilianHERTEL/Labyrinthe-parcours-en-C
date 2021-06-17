@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 
     if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
     {
-        end_sdl(0, "ERROR GET_DISPLAY_MODE", window, renderer);
+        quitSDL(0, "ERROR GET_DISPLAY_MODE", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
@@ -121,14 +121,14 @@ int main(int argc, char **argv)
                                 screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
     if (window == NULL) 
     {
-        end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
+        quitSDL(0, "ERROR WINDOW CREATION", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL) 
     {
-        end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
+        quitSDL(0, "ERROR RENDERER CREATION", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
@@ -136,6 +136,6 @@ int main(int argc, char **argv)
 
     gameLoop(window, renderer);
 
-    end_sdl(1, "Normal ending", window, renderer);
+    quitSDL(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
 }
