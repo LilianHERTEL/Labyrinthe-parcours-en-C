@@ -111,6 +111,12 @@ void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_di
     SDL_RenderDrawLine(renderer, cell.x + cell.w * m, cell.y, cell.x + cell.w * m, window_dimensions.h);
 }
 
+bool_t updateScore(int* score, int* remainingBricks) {
+    bool_t gameIsOver = false;
+
+    return gameIsOver;
+}
+
 /**
  * @brief Boucle de jeu du casse-briques
  * 
@@ -131,6 +137,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               window_dimensions = {0},
               paddle = {0},
               ball = {0};
+    int score = 0;
+    int remainingBricks = n*m;
 
 
 	texture = loadTextureFromImage("../res/sprites.png", renderer);
