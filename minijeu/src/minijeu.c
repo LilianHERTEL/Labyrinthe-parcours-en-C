@@ -25,8 +25,8 @@ bool_t drawText(char *text, int x, int y, TTF_Font *font, SDL_Renderer *renderer
 
     SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
     SDL_GetRendererOutputSize(renderer, &dest.w, &dest.h);
-    dest.w = dest.w / 40;
-    dest.h = dest.h / 30;
+    dest.w = dest.w / 4;
+    dest.h = dest.h / 10;
     dest.x = x;
     dest.y = y;
     SDL_RenderCopy(renderer, texture, &source, &dest);
@@ -240,8 +240,6 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
-              paddleSource = {0},
-              paddleDest = {0},
               cell = {0},
               window_dimensions = {0},
               paddle = {0},
@@ -255,6 +253,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               
     int score = 0;
     int remainingBricks = n*m;
+    int textx, texty;
 
 	//SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
 	//SDL_QueryTexture(texture, NULL, NULL, NULL/*&paddleSource.w*/, /*&paddleSource.h*/NULL);
@@ -267,6 +266,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     paddle.y = window_dimensions.h - paddle.h;
     ball.x = (cell.w * m - ball.w) / 2; 
     ball.y = paddle.y - ball.h;
+    textx = 7 * window_dimensions.w / 10;
+    texty = window_dimensions.h / 10;
 
     while (program_on && !gameIsOver) 
     {                                   // La boucle des évènements
@@ -276,7 +277,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
                                         // terminé le programme Défiler l'élément en tête de file dans 'event'
             switch (event.type) 
-            {      
+            {
                 case SDL_WINDOWEVENT:
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED)
                     {
@@ -314,7 +315,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     break;
                 case SDL_MOUSEBUTTONDOWN:     
                     SDL_GetMouseState(&mouse.x, &mouse.y);
-                    //Calcul des coordonnees par rapport a l'emplacement du labyrinthe
+                    //Calcul des coordonnees par rapport a l'emplacement du jeu
                     //mouse.x = (mouse.x - cell.x) / cell.w;
                     //mouse.y = (mouse.y - cell.y) / cell.h;
                     if (SDL_BUTTON(SDL_BUTTON_LEFT) ) 
@@ -346,6 +347,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        if(!(drawText("CASSE-BRIQUES", textx, texty, font, renderer))) {
+        	SDL_DestroyTexture(texture);
+        	quitSDL(0, "(gameloop) Erreur de texture", window, renderer);
+        	//sortir proprement
+        }
              
         if (!paused) 
         {      
@@ -419,7 +425,7 @@ int main(int argc, char **argv)
     }
 
 
-    font = TTF_OpenFont("../res/font.ttf", 300);
+    font = TTF_OpenFont("../res/font.ttf", 500);
     if(font == NULL) {
         quitSDL(0, " error font\n", window, renderer);
         exit(EXIT_FAILURE);
