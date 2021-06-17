@@ -111,6 +111,43 @@ void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_di
     SDL_RenderDrawLine(renderer, cell.x + cell.w * m, cell.y, cell.x + cell.w * m, window_dimensions.h);
 }
 
+void moveBall(SDL_Rect *ball, SDL_Rect speed)
+{
+    ball->x = ball->x + speed.x;
+    ball->y = ball->y + speed.y;
+}
+
+void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
+{
+    //Collisions murs
+    if(ball.x + speed->x <= cell.x)
+    {
+        speed->x = - speed->x;
+    }
+    if(ball.x + ball.w + speed->x > cell.x + cell.w * m)
+    {
+        speed->x = -speed->x;
+    }
+    //Collisions paddle
+    if(ball.y + speed->y > paddle.y)
+    {
+        speed->y = - speed->y;
+    }
+    //Collisions briques
+    if(ball.y + speed->y < cell.y + cell.h * n)
+    {
+        if(bricks[(ball.y-cell.y)/cell.h][(ball.x - cell.x)/cell.w] == 1)
+        {
+            speed->y = - speed->y;
+            //fonction de cassage de brique
+        }
+        if(ball.y + speed->y <= 0)
+        {
+            speed->y = - speed->y;
+        }
+    }
+}
+
 /**
  * @brief Boucle de jeu du casse-briques
  * 
@@ -130,7 +167,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               cell = {0},
               window_dimensions = {0},
               paddle = {0},
-              ball = {0};
+              ball = {0},
+              speed = {0};
+
+    speed.x = 10;
+    speed.y = -10;
 
 
 	texture = loadTextureFromImage("../res/sprites.png", renderer);
@@ -212,11 +253,15 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawBricks(renderer, bricks, n, m, cell); 
         drawLimits(renderer, cell, m, window_dimensions); 
         drawPaddle(renderer, paddle);
+        ballCollision(ball, cell, bricks, n, m, paddle, &speed);
+        moveBall(&ball, speed);
         drawBall(renderer, ball);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
              
         if (!paused) 
         {      
-	        SDL_RenderPresent(renderer);                          
+	        SDL_RenderPresent(renderer);  
+            SDL_RenderClear(renderer);                        
             //nextIteration(&grid, n, m, rule);             // la vie continue... 
         }
         SDL_Delay(50);                                  
