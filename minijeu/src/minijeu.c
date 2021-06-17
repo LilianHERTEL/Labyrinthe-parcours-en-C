@@ -1,8 +1,8 @@
 #include "minijeu.h"
 
-bool_t drawText(char *text, int x, int y, TTF_Font *font, SDL_Renderer *renderer) {
+bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer) {
     SDL_Color color = {0};
-    SDL_Rect source = {0}, dest = {0};
+    SDL_Rect source = {0};
     SDL_Texture *texture;
     SDL_Surface *surface;
 
@@ -24,11 +24,13 @@ bool_t drawText(char *text, int x, int y, TTF_Font *font, SDL_Renderer *renderer
     }
 
     SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
+    /*
     SDL_GetRendererOutputSize(renderer, &dest.w, &dest.h);
-    dest.w = dest.w / 40;
-    dest.h = dest.h / 30;
+    dest.w = dest.w / 4;
+    dest.h = dest.h / 10;
     dest.x = x;
     dest.y = y;
+    */
     SDL_RenderCopy(renderer, texture, &source, &dest);
     return true;
 }
@@ -73,14 +75,14 @@ void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect ce
     poseY = cell.y;
     source.w = 390;
     source.h = 130;
+    source.x = 770;
+    source.y = 260;
 
 	for(i = 0; i < n; i++) {
 		rectangle.y = poseY + rectangle.h * i;
 		for(j = 0; j < m; j++) {
 			rectangle.x = poseX + rectangle.w * j;
             if(bricks[i][j] == 1) {
-                source.x = 770;
-                source.y = 260;
                 SDL_RenderCopy(renderer, texture, &source, &rectangle);
             }
 		}
@@ -156,55 +158,75 @@ void breakBrick(int *** bricks, int n, int m) {
 bool_t ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
 {
     bool_t brokenBrick = false;
+    int leftBall, leftBrick,
+        rightBall, rightBrick,
+        topBall, topBrick,
+        bottomBall, bottomBrick,
+        rightWall, leftWall,
+        topWall,
+        topPaddle;
+
+    leftBall = ball.x + speed->x + cell.x;
+    rightBall = ball.x + speed->x + ball.w + cell.x;
+    topBall = ball.y + speed->y + cell.y;
+    bottomBall = ball.y + speed->y - ball.h + cell.y;
+
+    rightWall = cell.x + cell.w * m;
+    leftWall = cell.x;
+    topWall = cell.y;
+
+    topPaddle = paddle.y - paddle.h;
+
     //Collisions murs
-    if(ball.x + speed->x <= cell.x || ball.x + ball.w + speed->x > cell.x + cell.w * m)
+    if(leftBall <= leftWall || rightBall > rightWall)
     {
         speed->x = - speed->x;
     }
     //Collisions paddle
-    if(ball.y + speed->y > paddle.y - paddle.h && ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
+    if(topBall >= topPaddle)//&& ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
     {
         speed->y = - speed->y;
     }
     else
     {
-        //Collisions briques
-        if(ball.y + speed->y < cell.y + cell.h * n - 1)
-        {
-            int ballI, ballJ;
-            ballI = (ball.y-cell.y)/cell.h ;
-            ballJ = (ball.x - cell.x)/cell.w ;
-            //printf("%d, %d\n", ballI, ballJ);
-            if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
-            {   
-                //               a droite                                                   
-                if(ball.x + speed->x < ballJ * (cell.w+1) + cell.x )
-                {
-                    speed->x = -speed->x;
-                } 
-                else
-                {   // a gauche ************************
-                    if(ball.x + speed->x > ballJ* cell.w + cell.x)
-                        speed->x = -speed->x;
-                }
-                //             en bas                                                 
-                if(ball.y + speed-> y > ballI * cell.h + cell.y)
-                {
-                    speed->y = -speed->y;
-                }
-                else
-                {//         en haut **********************
-                    if(ball.y + speed-> y < ballI * (cell.h-1) + cell.y)
-                        speed->y = -speed->y;
-                }
-                breakBrick(bricks, ballI, ballJ);
-                brokenBrick = true;
-            }
-            if(ball.y + speed->y <= cell.y) // mur du haut
+        int ballI, ballJ;
+        ballI = (ball.y-cell.y)/cell.h ;
+        ballJ = (ball.x - cell.x)/cell.w ;
+
+        //printf("%d, %d\n", ballI, ballJ);
+        if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
+        {   
+            leftBrick = cell.x + ballJ * cell.w;
+            rightBrick = cell.x + (ballJ + 1) * cell.w;
+            topBrick = cell.y + ballI * cell.h;
+            bottomBrick = cell.y + (ballI + 1) * cell.h;
+            // avec le cote droit d'une brique                                                   
+            if(leftBall <= rightBrick)
             {
-                speed->y = - speed->y;
+                speed->x = -speed->x;
+            }  // avec le cote gauche d'une brique  
+            if(rightBall >= leftBrick)
+            {
+                speed->x = -speed->x;
             }
+            // Avec le bas d'une brique                                                
+            if(topBall <= bottomBrick)
+            {
+                speed->y = -speed->y;
+            }
+            // Avec le haut d'une brique
+            if(bottomBall >= topBrick)
+            {
+                speed->y = -speed->y;
+            }
+            breakBrick(bricks, ballI, ballJ);
+            brokenBrick = true;
         }
+        if(topBall <= topWall) // mur du haut
+        {
+            speed->y = - speed->y;
+        }
+        
     }
     return brokenBrick;
 }
@@ -220,8 +242,8 @@ bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeigh
     bool_t gameIsOver = false;
     if (ball.y > winHeight)
     {
-        //gameIsOver = true;
-        printf("GAME OVER\n");
+        gameIsOver = true;
+        puts("GAME OVER\n");
     }
     if (brokenBrick) {
         (*score)++;
@@ -249,8 +271,6 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
-              paddleSource = {0},
-              paddleDest = {0},
               cell = {0},
               window_dimensions = {0},
               paddle = {0},
@@ -260,11 +280,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     bool_t gameIsOver = false,
            brokenBrick = false;
 
-    speed.x = 25;
-    speed.y = -25;
+    speed.x = 18;
+    speed.y = -18;
               
     int score = 0;
+    char score_s[15];
     int remainingBricks = nbBricks;
+    SDL_Rect text, title;
+    
 
 	//SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
 	//SDL_QueryTexture(texture, NULL, NULL, NULL/*&paddleSource.w*/, /*&paddleSource.h*/NULL);
@@ -277,6 +300,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     paddle.y = window_dimensions.h - paddle.h;
     ball.x = (cell.w * m - ball.w) / 2; 
     ball.y = paddle.y - ball.h;
+    title.x = 7 * window_dimensions.w / 10;
+    title.y = window_dimensions.h / 10;
+    text.x = 6 * window_dimensions.w / 10;
+    text.y = window_dimensions.h / 3;
+    text.w = window_dimensions.w / 7;
+    text.h = window_dimensions.h / 15;
+    title.w = window_dimensions.w / 4;
+    title.h = window_dimensions.h / 10;
 
     while (program_on && !gameIsOver) 
     {                                   // La boucle des évènements
@@ -286,7 +317,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
                                         // terminé le programme Défiler l'élément en tête de file dans 'event'
             switch (event.type) 
-            {      
+            {
                 case SDL_WINDOWEVENT:
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED)
                     {
@@ -324,7 +355,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     break;
                 case SDL_MOUSEBUTTONDOWN:     
                     SDL_GetMouseState(&mouse.x, &mouse.y);
-                    //Calcul des coordonnees par rapport a l'emplacement du labyrinthe
+                    //Calcul des coordonnees par rapport a l'emplacement du jeu
                     //mouse.x = (mouse.x - cell.x) / cell.w;
                     //mouse.y = (mouse.y - cell.y) / cell.h;
                     if (SDL_BUTTON(SDL_BUTTON_LEFT) ) 
@@ -345,7 +376,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         int ballI, ballJ;
         ballI = (mouse.y-cell.y)/cell.h;
         ballJ = (mouse.x - cell.x)/cell.w ;
-        printf("%d,%d\n",ballI, ballJ);
+        //printf("%d,%d\n",mouse.x, mouse.y);
 
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
@@ -356,6 +387,12 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        sprintf(score_s, "%s%d", "Score : ", score);
+        if(!(drawText("CASSE-BRIQUES", title, font, renderer) && drawText(score_s, text, font, renderer))) {
+        	SDL_DestroyTexture(texture);
+        	quitSDL(0, "(gameloop) Erreur de texture", window, renderer);
+        	//sortir proprement
+        }
              
         if (!paused) 
         {      
@@ -438,7 +475,7 @@ int main(int argc, char **argv)
     }
 
 
-    font = TTF_OpenFont("../res/font.ttf", 300);
+    font = TTF_OpenFont("../res/font.ttf", 500);
     if(font == NULL) {
         quitSDL(0, " error font\n", window, renderer);
         exit(EXIT_FAILURE);
