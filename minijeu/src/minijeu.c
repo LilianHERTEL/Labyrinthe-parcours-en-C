@@ -89,6 +89,7 @@ void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddle)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &paddle);
+    printf("coord x = %d\n", paddle.x);
 }
 
 void ballDimensions(SDL_Rect * ball, SDL_Rect cell, int m)
@@ -111,8 +112,11 @@ void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_di
     SDL_RenderDrawLine(renderer, cell.x + cell.w * m, cell.y, cell.x + cell.w * m, window_dimensions.h);
 }
 
-void movePaddle(SDL_Rect* paddle, char direction) {
-    printf("x = %d\n", paddle->x);
+void movePaddle(SDL_Rect* paddle, char direction, SDL_Renderer* renderer) {
+    //printf("x = %d\n", paddle->x);
+    paddle->x = paddle->x -10;
+    //printf("x = %d\n", paddle->x);
+    drawPaddle(renderer, *paddle);
 }
 
 bool_t updateScore(int* score, int* remainingBricks) {
@@ -183,11 +187,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     {             
                         case SDLK_LEFT:                                // 'fleche gauche'
                         	//bouger la plateforme a gauche
-                            movePaddle(&paddle, 'l');
+                            movePaddle(&paddle, 'l', renderer);
                         	break;
                         case SDLK_RIGHT:
                         	//bouger la plateforme a droite
-                            movePaddle(&paddle, 'r');
+                            movePaddle(&paddle, 'r', renderer);
                         	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
@@ -230,6 +234,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
              
         if (!paused) 
         {      
+            //printf("paddle x = %d\n", paddle.x);
 	        SDL_RenderPresent(renderer);                          
             //nextIteration(&grid, n, m, rule);             // la vie continue... 
         }
