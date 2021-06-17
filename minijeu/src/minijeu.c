@@ -57,13 +57,13 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE); 
     }
 
-    font = TTF_OpenFont("../res/font.ttf", 500);
+    font = TTF_OpenFont("../fonts/font.ttf", 500);
     if(font == NULL) {
         quitSDL(0, " error font\n", window, renderer);
         exit(EXIT_FAILURE);
     }
 
-	texture = loadTextureFromImage("../res/sprites.png", renderer);
+	texture = loadTextureFromImage("../images/sprites.png", renderer);
     if(texture == NULL) {
         quitSDL(0, " error texture\n", window, renderer);
         exit(EXIT_FAILURE);
