@@ -11,10 +11,18 @@ bool_t initializeSDL(void) {
 	return status;
 }
 
-void quitSDL(bool_t status,                              // fin normale : ok = 0 ; anormale ok = 1
-             char const* msg,                            // message à afficher
-             SDL_Window* window,                         // fenêtre à fermer
-             SDL_Renderer* renderer) {                   // renderer à fermer                           
+/**
+ * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
+ * 
+ * @param ok 0 : erreur, 1 :normal
+ * @param msg message de fin
+ * @param window fenetre a fermer
+ * @param renderer rendu a fermer
+ */
+void quitSDL(bool_t status,
+             char const* msg,
+             SDL_Window* window,
+             SDL_Renderer* renderer) {                
   char msg_formated[255];
   int l;
 
