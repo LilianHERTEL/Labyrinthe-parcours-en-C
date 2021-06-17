@@ -29,32 +29,26 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
 
 
 /**
- * @brief Affiche une matrice d'entiers dans la fenetre
+ * @brief Affiche une matrice d'entiers dans le rendu
  * 
- * @param window 
  * @param renderer 
  * @param grille 
  * @param n 
  * @param m 
+ * @param cell
  */
-void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n, int m) 
+void drawGrid(SDL_Renderer *renderer, int ** grille, int n, int m, SDL_Rect cell) 
 {
 	int               i,
                       j,
                       poseX,
                       poseY;
-	SDL_Rect          window_dimensions = {0},
-                      rectangle;
-	
-	SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h); 
+	SDL_Rect          rectangle;
 
-    SDL_SetRenderDrawColor(renderer, 150, 150, 255, 0);
-	SDL_RenderClear(renderer);
-
-	rectangle.w = window_dimensions.h / m ;
-	rectangle.h = window_dimensions.h / n ;
-    poseX = (window_dimensions.w - rectangle.w * m) / 2 ;
-    poseY = (window_dimensions.h - rectangle.h * n) / 2 ;
+	rectangle.w = cell.w;
+	rectangle.h = cell.h;
+    poseX = cell.x;
+    poseY = cell.y;
 
 	for(i = 0; i < n; i++) {
 		rectangle.y = poseY + rectangle.h * i;
@@ -72,6 +66,10 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
+    SDL_Rect  mouse = {0},
+              cell = {0},
+              window_dimensions = {0};
+
     while (program_on) 
     {                                   // La boucle des évènements
         SDL_Event event;                // Evènement à traiter
@@ -81,46 +79,59 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** grid, int n, 
                                         // terminé le programme Défiler l'élément en tête de file dans 'event'
             switch (event.type) 
             {                               
-            case SDL_QUIT:                             
-                program_on = SDL_FALSE;                   
-                break;
-            case SDL_KEYDOWN:                             // Le type de event est : une touche appuyée
-                                                            // comme la valeur du type est SDL_Keydown, dans la pratie 'union' de
-                                                            // l'event, plusieurs champs deviennent pertinents   
-                switch (event.key.keysym.sym) 
-                {             // la touche appuyée est ...
-                    case SDLK_p:                                // 'p'
-                    case SDLK_SPACE:                            // 'SPC'
-                        paused = !paused;                         // basculement pause/unpause
-                        break;
-                    case SDLK_ESCAPE:                           // 'ESCAPE'  
-                    case SDLK_q:                                // 'q'
-                        program_on = 0;                           // 'escape' ou 'q', d'autres façons de quitter le programme                                     
-                        break;
-                    default:                                    // Une touche appuyée qu'on ne traite pas
+                case SDL_QUIT:                             
+                    program_on = SDL_FALSE;                   
                     break;
-                }
-                break;
-            case SDL_MOUSEBUTTONDOWN:                     // Click souris   
-                if (SDL_GetMouseState(NULL, NULL) & 
-                    SDL_BUTTON(SDL_BUTTON_LEFT) ) {         // Si c'est un click gauche
-                    //change_state(state, 1, window);           // Fonction à éxécuter lors d'un click gauche
-                } 
-                else if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT) ) 
-                { // Si c'est un click droit
-                    //change_state(state, 2, window);           // Fonction à éxécuter lors d'un click droit
-                }
-                break;
-                default:                                      // Les évènements qu'on n'a pas envisagé
+                case SDL_KEYDOWN:                              
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_p:                                // 'p'
+                        case SDLK_SPACE:                            // 'SPC'
+                            paused = !paused;                       // basculement pause/unpause
+                            break;
+                        case SDLK_ESCAPE:                           // 'ESCAPE'  
+                        case SDLK_q:                                // 'q'
+                            program_on = 0;                         // 'escape' ou 'q', d'autres façons de quitter le programme                                     
+                            break;
+                        default:                                    // Une touche appuyée qu'on ne traite pas
+                            break;
+                    }
+                    break;
+                case SDL_MOUSEBUTTONDOWN:     
+                    SDL_GetMouseState(&mouse.x, &mouse.y);
+                    //Calcul des coordonnees par rapport a l'emplacement du labyrinthe
+                    mouse.x = (mouse.x - cell.x) / cell.w;
+                    mouse.y = (mouse.y - cell.y) / cell.h;
+                    if (SDL_BUTTON(SDL_BUTTON_LEFT) ) 
+                    {                       
+                        change_state(&grid, n, m, mouse.x, mouse.y);
+                    } 
+                    else if (SDL_BUTTON(SDL_BUTTON_RIGHT) ) 
+                    {                                           
+                        change_state(&grid, n, m, mouse.x, mouse.y);          
+                    }
+                    break;
+                default:                                            // Les évènements qu'on n'a pas envisagé
                     break;
             }
         }
-        drawGrid(window, renderer, grid, n, m);          // On redessine
+        // Calcul des dimensions d'une cellule quand la fenetre change de taille
+        SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+        cell.w = window_dimensions.h / m ;
+        cell.h = window_dimensions.h / n ;    
+        cell.x = (window_dimensions.w - cell.w * m) / 2 ;
+        cell.y = (window_dimensions.h - cell.h * n) / 2 ;
+
+        SDL_GetMouseState(&mouse.x, &mouse.y);
+        SDL_SetRenderDrawColor(renderer, (mouse.x/3) % 255, ((mouse.x + mouse.y) / 3) % 255, (mouse.y/3) % 255, 255);
+	    SDL_RenderClear(renderer);
+
+        drawGrid(renderer, grid, n, m, cell);        
         if (!paused) 
-        {                                  // Si on n'est pas en pause
+        {                                  
             nextIteration(&grid, n, m, rule);             // la vie continue... 
         }
-        SDL_Delay(50);                                  // Petite pause
+        SDL_Delay(50);                                  
     }
 }
 
@@ -182,7 +193,6 @@ int main(int argc, char **argv)
         if(grid)
         {
             grid = createRandomGrid(grid, n, m);
-            drawGrid(window, renderer, grid, n, m);
             initMaze(rule);	
 
             gameLoop(window, renderer, grid, n, m, rule);
@@ -192,6 +202,6 @@ int main(int argc, char **argv)
         }
     }
 
-    end_sdl(0, "Normal ending", window, renderer);
+    end_sdl(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
 }

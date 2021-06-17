@@ -33,3 +33,5 @@ void initMaze(rule_t *maze);
  * @return int** la nouvelle matrice
  */
 void nextIteration(int *** grid, int n, int m, rule_t *rule);
+
+void change_state(int *** grid, int n, int m, int i, int j);

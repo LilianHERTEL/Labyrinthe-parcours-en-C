@@ -18,12 +18,12 @@
 void end_sdl(char ok,char const* msg,SDL_Window* window,SDL_Renderer* renderer); 
 
 /**
- * @brief Affiche une matrice d'entiers dans la fenetre
+ * @brief Affiche une matrice d'entiers dans le rendu
  * 
- * @param window 
  * @param renderer 
  * @param grille 
  * @param n 
  * @param m 
+ * @param cell
  */
-void drawGrid(SDL_Window * window, SDL_Renderer *renderer, int ** grille, int n, int m); 
+void drawGrid(SDL_Renderer *renderer, int ** grille, int n, int m, SDL_Rect cell); 

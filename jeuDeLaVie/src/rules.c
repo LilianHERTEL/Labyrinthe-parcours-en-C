@@ -95,3 +95,15 @@ void nextIteration(int *** grid, int n, int m, rule_t *rule) {
 	*grid = result;
 
 }
+
+void change_state(int *** grid, int n, int m, int i, int j)
+{
+	printf("%d,%d\n", i, j);
+	if(i >= 0 && i < m)
+	{
+		if(j >= 0 && j < n)
+		{
+			(*grid)[j][i] = !(*grid)[j][i];
+		}
+	}
+}
