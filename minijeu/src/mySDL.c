@@ -1,18 +1,17 @@
-#include <stdio.h>
-#include "bool.h"
-#include "SDL2/SDL.h"
-#include <SDL2/SDL_image.h>
+#include "mySDL.h"
 
 /**
  * @brief Initialise la librairie SDL
  * @return un booleen true si tout la librairie s'est initialisee avec succes, false sinon
  */
-bool_t initializeSDL(void) {
+bool_t initializeSDL(void) 
+{
     bool_t status = true;
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+    {
     	fprintf(stderr, "Erreur d'initialisation de la SDL : %s\n", SDL_GetError()); 
     	status = false; 
-	}
+	  }
 	return status;
 }
 
@@ -27,7 +26,8 @@ SDL_Texture* loadTextureFromImage(char *name, SDL_Renderer *renderer) {
 	SDL_Surface* surface;
 	
 	surface = IMG_Load(name);
-	if(surface == NULL) {
+	if(surface == NULL) 
+  {
     IMG_Quit();
 		return NULL;
 	}
@@ -44,14 +44,13 @@ SDL_Texture* loadTextureFromImage(char *name, SDL_Renderer *renderer) {
  * @param window fenetre a fermer
  * @param renderer rendu a fermer
  */
-void quitSDL(bool_t status,
-             char const* msg,
-             SDL_Window* window,
-             SDL_Renderer* renderer) {                
+void quitSDL(bool_t status, char const* msg, SDL_Window* window, SDL_Renderer* renderer) 
+{                
   char msg_formated[255];
   int l;
 
-  if (!status) {
+  if (!status) 
+  {
     strncpy(msg_formated, msg, 250);                                 
     l = strlen(msg_formated);                                        
     strcpy(msg_formated + l, " : %s\n");                     
@@ -63,18 +62,8 @@ void quitSDL(bool_t status,
 
   SDL_Quit();                                                     
 
-  if (!status) {
+  if (!status) 
+  {
 	  exit(EXIT_FAILURE);                                              
   }                                                               
-}
-
-void waitForQuitSDL(void) {
-  SDL_Event event;
-  SDL_bool exit = SDL_FALSE;
-  // Attente de la fermeture de la fenêtre
-  while(!exit) {
-    SDL_WaitEvent(&event);
-    if (event.type == SDL_QUIT) exit = SDL_TRUE;    
-  }
-
 }
