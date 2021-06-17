@@ -231,9 +231,6 @@ bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeigh
         gameIsOver = true;
     }
     
-    printf("SCORE = %d\n", *score);
-    printf("BRICKS = %d\n", *remainingBricks);
-    
     return gameIsOver;
 }
 
