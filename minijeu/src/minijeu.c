@@ -273,7 +273,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     title.y = window_dimensions.h / 10;
     text.x = 6 * window_dimensions.w / 10;
     text.y = window_dimensions.h / 3;
-    text.w = window_dimensions.w / 4;
+    text.w = window_dimensions.w / 7;
     text.h = window_dimensions.h / 15;
     title.w = window_dimensions.w / 4;
     title.h = window_dimensions.h / 10;
@@ -356,7 +356,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        if(!(drawText("CASSE-BRIQUES", title, font, renderer) && drawText("Lorem Ipsum", text, font, renderer))) {
+        if(!(drawText("CASSE-BRIQUES", title, font, renderer) && drawText("Score :", text, font, renderer))) {
         	SDL_DestroyTexture(texture);
         	quitSDL(0, "(gameloop) Erreur de texture", window, renderer);
         	//sortir proprement
