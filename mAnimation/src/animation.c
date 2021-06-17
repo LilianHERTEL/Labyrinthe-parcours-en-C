@@ -54,7 +54,7 @@ int init(SDL_Renderer **renderer, SDL_Window **window, SDL_Texture **texture) {
 		return EXIT_FAILURE;
 	}
 	
-	*texture = loadTextureFromImage("res/cards.png", *renderer);
+	*texture = loadTextureFromImage("../res/cards.png", *renderer);
 	if(*texture == NULL) {
 		fputs("erreur creation de la texture\n", stderr);
 		SDL_DestroyRenderer(*renderer);
@@ -68,7 +68,15 @@ int init(SDL_Renderer **renderer, SDL_Window **window, SDL_Texture **texture) {
 }
 
 SDL_Texture* loadTextureFromImage(char *name, SDL_Renderer *renderer) {
-	return NULL;
+	SDL_Texture* texture;
+	SDL_Surface* surface;
+	
+	surface = IMG_Load(name);
+	if(surface == NULL) {
+		return NULL;
+	}
+	texture = SDL_CreateTextureFromSurface(renderer, surface);
+	return texture;
 }
 void displayFrame(SDL_Renderer *renderer, int frame);
 
