@@ -225,7 +225,7 @@ int main(int argc, char const *argv[])
 	if (!status)
 		quitSDL(false, "Error : SDL initialization", NULL, NULL);
 
-	window = SDL_CreateWindow("Jeu de la vie", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Animation simple", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
 	if (window == NULL)
 	{
 		quitSDL(false, "Error : SDL window creation", window, renderer);
