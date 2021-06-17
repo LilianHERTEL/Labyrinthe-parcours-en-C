@@ -1,5 +1,13 @@
 #include "minijeu.h"
 
+/**
+ * @brief Affiche du texte
+ * 
+ * @param text texte a afficher 
+ * @param dest dimensions du texte a afficher
+ * @param font police d'ecriture
+ * @param renderer rendu visuel
+ */
 bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer) {
     SDL_Color color = {0};
     SDL_Rect source = {0};
