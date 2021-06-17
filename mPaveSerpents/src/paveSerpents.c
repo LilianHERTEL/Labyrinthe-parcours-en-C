@@ -4,7 +4,7 @@ int main(int argc, char **argv) {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Rect r1, r2, r3;
-	int i, x = 100, y = 100, width = 500, height = 300, delay = 500;
+	int i, x = 100, y = 100, width = 500, height = 300, delay = 100;
 
 	(void)argc;
 	(void)argv;
@@ -55,16 +55,16 @@ int main(int argc, char **argv) {
 }
 
 void moveSquare1(SDL_Renderer *renderer, SDL_Rect *rect) {
-	int w, h;
+	int w, h, speed = 10;
 	
 	SDL_GetRendererOutputSize(renderer, &w, &h);
 	SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
-	++(rect->x);
-	++(rect->y);
-	if(rect->y > h) {
+	rect->x += speed;
+	rect->y += speed;
+	if(rect->y + rect->h > h) {
 		rect->y = 0;
 	}
-	if(rect->x > w) {
+	if(rect->x + rect->w > w) {
 		rect->x = 0;
 	}
 	SDL_RenderFillRect(renderer, rect);
@@ -72,7 +72,9 @@ void moveSquare1(SDL_Renderer *renderer, SDL_Rect *rect) {
 
 void moveSquare2(SDL_Renderer *renderer, SDL_Rect *rect) {
 	(void)renderer;
+	(void)rect;
 }
 void moveSquare3(SDL_Renderer *renderer, SDL_Rect *rect) {
 	(void)renderer;
+	(void)rect;
 }
