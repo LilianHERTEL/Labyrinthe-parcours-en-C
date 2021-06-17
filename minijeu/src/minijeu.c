@@ -12,11 +12,14 @@
  */
 void gameLoop(SDL_Window * window, SDL_Renderer * renderer)
 {
+	SDL_Texture *texture;									// texture des sprites du jeu
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0};
               //cell = {0};
 
+
+	texture = loadTextureFromImage("../res/sprites.png", renderer);
     // Initialisation des coordonnees
     //cellDimensions(window, &cell, n, m);
 
@@ -90,6 +93,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer)
         }
         SDL_Delay(50);                                  
     }
+    SDL_DestroyTexture(texture);
 }
 
 /**
