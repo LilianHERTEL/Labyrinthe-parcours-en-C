@@ -91,7 +91,6 @@ void nextIteration(int *** grid, int n, int m, rule_t *rule) {
 			}
 		}
 	}
-	freeGrid(*grid, n);
 	*grid = result;
 
 }
