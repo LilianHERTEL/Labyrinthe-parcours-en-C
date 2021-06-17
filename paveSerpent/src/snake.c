@@ -129,7 +129,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE); 
     }
 
-    window = SDL_CreateWindow("Animation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+    window = SDL_CreateWindow("Pavé de serpents", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
                                 screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
     if (window == NULL) 
     {
