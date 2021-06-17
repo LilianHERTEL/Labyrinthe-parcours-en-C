@@ -170,16 +170,17 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
             speed->y = - speed->y;
         }
     }
-    
+}
+
 void movePaddle(SDL_Rect* paddle, char direction) {
     printf("x = %d\n", paddle->x);
 }
 
-bool_t updateScore(int* score, int* remainingBricks) {
+/*bool_t updateScore(int* score, int* remainingBricks) {
     bool_t gameIsOver = false;
 
     return gameIsOver;
-}
+}*/
 
 /**
  * @brief Boucle de jeu du casse-briques
@@ -197,25 +198,19 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
-              //cell = {0};
               paddleSource = {0},
               paddleDest = {0},
               cell = {0},
               window_dimensions = {0},
               paddle = {0},
-<<<<<<< HEAD
               ball = {0},
               speed = {0};
 
     speed.x = 20;
     speed.y = -20;
-
-=======
-              ball = {0};
               
     int score = 0;
     int remainingBricks = n*m;
->>>>>>> d0085fd5e94406ed4397545df9e7bd78456e264a
 
 	texture = loadTextureFromImage("../res/sprites.png", renderer);
 	//SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
@@ -299,16 +294,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 
         drawBricks(renderer, bricks, n, m, cell); 
         drawLimits(renderer, cell, m, window_dimensions); 
-<<<<<<< HEAD
-        drawPaddle(renderer, paddle);
         ballCollision(ball, cell, bricks, n, m, paddle, &speed);
         moveBall(&ball, speed);
-        drawBall(renderer, ball);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-=======
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
->>>>>>> d0085fd5e94406ed4397545df9e7bd78456e264a
              
         if (!paused) 
         {      
