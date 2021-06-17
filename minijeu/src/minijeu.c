@@ -155,8 +155,9 @@ void breakBrick(int *** bricks, int n, int m) {
     (*bricks)[n][m] = 0;
 }
 
-void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
+bool_t ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
 {
+    bool_t brokenBrick = false;
     int leftBall, leftBrick,
         rightBall, rightBrick,
         topBall, topBrick,
@@ -219,6 +220,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
                 speed->y = -speed->y;
             }
             breakBrick(bricks, ballI, ballJ);
+            brokenBrick = true;
         }
         if(topBall <= topWall) // mur du haut
         {
@@ -226,6 +228,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
         }
         
     }
+    return brokenBrick;
 }
 
 void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
@@ -235,15 +238,21 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
     }
 }
 
-bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight) {
+bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight, bool_t brokenBrick) {
     bool_t gameIsOver = false;
     if (ball.y > winHeight)
     {
-        //gameIsOver = true;
-        printf("GAME OVER\n");
+        gameIsOver = true;
+        puts("GAME OVER\n");
+    }
+    if (brokenBrick) {
+        (*score)++;
+        (*remainingBricks)--;
+    }
+    if (*remainingBricks <= 0) {
+        gameIsOver = true;
     }
     
-
     return gameIsOver;
 }
 
@@ -257,7 +266,7 @@ bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeigh
  * @param m 
  * @param rule 
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, TTF_Font *font, SDL_Texture *texture)
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture)
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
@@ -268,13 +277,15 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               ball = {0},
               speed = {0};
     
-    bool_t gameIsOver = false;
+    bool_t gameIsOver = false,
+           brokenBrick = false;
 
     speed.x = 18;
     speed.y = -18;
               
     int score = 0;
-    int remainingBricks = n*m;
+    char score_s[15];
+    int remainingBricks = nbBricks;
     SDL_Rect text, title;
     
 
@@ -365,18 +376,19 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         int ballI, ballJ;
         ballI = (mouse.y-cell.y)/cell.h;
         ballJ = (mouse.x - cell.x)/cell.w ;
-        printf("%d,%d\n",mouse.x, mouse.y);
+        //printf("%d,%d\n",mouse.x, mouse.y);
 
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
-        ballCollision(ball, cell, &bricks, n, m, paddle, &speed);
-        gameIsOver = updateScore(&score, &remainingBricks, ball, window_dimensions.h);
+        brokenBrick = ballCollision(ball, cell, &bricks, n, m, paddle, &speed);
+        gameIsOver = updateScore(&score, &remainingBricks, ball, window_dimensions.h, brokenBrick);
 
         moveBall(&ball, speed);
         drawPaddle(renderer, paddle, texture);
         drawBall(renderer, ball, texture);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        if(!(drawText("CASSE-BRIQUES", title, font, renderer) && drawText("Score :", text, font, renderer))) {
+        sprintf(score_s, "%s%d", "Score : ", score);
+        if(!(drawText("CASSE-BRIQUES", title, font, renderer) && drawText(score_s, text, font, renderer))) {
         	SDL_DestroyTexture(texture);
         	quitSDL(0, "(gameloop) Erreur de texture", window, renderer);
         	//sortir proprement
@@ -391,6 +403,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         SDL_Delay(50);                                  
     }
     SDL_DestroyTexture(texture);
+
+    if (remainingBricks == 0) {
+        /* GERER VICTOIRE A FAIRE */
+    }
+    else {
+        printf("SCORE : %d\n", score);
+        /* GERER DEFAITE A FAIRE */
+    }
 }
 
 /**
@@ -411,6 +431,7 @@ int main(int argc, char **argv)
     SDL_Renderer     * renderer = NULL;
     SDL_DisplayMode    screen;
     int             ** bricks,
+                       nbBricks,
                        n = 3,
                        m = 10;
 
@@ -465,8 +486,8 @@ int main(int argc, char **argv)
     bricks = allocGrid(n, m);
     if(bricks)
     {
-        bricks = createRandomGrid(bricks, n, m);
-        gameLoop(window, renderer, bricks, n, m, font, texture);
+        bricks = createRandomGrid(bricks, n, m, &nbBricks);
+        gameLoop(window, renderer, bricks, n, m, nbBricks, font, texture);
     }
 
     TTF_Quit();

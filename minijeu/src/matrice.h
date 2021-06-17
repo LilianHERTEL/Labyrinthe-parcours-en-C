@@ -27,9 +27,10 @@ int ** allocGrid(int n, int m);
  * @param grid matrice d'entiers
  * @param n nombre de lignes
  * @param m nombre de colonnes
+ * @param cpt nombre d'éléments initialisés à 1
  * @return int** 
  */
-int ** createRandomGrid(int ** grid, int n, int m);
+int ** createRandomGrid(int ** grid, int n, int m, int* cpt);
 
 /**
  * @brief Affiche la matrice dans le terminal

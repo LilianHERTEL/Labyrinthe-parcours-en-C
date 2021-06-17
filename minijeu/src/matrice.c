@@ -53,12 +53,13 @@ int ** allocGrid(int n, int m)
  * @param grid matrice d'entiers
  * @param n nombre de lignes
  * @param m nombre de colonnes
+ * @param cpt nombre d'éléments initialisés à 1
  * @return int** 
  */
-int ** createRandomGrid(int ** grid, int n, int m)
+int ** createRandomGrid(int ** grid, int n, int m, int* cpt)
 {
-    int i,
-          j;
+    int i, j;
+    *cpt = 0;
     
     srand (time (NULL));
     for(i=0; i<n; i++)
@@ -66,6 +67,7 @@ int ** createRandomGrid(int ** grid, int n, int m)
         for(j=0; j<m; j++)
         {
             grid[i][j] = rand() % 2;
+            *cpt += grid[i][j];
         }
     }
     return grid;
