@@ -85,11 +85,25 @@ void paddleDimensions(SDL_Rect * paddle, SDL_Rect cell, int m)
     paddle->h = cell.h * 0.5;
 }
 
-void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddle)
+/**
+ * @brief Affiche le paddle
+ * 
+ * @param renderer 
+ * @param paddleDest 
+ * @param texture
+ */
+void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddleDest, SDL_Texture *texture)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &paddle);
-    printf("coord x = %d\n", paddle.x);
+    SDL_RenderFillRect(renderer, &paddleDest);
+    printf("coord x = %d\n", paddleDest.x);
+    SDL_Rect paddleSource = {0};
+
+   	paddleSource.x = 0;
+	paddleSource.y = 910;
+	paddleSource.w = 347;
+	paddleSource.h = 65;
+    SDL_RenderCopy(renderer, texture, &paddleSource, &paddleDest);
 }
 
 void ballDimensions(SDL_Rect * ball, SDL_Rect cell, int m)
@@ -98,10 +112,22 @@ void ballDimensions(SDL_Rect * ball, SDL_Rect cell, int m)
     ball->h = ball->w;
 }
 
-void drawBall(SDL_Renderer * renderer, SDL_Rect ball)
+/**
+ * @brief Affiche la balle
+ * 
+ * @param renderer 
+ * @param paddleDest 
+ * @param texture
+ */
+void drawBall(SDL_Renderer * renderer, SDL_Rect ball, SDL_Texture *texture)
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    SDL_RenderFillRect(renderer, &ball);
+    SDL_Rect source = {0};
+
+   	source.x = 1402;
+	source.y = 652;
+	source.w = 65;
+	source.h = 65;
+    SDL_RenderCopy(renderer, texture, &source, &ball);
 }
 
 void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_dimensions)
@@ -141,15 +167,20 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
+              //cell = {0};
+              paddleSource = {0},
+              paddleDest = {0},
               cell = {0},
               window_dimensions = {0},
               paddle = {0},
               ball = {0};
+              
     int score = 0;
     int remainingBricks = n*m;
 
-
 	texture = loadTextureFromImage("../res/sprites.png", renderer);
+	//SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+	//SDL_QueryTexture(texture, NULL, NULL, NULL/*&paddleSource.w*/, /*&paddleSource.h*/NULL);
     // Initialisation des coordonnees
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     cellDimensions(&cell, n, m, window_dimensions);
@@ -229,8 +260,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 
         drawBricks(renderer, bricks, n, m, cell); 
         drawLimits(renderer, cell, m, window_dimensions); 
-        drawPaddle(renderer, paddle);
-        drawBall(renderer, ball);
+        drawPaddle(renderer, paddle, texture);
+        drawBall(renderer, ball, texture);
              
         if (!paused) 
         {      
