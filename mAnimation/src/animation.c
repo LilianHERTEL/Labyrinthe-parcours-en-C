@@ -96,17 +96,22 @@ void displayFrame(SDL_Renderer *renderer, SDL_Texture *texture) {
 	destination.w = offset_x * zoom;
 	destination.h = offset_y * zoom;
 	destination.y = (window.h - destination.h) / 2;
+	destination.x = (window.w - destination.w) / 2;
 	SDL_RenderCopy(renderer, texture, &card, &destination);
 	SDL_RenderPresent(renderer);
 	SDL_Delay(delay);
 	for(i = 0; i < n; ++i) {
+		destination.w = offset_x * zoom;
+		destination.h = offset_y * zoom;
+		destination.y = ((window.h - destination.h) / 2) + (((i % 3) - 3) * 5);
+		destination.x = (window.w - destination.w) / 2;
 		card.x = (rand() % 14 * offset_x) % source.w;
 		card.y = (rand() % 4 * offset_y) % source.h;
-		printf("x %d, y %d\n", card.x, card.y);
+		//printf("x %d, y %d\n", card.x, card.y);
 		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, &card, &destination);
 		SDL_RenderPresent(renderer);
-		printf("delay : %d\n", i * 100 / speed + 100);
+		//printf("delay : %d\n", i * 100 / speed + 100);
 		SDL_Delay(i * 100 / speed + 100);
 	}
 	SDL_RenderClear(renderer);
