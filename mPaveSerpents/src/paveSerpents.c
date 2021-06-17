@@ -4,7 +4,7 @@ int main(int argc, char **argv) {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	SDL_Rect r1, r2, r3;
-	int i, x = 100, y = 100, width = 500, height = 300, delay = 100, n = 100;
+	int i, x = 100, y = 100, width = 800, height = 450, delay = 100, n = 100;
 
 	(void)argc;
 	(void)argv;
