@@ -112,7 +112,7 @@ void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_di
 }
 
 /**
- * @brief Boucle de jeu du jeu de la vie facon labyrinthe
+ * @brief Boucle de jeu du casse-briques
  * 
  * @param window 
  * @param renderer 
@@ -123,6 +123,7 @@ void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_di
  */
 void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m)
 {
+	SDL_Texture *texture;									// texture des sprites du jeu
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
     SDL_Rect  mouse = {0},
@@ -131,6 +132,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               paddle = {0},
               ball = {0};
 
+
+	texture = loadTextureFromImage("../res/sprites.png", renderer);
     // Initialisation des coordonnees
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     cellDimensions(&cell, n, m, window_dimensions);
@@ -163,16 +166,21 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                 case SDL_QUIT:                         
                     program_on = 0;                   
                     break;
-                case SDL_KEYDOWN:                              
+                case SDL_KEYDOWN:
                     switch (event.key.keysym.sym) 
                     {             
-                        case SDLK_p:                                // 'p'
+                        case SDLK_LEFT:                                // 'fleche gauche'
+                        	//bouger la plateforme a gauche
+                        	break;
+                        case SDLK_RIGHT:
+                        	//bouger la plateforme a droite
+                        	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
                             break;
                         case SDLK_ESCAPE:                           // 'ESCAPE'  
                         case SDLK_q:                                // 'q'
-                            program_on = 0;                                                         
+                            program_on = 0;
                             break;
                         default:                      
                             break;
@@ -213,10 +221,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         }
         SDL_Delay(50);                                  
     }
+    SDL_DestroyTexture(texture);
 }
 
 /**
- * @brief Affiche le jeu de la vie facon labyrinthe
+ * @brief Affiche le casse-briques
  * 
  * @param argc 
  * @param argv 
@@ -236,15 +245,15 @@ int main(int argc, char **argv)
 
     /* INITIALISATIONS */
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+    if (initializeSDL() == false) 
     {
-        end_sdl(0, "ERROR SDL INIT", window, renderer);
+        quitSDL(0, "ERROR SDL INIT", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
     if(SDL_GetCurrentDisplayMode(0, &screen) != 0)
     {
-        end_sdl(0, "ERROR GET_DISPLAY_MODE", window, renderer);
+        quitSDL(0, "ERROR GET_DISPLAY_MODE", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
@@ -252,14 +261,14 @@ int main(int argc, char **argv)
                                 screen.w * 0.8, screen.h * 0.8, SDL_WINDOW_RESIZABLE);
     if (window == NULL) 
     {
-        end_sdl(0, "ERROR WINDOW CREATION", window, renderer);
+        quitSDL(0, "ERROR WINDOW CREATION", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL) 
     {
-        end_sdl(0, "ERROR RENDERER CREATION", window, renderer);
+        quitSDL(0, "ERROR RENDERER CREATION", window, renderer);
         exit(EXIT_FAILURE); 
     }
 
@@ -272,6 +281,6 @@ int main(int argc, char **argv)
         gameLoop(window, renderer, bricks, n, m);
     }
 
-    end_sdl(1, "Normal ending", window, renderer);
+    quitSDL(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
 }

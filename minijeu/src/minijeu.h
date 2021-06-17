@@ -5,3 +5,5 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include "matrice.h"
+#include "mySDL.h"
+
