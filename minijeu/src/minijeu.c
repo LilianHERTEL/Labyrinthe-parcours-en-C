@@ -109,10 +109,22 @@ void ballDimensions(SDL_Rect * ball, SDL_Rect cell, int m)
     ball->h = ball->w;
 }
 
-void drawBall(SDL_Renderer * renderer, SDL_Rect ball)
+/**
+ * @brief Affiche la balle
+ * 
+ * @param renderer 
+ * @param paddleDest 
+ * @param texture
+ */
+void drawBall(SDL_Renderer * renderer, SDL_Rect ball, SDL_Texture *texture)
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    SDL_RenderFillRect(renderer, &ball);
+    SDL_Rect source = {0};
+
+   	source.x = 1402;
+	source.y = 652;
+	source.w = 65;
+	source.h = 65;
+    SDL_RenderCopy(renderer, texture, &source, &ball);
 }
 
 void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_dimensions)
@@ -243,7 +255,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawBricks(renderer, bricks, n, m, cell); 
         drawLimits(renderer, cell, m, window_dimensions); 
         drawPaddle(renderer, paddle, texture);
-        drawBall(renderer, ball);
+        drawBall(renderer, ball, texture);
              
         if (!paused) 
         {      
