@@ -116,6 +116,10 @@ void moveBall(SDL_Rect *ball, SDL_Rect speed)
     ball->y = ball->y + speed.y;
 }
 
+void breakBrick(int *** bricks, int n, int m) {
+    (*bricks)[n][m] = 0;
+}
+
 void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
 {
     //Collisions murs
@@ -138,7 +142,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, S
         int ballI, ballJ;
         ballI = (ball.y-cell.y)/cell.h ;
         ballJ = (ball.x - cell.x)/cell.w ;
-        printf("%d, %d\n", ballI, ballJ);
+        //printf("%d, %d\n", ballI, ballJ);
         if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
         {
             if(ball.x + speed->x < ballJ * cell.w + cell.x + cell.w || ball.x + speed->x > ballJ* cell.w + cell.x)
@@ -163,10 +167,6 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
     if (new_x >= cell.x && new_x < cell.w*m - paddle->w) {
         paddle->x = new_x;
     }
-}
-
-void breakBrick(int *** bricks, int n, int m) {
-    (*bricks)[n, m] = 0;
 }
 
 bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight) {
