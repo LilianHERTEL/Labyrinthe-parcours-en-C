@@ -1,33 +1,6 @@
 #include "minijeu.h"
 
 /**
- * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
- * 
- * @param ok 0 : erreur, 1 :normal
- * @param msg message de fin
- * @param window fenetre a fermer
- * @param renderer rendu a fermer
- */
-void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* renderer)
-{                           
-  char msg_formated[255];                                         
-  int l;                                                          
-
-  if (!ok) 
-  {                                                      
-         strncpy(msg_formated, msg, 250);                                 
-         l = strlen(msg_formated);                                        
-         strcpy(msg_formated + l, " : %s\n");                     
-         SDL_Log(msg_formated, SDL_GetError());                   
-  }                                                               
-
-  if (renderer != NULL) SDL_DestroyRenderer(renderer);                            
-  if (window != NULL)   SDL_DestroyWindow(window);                                        
-
-  SDL_Quit();                                                            
-}
-
-/**
  * @brief Permet de calculer les dimensions d'une cellule par rapport a la taille de la fenetre
  * 
  * @param window la fenetre
@@ -42,7 +15,6 @@ void cellDimensions(SDL_Rect * cell, int n, int m, SDL_Rect window_dimensions)
     cell->x = 0 ;
     cell->y = 0 ;
 }
-
 
 /**
  * @brief Affiche les briques
