@@ -97,7 +97,6 @@ void paddleDimensions(SDL_Rect * paddle, SDL_Rect cell, int m)
  */
 void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddleDest, SDL_Texture *texture)
 {
-    printf("coord x = %d\n", paddleDest.x);
     SDL_Rect paddleSource = {0};
 
    	paddleSource.x = 0;
@@ -162,12 +161,22 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
         speed->y = - speed->y;
     }
     //Collisions briques
-    if(ball.y + speed->y < cell.y + cell.h * n)
+    if(ball.y + speed->y < cell.y + cell.h * n - 1)
     {
-        if(bricks[(ball.y-cell.y)/cell.h -1][(ball.x - cell.x)/cell.w -1] == 1)
+        int ballI, ballJ;
+        ballI = (ball.y-cell.y)/cell.h ;
+        ballJ = (ball.x - cell.x)/cell.w ;
+        printf("%d, %d\n", ballI, ballJ);
+        if(ballI < n && ballI >= 0 && bricks[ballI][ballJ] == 1)
         {
-            speed->y = - speed->y;
-            //fonction de cassage de brique
+            if(ball.x + speed->x < ballJ * cell.w + cell.x + cell.w || ball.x + speed->x > ballJ* cell.w + cell.x)
+            {
+                speed->x = -speed->x;
+            }
+            if(ball.y + speed-> y < ballI * cell.h + cell.y + cell.h || ball.y + speed-> y > ballI * cell.h + cell.y)
+            {
+                speed->y = -speed->y;
+            }
         }
         if(ball.y + speed->y <= cell.y) // mur du haut
         {
@@ -295,9 +304,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             }
         }
         // Changement du fond en fonction de la position de la souris
-        //SDL_GetMouseState(&mouse.x, &mouse.y);
-        //SDL_SetRenderDrawColor(renderer, (mouse.x/3) % 255, ((mouse.x + mouse.y) / 3) % 255, (mouse.y/3) % 255, 255);
-	    //SDL_RenderClear(renderer);
+        SDL_GetMouseState(&mouse.x, &mouse.y);
+        int ballI, ballJ;
+        ballI = (mouse.y-cell.y)/cell.h;
+        ballJ = (mouse.x - cell.x)/cell.w ;
+        printf("%d,%d\n",ballI, ballJ);
 
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
