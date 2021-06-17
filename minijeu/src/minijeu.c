@@ -116,7 +116,7 @@ void moveBall(SDL_Rect *ball, SDL_Rect speed)
     ball->y = ball->y + speed.y;
 }
 
-void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
+void ballCollision(SDL_Rect ball, SDL_Rect cell, int *** bricks, int n, int m, SDL_Rect paddle, SDL_Rect * speed)
 {
     //Collisions murs
     if(ball.x + speed->x <= cell.x)
@@ -139,7 +139,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
         ballI = (ball.y-cell.y)/cell.h ;
         ballJ = (ball.x - cell.x)/cell.w ;
         printf("%d, %d\n", ballI, ballJ);
-        if(ballI < n && ballI >= 0 && bricks[ballI][ballJ] == 1)
+        if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
         {
             if(ball.x + speed->x < ballJ * cell.w + cell.x + cell.w || ball.x + speed->x > ballJ* cell.w + cell.x)
             {
@@ -149,6 +149,7 @@ void ballCollision(SDL_Rect ball, SDL_Rect cell, int ** bricks, int n, int m, SD
             {
                 speed->y = -speed->y;
             }
+            breakBrick(bricks, ballI, ballJ);
         }
         if(ball.y + speed->y <= cell.y) // mur du haut
         {
@@ -164,8 +165,8 @@ void movePaddle(SDL_Rect* paddle, SDL_Rect cell, int m, int step) {
     }
 }
 
-void breakBrick(int ** bricks, int n, int m) {
-    bricks[n, m] = 0;
+void breakBrick(int *** bricks, int n, int m) {
+    (*bricks)[n, m] = 0;
 }
 
 bool_t updateScore(int* score, int* remainingBricks, SDL_Rect ball, int winHeight) {
@@ -296,7 +297,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 
         drawBricks(renderer, bricks, n, m, cell, texture); 
         drawLimits(renderer, cell, m, window_dimensions); 
-        ballCollision(ball, cell, bricks, n, m, paddle, &speed);
+        ballCollision(ball, cell, &bricks, n, m, paddle, &speed);
         gameIsOver = updateScore(&score, &remainingBricks, ball, window_dimensions.h);
 
         moveBall(&ball, speed);
