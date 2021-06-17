@@ -239,7 +239,7 @@ int main(int argc, char const *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	animation(window, renderer, ground, character, sky1, sky2, status);
+	animation(window, renderer, ground, character, sky1, sky2, &status);
 	if (!status) {
 		quitSDL(status, "Error : texture loading failed", window, renderer);
 		exit(EXIT_FAILURE);
