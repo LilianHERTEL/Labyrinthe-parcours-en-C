@@ -27,6 +27,65 @@ void end_sdl(char ok, char const* msg, SDL_Window* window, SDL_Renderer* rendere
   SDL_Quit();                                                            
 }
 
+/**
+ * @brief Permet de calculer les dimensions d'une cellule par rapport a la taille de la fenetre
+ * 
+ * @param window la fenetre
+ * @param cell la cellule (SDL_Rect)
+ * @param n nombre de lignes de la grille
+ * @param m nombre de colonnes de la grille
+ */
+void cellDimensions(SDL_Rect * cell, int n, int m, SDL_Rect window_dimensions)
+{
+    cell->w = (window_dimensions.w * 0.6) / m;
+    cell->h = (window_dimensions.h * 0.3) / n ;    
+    cell->x = 0 ;
+    cell->y = 0 ;
+}
+
+
+/**
+ * @brief Affiche les briques
+ * 
+ * @param renderer 
+ * @param grille 
+ * @param n 
+ * @param m 
+ * @param cell
+ */
+void drawBricks(SDL_Renderer *renderer, int ** bricks, int n, int m, SDL_Rect cell) 
+{
+	int               i,
+                      j,
+                      poseX,
+                      poseY;
+	SDL_Rect          rectangle;
+
+	rectangle.w = cell.w;
+	rectangle.h = cell.h;
+    poseX = cell.x;
+    poseY = cell.y;
+
+	for(i = 0; i < n; i++) {
+		rectangle.y = poseY + rectangle.h * i;
+		for(j = 0; j < m; j++) {
+			rectangle.x = poseX + rectangle.w * j;
+            if(bricks[i][j] == 1)
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            else
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_RenderFillRect(renderer, &rectangle);
+		}
+	}
+}
+
+void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_dimensions)
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer, cell.x, cell.y, cell.x, window_dimensions.h);
+    SDL_RenderDrawLine(renderer, cell.x, cell.y, cell.x + cell.w * m, cell.y);
+    SDL_RenderDrawLine(renderer, cell.x + cell.w * m, cell.y, cell.x + cell.w * m, window_dimensions.h);
+}
 
 /**
  * @brief Boucle de jeu du jeu de la vie facon labyrinthe
@@ -42,11 +101,13 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booléen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booléen pour dire que le programme est en pause
-    SDL_Rect  mouse = {0};
-              //cell = {0};
+    SDL_Rect  mouse = {0},
+              cell = {0},
+              window_dimensions = {0};
 
     // Initialisation des coordonnees
-    //cellDimensions(window, &cell, n, m);
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    cellDimensions(&cell, n, m, window_dimensions);
 
     while (program_on) 
     {                                   // La boucle des évènements
@@ -61,7 +122,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED)
                     {
                         // Calcul des dimensions d'une cellule quand la fenetre change de taille
-                        //cellDimensions(window, &cell, n, m);
+                        SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+                        cellDimensions(&cell, n, m, window_dimensions);
                     }
                     break;
                 case SDL_QUIT:                         
@@ -101,14 +163,16 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             }
         }
         // Changement du fond en fonction de la position de la souris
-        SDL_GetMouseState(&mouse.x, &mouse.y);
-        SDL_SetRenderDrawColor(renderer, (mouse.x/3) % 255, ((mouse.x + mouse.y) / 3) % 255, (mouse.y/3) % 255, 255);
-	    SDL_RenderClear(renderer);
+        //SDL_GetMouseState(&mouse.x, &mouse.y);
+        //SDL_SetRenderDrawColor(renderer, (mouse.x/3) % 255, ((mouse.x + mouse.y) / 3) % 255, (mouse.y/3) % 255, 255);
+	    //SDL_RenderClear(renderer);
 
-        //drawGrid(renderer, grid, n, m, cell);        
+        drawBricks(renderer, bricks, n, m, cell); 
+        drawLimits(renderer, cell, m, window_dimensions); 
+             
         if (!paused) 
         {      
-            SDL_RenderPresent(renderer);                            
+	        SDL_RenderPresent(renderer);                          
             //nextIteration(&grid, n, m, rule);             // la vie continue... 
         }
         SDL_Delay(50);                                  
@@ -132,7 +196,7 @@ int main(int argc, char **argv)
     SDL_DisplayMode    screen;
     int             ** bricks,
                        n = 3,
-                       m = 5;
+                       m = 10;
 
     /* INITIALISATIONS */
 
