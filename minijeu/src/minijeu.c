@@ -91,6 +91,18 @@ void drawPaddle(SDL_Renderer * renderer, SDL_Rect paddle)
     SDL_RenderFillRect(renderer, &paddle);
 }
 
+void ballDimensions(SDL_Rect * ball, SDL_Rect cell, int m)
+{
+    ball->w = cell.w * m * 0.05;
+    ball->h = ball->w;
+}
+
+void drawBall(SDL_Renderer * renderer, SDL_Rect ball)
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_RenderFillRect(renderer, &ball);
+}
+
 void drawLimits(SDL_Renderer *renderer, SDL_Rect cell, int m, SDL_Rect window_dimensions)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -116,14 +128,18 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     SDL_Rect  mouse = {0},
               cell = {0},
               window_dimensions = {0},
-              paddle = {0};
+              paddle = {0},
+              ball = {0};
 
     // Initialisation des coordonnees
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     cellDimensions(&cell, n, m, window_dimensions);
     paddleDimensions(&paddle, cell, m);
+    ballDimensions(&ball, cell, m);
     paddle.x = (cell.w * m - paddle.w) / 2; 
     paddle.y = window_dimensions.h - paddle.h;
+    ball.x = (cell.w * m - ball.w) / 2; 
+    ball.y = paddle.y - ball.h;
 
     while (program_on) 
     {                                   // La boucle des évènements
@@ -141,6 +157,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                         SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
                         cellDimensions(&cell, n, m, window_dimensions);
                         paddleDimensions(&paddle, cell, m);
+                        ballDimensions(&ball,cell, m);
                     }
                     break;
                 case SDL_QUIT:                         
@@ -187,6 +204,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         drawBricks(renderer, bricks, n, m, cell); 
         drawLimits(renderer, cell, m, window_dimensions); 
         drawPaddle(renderer, paddle);
+        drawBall(renderer, ball);
              
         if (!paused) 
         {      
