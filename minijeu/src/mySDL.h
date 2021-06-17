@@ -9,3 +9,4 @@ void quitSDL(char ok,
              SDL_Window* window,
              SDL_Renderer* renderer);
 void waitForQuitSDL(void);
+SDL_Texture* loadTextureFromImage(char *name, SDL_Renderer *renderer);

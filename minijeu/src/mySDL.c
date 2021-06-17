@@ -2,6 +2,10 @@
 #include "bool.h"
 #include "SDL2/SDL.h"
 
+/**
+ * @brief Initialise la librairie SDL
+ * @return un booleen true si tout la librairie s'est initialisee avec succes, false sinon
+ */
 bool_t initializeSDL(void) {
     bool_t status = true;
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -10,6 +14,25 @@ bool_t initializeSDL(void) {
 	}
 	return status;
 }
+
+/**
+ * @brief Permet de charger une texture SDL a partir de son chemin et d'un renderer SDL
+ * 
+ * @param name chemin d'acces au fichier png
+ * @param renderer rendu a dans lequel charger
+ */
+SDL_Texture* loadTextureFromImage(char *name, SDL_Renderer *renderer) {
+	SDL_Texture* texture;
+	SDL_Surface* surface;
+	
+	surface = IMG_Load(name);
+	if(surface == NULL) {
+		return NULL;
+	}
+	texture = SDL_CreateTextureFromSurface(renderer, surface);
+	return texture;
+}
+
 
 /**
  * @brief Permet de fermer toute la sdl et d'indiquer un message d'erreur si il y en a une
