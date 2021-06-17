@@ -70,11 +70,15 @@ void moveSquare1(SDL_Renderer *renderer, SDL_Rect *rect) {
 }
 
 void moveSquare2(SDL_Renderer *renderer, SDL_Rect *rect) {
-	int w, h, speed = 10;
+	int w, h, speed = 6;
 	
 	SDL_GetRendererOutputSize(renderer, &w, &h);
-	SDL_SetRenderDrawColor(renderer, (55 * rect->w) % 256, rect->w % 256, (110 * rect->w) % 256, 255);
+	SDL_SetRenderDrawColor(renderer, (2 * rect->x) % 256, rect->x % 256, (3 * rect->x) % 256, 255);
 
+	rect->x += speed;
+	if(rect->x + rect->w > w) {
+		rect->x = 0;
+	}
 	SDL_RenderFillRect(renderer, rect);	
 }
 void moveSquare3(SDL_Renderer *renderer, SDL_Rect *rect) {
