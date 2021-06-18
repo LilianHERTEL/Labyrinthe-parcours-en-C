@@ -2,18 +2,41 @@
 #include "binary_heap.h"
 #include "bool.h"
 
+/**
+ * @brief Retourne l'indice du parent de l'indice index
+ * 
+ * @param index 
+ * @return int 
+ */
 int getParent(int index) {
     return index/2;
 }
 
+/**
+ * @brief Retourne l'indice du fils de gauche de l'indice index
+ * 
+ * @param index 
+ * @return int 
+ */
 int getLeftChild(int index) {
     return 2*index;
 }
 
+/**
+ * @brief Retourne l'indice du fils de droite de l'indice index
+ * 
+ * @param index 
+ * @return int 
+ */
 int getRightChild(int index) {
     return 2*index + 1;
 }
 
+/**
+ * @brief Affiche le tableau du tas binaire dans le terminal 
+ * 
+ * @param heap Le tas binaire
+ */
 void printHeap(binary_heap_t heap) {
     int i;
     printf("heap size = %d\n", heap.length);
@@ -94,6 +117,13 @@ void buildMinHeap(binary_heap_t * heap)
     }
 }
 
+/**
+ * @brief Permute 2 valeurs d'indices i et j dans la tableau array
+ * 
+ * @param array Tableau de valeurs
+ * @param i Indice du premier element
+ * @param j Indice du deuxieme element
+ */
 void permute(int array[], int i, int j) {
     int tmp = array[i];
     array[i] = array[j];

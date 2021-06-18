@@ -11,12 +11,45 @@ typedef struct binary_heap
     int array[MAX];
 } binary_heap_t;
 
+/**
+ * @brief Retourne l'indice du parent de l'indice index
+ * 
+ * @param index 
+ * @return int 
+ */
 int getParent(int index);
+
+/**
+ * @brief Retourne l'indice du fils de gauche de l'indice index
+ * 
+ * @param index 
+ * @return int 
+ */
 int getLeftChild(int index);
+
+/**
+ * @brief Retourne l'indice du fils de droite de l'indice index
+ * 
+ * @param index 
+ * @return int 
+ */
 int getRightChild(int index);
 
+/**
+ * @brief Affiche le tableau du tas binaire dans le terminal 
+ * 
+ * @param heap Le tas binaire
+ */
 void printHeap(binary_heap_t heap);
 bool_t heapInsert(binary_heap_t* heap, int val);
+
+/**
+ * @brief Permute 2 valeurs d'indices i et j dans la tableau array
+ * 
+ * @param array Tableau de valeurs
+ * @param i Indice du premier element
+ * @param j Indice du deuxieme element
+ */
 void permute(int array[], int i, int j);
 
 /**
