@@ -54,5 +54,18 @@ bool testFusion() {
 	}
 	return true;
 }
-bool testListerClasse();
+
+bool testListerClasse() {
+	partition_t partition;
+	element_t *element;
+	
+	partition = creer(N);
+	partition = fusion(partition, 0, 1);
+	element = lister_classe(partition, 0);
+	if(element[0] != 0 || element[1] != 1 || element[2] != -1) {
+		puts("echec listage classes\n");
+		return false;
+	}
+	return true;
+}
 bool testListerPartition();
