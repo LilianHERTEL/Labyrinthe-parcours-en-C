@@ -14,7 +14,8 @@ int main(int argc, char **argv)
     (void)argv;
 
     TTF_Font         *font;
-    SDL_Texture      *texture;
+    SDL_Texture      *texture,
+                     *background;
     SDL_Window       * window = NULL;
     SDL_Renderer     * renderer = NULL;
     SDL_DisplayMode    screen;
@@ -69,18 +70,41 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
+    background = loadTextureFromImage("../images/background.jpg", renderer);
+    if(texture == NULL) {
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
     /*TRAITEMENT*/
 
     bricks = allocGrid(n, m);
     if(bricks)
     {
         bricks = createRandomGrid(bricks, n, m, &nbBricks);
-        gameLoop(window, renderer, bricks, n, m, nbBricks, font, texture);
+        gameLoop(window, renderer, bricks, n, m, nbBricks, font, texture, background);
     }
 
     TTF_Quit();
     quitSDL(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
+}
+
+/**
+ * @brief Dessine le fond
+ * 
+ * @param renderer Le rendu
+ * @param background Texture appliquee au fond
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions)
+{
+    SDL_Rect source = {0},
+             dest = {0};
+    
+    dest = window_dimensions;
+    SDL_QueryTexture(background, NULL, NULL, &source.w, &source.h); 
+    SDL_RenderCopy(renderer, background, &source, &dest);
 }
 
 /**
@@ -466,8 +490,9 @@ bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHei
  * @param nbBricks Nombre de briques total
  * @param font Police d'ecriture
  * @param texture Texture pour les images
+ * @param background Texture du fond
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture)
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture, SDL_Texture *background)
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booleen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
@@ -558,6 +583,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     break;
             }
         } 
+        drawBackground(renderer, background, window_dimensions);
 
         if(gameIsOver)
         {

@@ -9,6 +9,15 @@
 #include "mySDL.h"
 
 /**
+ * @brief Dessine le fond
+ * 
+ * @param renderer Le rendu
+ * @param background Texture appliquee au fond
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions);
+
+/**
  * @brief Dessine l'etoile a l'ecran avec un certain angle
  * 
  * @param renderer Le rendu
@@ -168,5 +177,6 @@ bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHei
  * @param nbBricks Nombre de briques total
  * @param font Police d'ecriture
  * @param texture Texture pour les images
+ * @param background Texture du fond
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture);
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture, SDL_Texture *background);
