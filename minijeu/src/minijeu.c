@@ -512,7 +512,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     bool_t    gameIsOver = false,                             // Booleen pour savoir si le jeu est fini
               brokenBrick = false;                            // Booleen pour savoir si une brique a ete cassee
     int       score = 0,                                      // Score de la partie
-              remainingBricks = nbBricks;                     // Nombre de briques restants
+              remainingBricks = nbBricks,                     // Nombre de briques restants
+              paddleSpeed = 0;
     char      score_s[15];                                    // Chaine de caracteres pour afficher le score
     double    angle = 0;
 
@@ -565,13 +566,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym) 
                     {             
-                        case SDLK_LEFT:                                // 'fleche gauche'
-                        	//bouger la plateforme a gauche
-                            movePaddle(&paddle, brick, m, -3);
+                        case SDLK_LEFT:
+                            paddleSpeed = -2;
                         	break;
                         case SDLK_RIGHT:
-                        	//bouger la plateforme a droite
-                            movePaddle(&paddle, brick, m, 3);
+                            paddleSpeed = 2;
                         	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
@@ -584,6 +583,18 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                             break;
                     }
                     break;
+                case SDL_KEYUP:
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_LEFT:         
+                            paddleSpeed = 0;
+                        	break;
+                        case SDLK_RIGHT:
+                            paddleSpeed = 0;
+                        	break;
+                        default :
+                            break;
+                    }
                 default:                                            
                     break;
             }
@@ -618,6 +629,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         if (!paused) 
         {      
             // Affichage du jeu et fonctions
+            movePaddle(&paddle, brick, m, paddleSpeed);
             drawBackground(renderer, background, window_dimensions, brick, m);
             drawBricks(renderer, bricks, n, m, brick, texture); 
             drawLimits(renderer, brick, m, window_dimensions); 
