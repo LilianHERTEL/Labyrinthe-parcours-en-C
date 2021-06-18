@@ -403,6 +403,8 @@ bool_t ballCollision(SDL_Rect ball, SDL_Rect brick, int *** bricks, int n, int m
 
         if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
         {   
+            speed->x = (speed->x)/(abs(speed->x)) * 18;
+            speed->y = (speed->y)/(abs(speed->y)) * 18;
             leftBrick = brick.x + (ballJ - 1) * brick.w;
             rightBrick = brick.x + (ballJ) * brick.w;
             topBrick = brick.y + (ballI - 1) * brick.h;
