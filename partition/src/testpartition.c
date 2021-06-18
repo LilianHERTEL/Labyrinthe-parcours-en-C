@@ -5,7 +5,20 @@ int main() {
 	return 0;
 }
 
-bool testCreer();
+bool testCreer() {
+	int i;
+	partition_t test;
+	bool code = true;
+
+	test = creer(N);
+	for(i = 0; i < N; ++i) {
+		if(test.foret[i] != i || test.hauteur[i] != 1) {
+			code = false;
+		}
+	}
+	return code;
+}
+
 bool testRecupererClasse();
 bool testFusion();
 bool testListerClasse();
