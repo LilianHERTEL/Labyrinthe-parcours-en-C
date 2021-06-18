@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#define N 5
+#define N 11
 
 typedef int ensemble_t;
 typedef int classe_t;

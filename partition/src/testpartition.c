@@ -48,10 +48,37 @@ bool testFusion() {
 		puts("echec fusion simple\n");
 		return false;
 	}
+	afficherForet(partition);
 	partition = fusion(partition, 2, 3);
-	partition = fusion(partition, 3, 4);
-	partition = fusion(partition, 1, 2);
-	if(recuperer_classe(partition, 4) != 0) {
+	afficherForet(partition);
+	partition = fusion(partition, 10, 3);
+	if(recuperer_classe(partition, 10) != 2) {
+		puts("echec fusions combinees\n");
+		afficherForet(partition);
+		return false;
+	}
+	afficherForet(partition);	
+	partition = fusion(partition, 5, 9);
+	afficherForet(partition);
+	partition = fusion(partition, 4, 6);
+	afficherForet(partition);
+	partition = fusion(partition, 8, 7);
+	if(recuperer_classe(partition, 7) != 8) {
+		puts("echec fusions combinees\n");
+		afficherForet(partition);
+		return false;
+	}
+	afficherForet(partition);
+	partition = fusion(partition, 7, 9);
+	if(recuperer_classe(partition, 5) != 5 || recuperer_classe(partition, 8) != 5 || recuperer_classe(partition, 9) != 5) {
+		puts("echec fusions combinees\n");
+		afficherForet(partition);
+		return false;
+	}
+	afficherForet(partition);
+	partition = fusion(partition, 6, 8);
+	afficherForet(partition);
+	if(recuperer_classe(partition, 4) != 5) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
 		return false;
@@ -99,4 +126,5 @@ void afficherForet(partition_t partition) {
 	for(i = 0; i < N; ++i) {
 		printf("indice[%d] : %d (hauteur %d)\n", i, partition.foret[i], partition.hauteur[i]);
 	}
+	puts("");
 }
