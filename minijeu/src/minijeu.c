@@ -549,7 +549,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         {
             paused = SDL_TRUE;
             title.x = (window_dimensions.w-title.w)/2;
-            title.y = (window_dimensions.h-title.h)/2;
+            title.y = window_dimensions.h * 0.2;
             if (remainingBricks == 0) 
             {
                 drawText("Victoire !", title, font, renderer);
@@ -558,6 +558,10 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             {
                 drawText("Defaite !", title, font, renderer);
             }
+            star.x = (window_dimensions.w - star.w) / 2;
+            star.y = (window_dimensions.h - star.h) / 2;
+            angle = angle + 4.0;
+            drawStar(renderer, texture, star, angle);
             SDL_RenderPresent(renderer);  
             SDL_RenderClear(renderer);
         }
