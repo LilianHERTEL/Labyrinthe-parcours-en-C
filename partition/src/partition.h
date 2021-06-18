@@ -4,10 +4,10 @@
 #define N 5
 
 typedef ensemble_t;
-typedef classe_t;
-typedef partition_t;
-typedef element_t;
-typedef label_t;
+typedef arbre_t classe_t;
+typedef arbre_t* partition_t;
+typedef noeud_t element_t;
+typedef noeud_t label_t;
 
 partition_t creer(ensemble_t ensemble);
 classe_t recuperer_classe(element_t element);
