@@ -3,10 +3,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "matrice.h"
 #include "mySDL.h"
+
+/**
+ * @brief Dessine le fond
+ * 
+ * @param renderer Le rendu
+ * @param background Texture appliquee au fond
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions, SDL_Rect brick, int m);
+
+/**
+ * @brief Dessine l'etoile a l'ecran avec un certain angle
+ * 
+ * @param renderer Le rendu
+ * @param texture La texture appliquee pour l'etoile
+ * @param star Dimensions et position de l'etoile
+ * @param angle L'angle a appliquer
+ */
+void drawStar(SDL_Renderer *renderer, SDL_Texture * texture, SDL_Rect star, double angle);
+
+/**
+ * @brief Calcule les dimensions de l'etoile
+ * 
+ * @param star Dimensions et position de l'etoile
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void starDimensions (SDL_Rect * star, SDL_Rect window_dimensions);
 
 /**
  * @brief Affiche du texte a l'ecran 
@@ -150,5 +178,6 @@ bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHei
  * @param nbBricks Nombre de briques total
  * @param font Police d'ecriture
  * @param texture Texture pour les images
+ * @param background Texture du fond
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture);
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture, SDL_Texture *background);

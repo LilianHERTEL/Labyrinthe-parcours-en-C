@@ -14,7 +14,8 @@ int main(int argc, char **argv)
     (void)argv;
 
     TTF_Font         *font;
-    SDL_Texture      *texture;
+    SDL_Texture      *texture,
+                     *background;
     SDL_Window       * window = NULL;
     SDL_Renderer     * renderer = NULL;
     SDL_DisplayMode    screen;
@@ -69,18 +70,80 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
+    background = loadTextureFromImage("../images/background.jpg", renderer);
+    if(texture == NULL) {
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
     /*TRAITEMENT*/
 
     bricks = allocGrid(n, m);
     if(bricks)
     {
         bricks = createRandomGrid(bricks, n, m, &nbBricks);
-        gameLoop(window, renderer, bricks, n, m, nbBricks, font, texture);
+        gameLoop(window, renderer, bricks, n, m, nbBricks, font, texture, background);
     }
 
     TTF_Quit();
     quitSDL(1, "Normal ending", window, renderer);
     return EXIT_SUCCESS;
+}
+
+/**
+ * @brief Dessine le fond
+ * 
+ * @param renderer Le rendu
+ * @param background Texture appliquee au fond
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions, SDL_Rect brick, int m)
+{
+    SDL_Rect source = {0},
+             dest = {0};
+    
+    dest = window_dimensions;
+    dest.w = brick.w * m;
+    SDL_QueryTexture(background, NULL, NULL, &source.w, &source.h); 
+    SDL_RenderCopy(renderer, background, &source, &dest);
+}
+
+/**
+ * @brief Dessine l'etoile a l'ecran avec un certain angle
+ * 
+ * @param renderer Le rendu
+ * @param texture La texture appliquee pour l'etoile
+ * @param star Dimensions et position de l'etoile
+ * @param angle L'angle a appliquer
+ */
+void drawStar(SDL_Renderer *renderer, SDL_Texture * texture, SDL_Rect star, double angle)
+{
+    SDL_Rect        source = {0};
+    
+    source.w = 64;
+    source.h = 64;
+    source.x = 771;
+    source.y = 845;
+
+    SDL_RenderCopyEx(renderer, texture, &source, &star, angle, NULL, SDL_FLIP_NONE);
+}
+
+/**
+ * @brief Calcule les dimensions de l'etoile
+ * 
+ * @param star Dimensions et position de l'etoile
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void starDimensions (SDL_Rect * star, SDL_Rect window_dimensions)
+{
+    int               a,
+                      b;
+
+    a = window_dimensions.h * 0.3;
+    b = window_dimensions.w * 0.3;
+    star->h = star->w = a <= b ? a : b;
+    star->x = (window_dimensions.w - star->w) * 0.85;
+    star->y = (window_dimensions.h - star->h) * 0.8;
 }
 
 /**
@@ -100,9 +163,9 @@ bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *rendere
     SDL_Surface *surface;
 
     color.a = 255;
-    color.r = 0;
-    color.g = 0;
-    color.b = 0;
+    color.r = 255;
+    color.g = 255;
+    color.b = 255;
 
     surface = TTF_RenderText_Solid(font, text, color);
     if(surface == NULL) {
@@ -325,6 +388,10 @@ bool_t ballCollision(SDL_Rect ball, SDL_Rect brick, int *** bricks, int n, int m
     if(topBall >= topPaddle && ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
     {
         speed->y = - speed->y;
+        if(ball.x > paddle.x + (paddle.w/2))
+            speed->x = speed->x -(paddle.x + (paddle.w/2) - ball.x)/15;
+        else
+            speed->x = - speed->x +(paddle.x + (paddle.w/2) - ball.x)/15;
     }
     else
     {
@@ -336,6 +403,8 @@ bool_t ballCollision(SDL_Rect ball, SDL_Rect brick, int *** bricks, int n, int m
 
         if(ballI < n && ballI >= 0 && (*bricks)[ballI][ballJ] == 1)
         {   
+            speed->x = (speed->x)/(abs(speed->x)) * 18;
+            speed->y = (speed->y)/(abs(speed->y)) * 18;
             leftBrick = brick.x + (ballJ - 1) * brick.w;
             rightBrick = brick.x + (ballJ) * brick.w;
             topBrick = brick.y + (ballI - 1) * brick.h;
@@ -403,7 +472,6 @@ bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHei
     if (ball.y > winHeight)
     {
         gameIsOver = true;
-        puts("GAME OVER\n");
     }
     if (brokenBrick) 
     {
@@ -429,8 +497,9 @@ bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHei
  * @param nbBricks Nombre de briques total
  * @param font Police d'ecriture
  * @param texture Texture pour les images
+ * @param background Texture du fond
  */
-void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture)
+void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n, int m, int nbBricks, TTF_Font *font, SDL_Texture *texture, SDL_Texture *background)
 {
     SDL_bool  program_on = SDL_TRUE,                          // Booleen pour dire que le programme doit continuer
               paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
@@ -440,12 +509,15 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               ball = {0},                                     // Dimensions et position de la balle
               speed = {0},                                    // Valeurs de la vitesse de la balle
               text = {0},                                     // Dimensions et position du texte
-              title = {0};                                    // Dimensions et position du titre
+              title = {0},                                    // Dimensions et position du titre
+              star = {0};                                     // Dimensions et position de l'etoile
     bool_t    gameIsOver = false,                             // Booleen pour savoir si le jeu est fini
               brokenBrick = false;                            // Booleen pour savoir si une brique a ete cassee
     int       score = 0,                                      // Score de la partie
-              remainingBricks = nbBricks;                     // Nombre de briques restants
+              remainingBricks = nbBricks,                     // Nombre de briques restants
+              paddleSpeed = 0;
     char      score_s[15];                                    // Chaine de caracteres pour afficher le score
+    double    angle = 0;
 
     // Initialisation de la vitesse de la balle
     speed.x = 20;
@@ -456,6 +528,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     brickDimensions(&brick, n, m, window_dimensions);
     paddleDimensions(&paddle, brick, m);
     ballDimensions(&ball, brick, m);
+    starDimensions(&star, window_dimensions);
     paddle.x = (brick.w * m - paddle.w) / 2; 
     paddle.y = window_dimensions.h - paddle.h;
     ball.x = (brick.w * m - ball.w) / 2; 
@@ -486,6 +559,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                         brickDimensions(&brick, n, m, window_dimensions);
                         paddleDimensions(&paddle, brick, m);
                         ballDimensions(&ball,brick, m);
+                        starDimensions(&star, window_dimensions);
                     }
                     break;
                 case SDL_QUIT:                         
@@ -494,13 +568,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym) 
                     {             
-                        case SDLK_LEFT:                                // 'fleche gauche'
-                        	//bouger la plateforme a gauche
-                            movePaddle(&paddle, brick, m, -1);
+                        case SDLK_LEFT:
+                            paddleSpeed = -2;
                         	break;
                         case SDLK_RIGHT:
-                        	//bouger la plateforme a droite
-                            movePaddle(&paddle, brick, m, 1);
+                            paddleSpeed = 2;
                         	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
@@ -513,6 +585,18 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                             break;
                     }
                     break;
+                case SDL_KEYUP:
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_LEFT:         
+                            paddleSpeed = 0;
+                        	break;
+                        case SDLK_RIGHT:
+                            paddleSpeed = 0;
+                        	break;
+                        default :
+                            break;
+                    }
                 default:                                            
                     break;
             }
@@ -521,8 +605,9 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         if(gameIsOver)
         {
             paused = SDL_TRUE;
-            title.x = (window_dimensions.w-title.w)/2;
-            title.y = (window_dimensions.h-title.h)/2;
+            title.x = (brick.w * m - title.w)/2;
+            title.y = window_dimensions.h * 0.2;
+            drawBackground(renderer, background, window_dimensions, brick, m);
             if (remainingBricks == 0) 
             {
                 drawText("Victoire !", title, font, renderer);
@@ -531,6 +616,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             {
                 drawText("Defaite !", title, font, renderer);
             }
+            sprintf(score_s, "%s%d", "Score : ", score);
+            text.x = (window_dimensions.w - text.w) * 0.85;
+            text.y =  (window_dimensions.h - text.h) / 2;
+            drawText(score_s, text, font, renderer);
+            star.x = (brick.w * m - star.w) / 2;
+            star.y = (window_dimensions.h - star.h) / 2;
+            angle = angle + 4.0;
+            drawStar(renderer, texture, star, angle);
             SDL_RenderPresent(renderer);  
             SDL_RenderClear(renderer);
         }
@@ -538,6 +631,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         if (!paused) 
         {      
             // Affichage du jeu et fonctions
+            movePaddle(&paddle, brick, m, paddleSpeed);
+            drawBackground(renderer, background, window_dimensions, brick, m);
             drawBricks(renderer, bricks, n, m, brick, texture); 
             drawLimits(renderer, brick, m, window_dimensions); 
             
@@ -547,12 +642,18 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             
             drawPaddle(renderer, paddle, texture);
             drawBall(renderer, ball, texture);
-            
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Couleur du fond
+
+            SDL_SetRenderDrawColor(renderer, 30, 5 , 50, 255);
             
             sprintf(score_s, "%s%d", "Score : ", score);
             drawText("CASSE-BRIQUES", title, font, renderer);
             drawText(score_s, text, font, renderer);
+
+            if(brokenBrick)
+            {
+                angle = angle + 20.0;
+            }
+            drawStar(renderer, texture, star, angle);
 
 	        SDL_RenderPresent(renderer);  
             SDL_RenderClear(renderer);                        
