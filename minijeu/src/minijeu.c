@@ -83,6 +83,24 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+void drawStar(SDL_Renderer *renderer, SDL_Texture * texture, SDL_Rect window_dimensions)
+{
+    SDL_Rect          dest = {0},
+                      source = {0};
+
+    dest.x = window_dimensions.w * 0.75;
+    dest.y = window_dimensions.h * 0.6;
+    dest.w = window_dimensions.w * 0.3;
+    dest.h = window_dimensions.h * 0.3;
+
+    source.w = 68;
+    source.h = 68;
+    source.x = 770;
+    source.y = 840;
+
+    SDL_RenderCopy(renderer, texture, &source, &dest);
+}
+
 /**
  * @brief Affiche du texte a l'ecran 
  * 
@@ -553,6 +571,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             sprintf(score_s, "%s%d", "Score : ", score);
             drawText("CASSE-BRIQUES", title, font, renderer);
             drawText(score_s, text, font, renderer);
+
+            drawStar(renderer, texture, window_dimensions);
 
 	        SDL_RenderPresent(renderer);  
             SDL_RenderClear(renderer);                        
