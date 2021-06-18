@@ -74,7 +74,7 @@ void minHeapify(binary_heap_t * heap, int val)
     if(min != val)
     {
         permute(heap->array, val, min);
-        heapInsertRec(heap, min);
+        minHeapify(heap, min);
     }
 }
 
@@ -90,7 +90,7 @@ void buildMinHeap(binary_heap_t * heap)
     heap->heapSize = heap->length;
     for(i = (heap->length / 2); i > 0; i--)
     {
-        heapInsertRec(heap, i);
+        minHeapify(heap, i);
     }
 }
 
@@ -100,13 +100,28 @@ void permute(int array[], int i, int j) {
     array[j] = tmp;
 }
 
-int main()
+void createHeap(int source_array[], int size, binary_heap_t* heap) {
+    int i;
+    heap->heapSize = 1;
+    heap->length = MAX;
+    for (i = 0; i < size; i++)
+    {
+        heapInsert(heap, source_array[i]);
+        printf("Val = %d\n", source_array[i]);
+    }
+}
+
+int main(void)
 {
     /*binary_heap_t heap;
     heap.heapSize = 1;
     heap.length = MAX;
     bool_t status;
-    status = heapInsert(&heap, 16);
+    //int tab[] = {41, 87, 14, 23, 90, 50, 64, 53, 5, 32};
+    //int tab_size = 10;
+    
+    status = heapInsert(&heap, 41);
+    status = heapInsert(&heap, 87);
     status = heapInsert(&heap, 14);
     status = heapInsert(&heap, 10);
     status = heapInsert(&heap, 8);
