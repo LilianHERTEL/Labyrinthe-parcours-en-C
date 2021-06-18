@@ -15,13 +15,19 @@ classe_t recuperer_classe(partition_t partition, element_t element) {
 	return partition.foret[(int) element];
 }
 
-partition_t fusion(partition_t partition, classe_t x, classe_t y) {
+partition_t fusion(partition_t partition, element_t x, element_t y) {
 	int i;
-	classe_t oldclasse = x, newclasse = y;
+	classe_t oldclasse, newclasse, classex, classey, min;
 	
-	if(partition.hauteur[(int) y] < partition.hauteur[(int) x]) {
-		oldclasse = y;
-		newclasse = x;
+	classex = recuperer_classe(partition, x);
+	classey = recuperer_classe(partition, y);
+	if(partition.hauteur[(int) classey] == partition.hauteur[(int) classex]) {
+		min = (classey > classex) ? classex : classex;
+		++(partition.hauteur[min]);
+	}
+	if(partition.hauteur[(int) classey] < partition.hauteur[(int) classex]) {
+		oldclasse = classey;
+		newclasse = classex;
 	}
 	for(i = 0; i < N; ++i) {
 		if(partition.foret[i] == oldclasse) {

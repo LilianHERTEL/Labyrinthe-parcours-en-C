@@ -51,8 +51,9 @@ bool testFusion() {
 	partition = fusion(partition, 2, 3);
 	partition = fusion(partition, 3, 4);
 	partition = fusion(partition, 1, 2);
-	if(recuperer_classe(partition, 0) != 2) {
+	if(recuperer_classe(partition, 4) != 0) {
 		puts("echec fusions combinees\n");
+		afficherForet(partition);
 		return false;
 	}
 	puts("fusion OK");

@@ -10,3 +10,4 @@ bool testRecupererClasse();
 bool testFusion();
 bool testListerClasse();
 bool testListerPartition();
+void afficherForet(partition_t partition);
