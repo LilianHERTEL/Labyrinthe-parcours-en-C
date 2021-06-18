@@ -27,9 +27,11 @@ partition_t fusion(partition_t partition, element_t x, element_t y) {
 	}
 	if(partition.hauteur[(int) classey] < partition.hauteur[(int) classex]) {
 		partition.foret[(int) y] = classex;
+		partition.foret[(int) classey] = classex;
 	}
 	else {
 		partition.foret[(int) x] = classey;
+		partition.foret[(int) classex] = classey;
 	}
 	return partition;
 }
