@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include "matrice.h"
 #include "booleen.h"
