@@ -51,4 +51,24 @@ element_t* lister_classe(partition_t partition, label_t label) {
 	}
 	return liste;
 }
-classe_t* lister_partition(partition_t partition);
+
+classe_t* lister_partition(partition_t partition) {
+	int i, k;
+	classe_t *liste;
+	
+	liste = malloc(sizeof(classe_t) * N);
+	if(liste == NULL) {
+		return NULL;
+	}
+	
+	for(i = 0; i < N; ++i) {
+		if((int) partition.foret[i] == i) {
+			liste[k] = (classe_t) liste[i];
+			++k;
+		}
+	}
+	if(k < N) {
+		liste[k] = -1;
+	}
+	return liste;
+}
