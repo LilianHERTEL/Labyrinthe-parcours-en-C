@@ -3,7 +3,7 @@
 
 #define N 5
 
-typedef ensemble_t;
+typedef ensemble_t int;
 typedef arbre_t classe_t;
 typedef arbre_t* partition_t;
 typedef noeud_t element_t;
