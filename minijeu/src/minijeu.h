@@ -15,7 +15,7 @@
  * @param background Texture appliquee au fond
  * @param window_dimensions Dimensions et position de la fenetre
  */
-void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions);
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions, SDL_Rect brick, int m);
 
 /**
  * @brief Dessine l'etoile a l'ecran avec un certain angle

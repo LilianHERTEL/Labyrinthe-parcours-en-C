@@ -97,12 +97,13 @@ int main(int argc, char **argv)
  * @param background Texture appliquee au fond
  * @param window_dimensions Dimensions et position de la fenetre
  */
-void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions)
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions, SDL_Rect brick, int m)
 {
     SDL_Rect source = {0},
              dest = {0};
     
     dest = window_dimensions;
+    dest.w = brick.w * m;
     SDL_QueryTexture(background, NULL, NULL, &source.w, &source.h); 
     SDL_RenderCopy(renderer, background, &source, &dest);
 }
@@ -162,9 +163,9 @@ bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *rendere
     SDL_Surface *surface;
 
     color.a = 255;
-    color.r = 0;
-    color.g = 0;
-    color.b = 0;
+    color.r = 255;
+    color.g = 255;
+    color.b = 255;
 
     surface = TTF_RenderText_Solid(font, text, color);
     if(surface == NULL) {
@@ -583,13 +584,13 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     break;
             }
         } 
-        drawBackground(renderer, background, window_dimensions);
 
         if(gameIsOver)
         {
             paused = SDL_TRUE;
-            title.x = (window_dimensions.w-title.w)/2;
+            title.x = (brick.w * m - title.w)/2;
             title.y = window_dimensions.h * 0.2;
+            drawBackground(renderer, background, window_dimensions, brick, m);
             if (remainingBricks == 0) 
             {
                 drawText("Victoire !", title, font, renderer);
@@ -598,7 +599,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             {
                 drawText("Defaite !", title, font, renderer);
             }
-            star.x = (window_dimensions.w - star.w) / 2;
+            sprintf(score_s, "%s%d", "Score : ", score);
+            text.x = (window_dimensions.w - text.w) * 0.85;
+            text.y =  (window_dimensions.h - text.h) / 2;
+            drawText(score_s, text, font, renderer);
+            star.x = (brick.w * m - star.w) / 2;
             star.y = (window_dimensions.h - star.h) / 2;
             angle = angle + 4.0;
             drawStar(renderer, texture, star, angle);
@@ -609,6 +614,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
         if (!paused) 
         {      
             // Affichage du jeu et fonctions
+            drawBackground(renderer, background, window_dimensions, brick, m);
             drawBricks(renderer, bricks, n, m, brick, texture); 
             drawLimits(renderer, brick, m, window_dimensions); 
             
@@ -618,8 +624,8 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             
             drawPaddle(renderer, paddle, texture);
             drawBall(renderer, ball, texture);
-            
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Couleur du fond
+
+            SDL_SetRenderDrawColor(renderer, 30, 5 , 50, 255);
             
             sprintf(score_s, "%s%d", "Score : ", score);
             drawText("CASSE-BRIQUES", title, font, renderer);
