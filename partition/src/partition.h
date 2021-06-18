@@ -18,4 +18,3 @@ classe_t recuperer_classe(partition_t partition, element_t element);
 partition_t fusion(partition_t partition, element_t x, element_t y);
 element_t* lister_classe(partition_t partition, label_t label);
 classe_t* lister_partition(partition_t partition);
-

@@ -15,27 +15,21 @@ classe_t recuperer_classe(partition_t partition, element_t element) {
 	return partition.foret[(int) element];
 }
 
-//#include <stdio.h>
+#include <stdio.h>
 partition_t fusion(partition_t partition, element_t x, element_t y) {
-	int i;
-	classe_t oldclasse, newclasse, classex, classey, min;
+	classe_t classex, classey;
 	
-	//fprintf(stderr, "fusionner(%d,%d)\n", (int) x, (int) y);
+	fprintf(stderr, "fusionner(%d,%d)\n", (int) x, (int) y);
 	classex = recuperer_classe(partition, x);
 	classey = recuperer_classe(partition, y);
-	oldclasse = classex;
-	newclasse = classey;
 	if(partition.hauteur[(int) classey] == partition.hauteur[(int) classex]) {
 		++(partition.hauteur[classex]);
 	}
 	if(partition.hauteur[(int) classey] < partition.hauteur[(int) classex]) {
-		oldclasse = classey;
-		newclasse = classex;
+		partition.foret[(int) y] = classex;
 	}
-	for(i = 0; i < N; ++i) {
-		if(partition.foret[i] == oldclasse) {
-			partition.foret[i] = newclasse;
-		}
+	else {
+		partition.foret[(int) x] = classey;
 	}
 	return partition;
 }
