@@ -91,3 +91,11 @@ bool testListerPartition() {
 	puts("liste partition OK");
 	return true;
 }
+
+void afficherForet(partition_t partition) {
+	int i;
+	
+	for(i = 0; i < N; ++i) {
+		printf("indice[%d] : %d (hauteur %d)\n", i, partition.foret[i], partition.hauteur[i]);
+	}
+}
