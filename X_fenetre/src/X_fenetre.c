@@ -74,7 +74,6 @@ int main(int argc, char **argv)
         window[i] = SDL_CreateWindow(nom, poseX, screen.h/2 - height/2, weight, height, SDL_WINDOW_RESIZABLE);
         i++;
         poseX += weight;
-        printf("%d\n",i);
         SDL_Delay(200);
     }
     while(i < NB_FENETRES && window[i-1] != NULL);
