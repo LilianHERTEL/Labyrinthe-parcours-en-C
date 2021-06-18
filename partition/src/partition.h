@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdlib.h>
+
 #define N 5
 
 typedef int ensemble_t;

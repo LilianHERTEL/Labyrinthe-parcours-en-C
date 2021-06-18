@@ -24,12 +24,31 @@ partition_t fusion(partition_t partition, classe_t x, classe_t y) {
 		newclasse = x;
 	}
 	for(i = 0; i < N; ++i) {
-		if(partition.foret[i] == (int) oldclasse) {
-			partition.foret[i] = (int) newclasse;
+		if(partition.foret[i] == oldclasse) {
+			partition.foret[i] = newclasse;
 		}
 	}
 	return partition;
 }
 
-element_t* lister_classe(partition_t partition, label_t label);
+element_t* lister_classe(partition_t partition, label_t label) {
+	int i, k = 0;;
+	element_t *liste;
+	
+	liste = malloc(sizeof(element_t) * N);
+	if(liste == NULL) {
+		return NULL;
+	}
+	
+	for(i = 0; i < N; ++i) {
+		if((int) partition.foret[i] == (int) label) {
+			liste[k] = (element_t) i;
+			++k;
+		}
+	}
+	if(k < N) {
+		liste[k] = -1;
+	}
+	return liste;
+}
 classe_t* lister_partition(partition_t partition);
