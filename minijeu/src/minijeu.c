@@ -83,22 +83,28 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-void drawStar(SDL_Renderer *renderer, SDL_Texture * texture, SDL_Rect window_dimensions)
+void drawStar(SDL_Renderer *renderer, SDL_Texture * texture, SDL_Rect star, double angle)
 {
-    SDL_Rect          dest = {0},
-                      source = {0};
+    SDL_Rect        source = {0};
+    
+    source.w = 64;
+    source.h = 64;
+    source.x = 771;
+    source.y = 845;
 
-    dest.x = window_dimensions.w * 0.75;
-    dest.y = window_dimensions.h * 0.6;
-    dest.w = window_dimensions.w * 0.3;
-    dest.h = window_dimensions.h * 0.3;
+    SDL_RenderCopyEx(renderer, texture, &source, &star, angle, NULL, SDL_FLIP_NONE);
+}
 
-    source.w = 68;
-    source.h = 68;
-    source.x = 770;
-    source.y = 840;
+void starDimensions (SDL_Rect * star, SDL_Rect window_dimensions)
+{
+    int               a,
+                      b;
 
-    SDL_RenderCopy(renderer, texture, &source, &dest);
+    a = window_dimensions.h * 0.3;
+    b = window_dimensions.w * 0.3;
+    star->h = star->w = a <= b ? a : b;
+    star->x = (window_dimensions.w - star->w) * 0.85;
+    star->y = (window_dimensions.h - star->h) * 0.8;
 }
 
 /**
@@ -421,7 +427,6 @@ bool_t updateScore(int * score, int * remainingBricks, SDL_Rect ball, int winHei
     if (ball.y > winHeight)
     {
         gameIsOver = true;
-        puts("GAME OVER\n");
     }
     if (brokenBrick) 
     {
@@ -458,12 +463,14 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
               ball = {0},                                     // Dimensions et position de la balle
               speed = {0},                                    // Valeurs de la vitesse de la balle
               text = {0},                                     // Dimensions et position du texte
-              title = {0};                                    // Dimensions et position du titre
+              title = {0},                                    // Dimensions et position du titre
+              star = {0};                                     // Dimensions et position de l'etoile
     bool_t    gameIsOver = false,                             // Booleen pour savoir si le jeu est fini
               brokenBrick = false;                            // Booleen pour savoir si une brique a ete cassee
     int       score = 0,                                      // Score de la partie
               remainingBricks = nbBricks;                     // Nombre de briques restants
     char      score_s[15];                                    // Chaine de caracteres pour afficher le score
+    double    angle = 0;
 
     // Initialisation de la vitesse de la balle
     speed.x = 20;
@@ -474,6 +481,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
     brickDimensions(&brick, n, m, window_dimensions);
     paddleDimensions(&paddle, brick, m);
     ballDimensions(&ball, brick, m);
+    starDimensions(&star, window_dimensions);
     paddle.x = (brick.w * m - paddle.w) / 2; 
     paddle.y = window_dimensions.h - paddle.h;
     ball.x = (brick.w * m - ball.w) / 2; 
@@ -504,6 +512,7 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                         brickDimensions(&brick, n, m, window_dimensions);
                         paddleDimensions(&paddle, brick, m);
                         ballDimensions(&ball,brick, m);
+                        starDimensions(&star, window_dimensions);
                     }
                     break;
                 case SDL_QUIT:                         
@@ -572,7 +581,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
             drawText("CASSE-BRIQUES", title, font, renderer);
             drawText(score_s, text, font, renderer);
 
-            drawStar(renderer, texture, window_dimensions);
+            if(brokenBrick)
+            {
+                angle = angle + 20.0;
+            }
+            drawStar(renderer, texture, star, angle);
 
 	        SDL_RenderPresent(renderer);  
             SDL_RenderClear(renderer);                        
