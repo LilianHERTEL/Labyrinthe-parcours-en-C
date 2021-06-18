@@ -1,5 +1,5 @@
 FIC = $(shell ls *.c)
-EXEC = ./
+EXEC = ../bin/
 BIN = a.out
 DEBUG = -DDEBUG
 LFLAGS = -lSDL2

@@ -68,7 +68,6 @@ int main(int argc, char const *argv[]) {
 	}
 	
 	initializeRandomGrid(grid);
-	displayGrid(grid);
 	drawGrid(window, renderer, grid);
 
 	startGoL(grid, rules, iterations, delay, window, renderer);

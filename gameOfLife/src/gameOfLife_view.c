@@ -65,7 +65,6 @@ void startGoL(grid_t grid, rules_t* rules, int iterations, int delay, SDL_Window
 	for(i = 0; i < iterations; ++i) {
 		nextIteration(&grid, rules);
 		drawGrid(window, renderer, grid);
-		displayGrid(grid);
 		SDL_Delay(delay);
 	}
 }
