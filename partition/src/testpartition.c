@@ -36,6 +36,23 @@ bool testRecupererClasse() {
 	return true;
 }
 
-bool testFusion();
+bool testFusion() {
+	partition_t partition;
+	
+	partition = creer(N);
+	partition = fusion(partition, 0, 1);
+	if(recuperer_classe(partition, 1) != 0) {
+		puts("echec fusion simple\n");
+		return false;
+	}
+	partition = fusion(partition, 2, 3);
+	partition = fusion(partition, 3, 4);
+	partition = fusion(partition, 1, 2);
+	if(recuperer_classe(partition, 0) != 2) {
+		puts("echec fusions combinees\n");
+		return false;
+	}
+	return true;
+}
 bool testListerClasse();
 bool testListerPartition();
