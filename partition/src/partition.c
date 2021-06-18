@@ -11,7 +11,10 @@ partition_t creer(ensemble_t ensemble) {
 	return partition;
 }
 
-classe_t recuperer_classe(element_t element);
+classe_t recuperer_classe(element_t element) {
+	return partition.foret[(int) element];
+}
+
 partition_t fusion(element_t x, element_t y);
 element_t* lister_classe(label_t label, partition_t);
 classe_t* lister_partition(partition_t partition);
