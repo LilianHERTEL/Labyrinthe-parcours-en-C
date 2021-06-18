@@ -1,7 +1,7 @@
 #include "testpartition.h"
 
 int main() {
-	(testCreer() && testRecupererClasse() && testFusion() && testListerClasse() && testListerPartition()) ? printf("tests ok") : printf("erreur tests");
+	(testCreer() && testRecupererClasse() && testFusion() && testListerClasse() && testListerPartition()) ? puts("tests ok") : puts("erreur tests");
 	return 0;
 }
 
@@ -31,6 +31,7 @@ bool testRecupererClasse() {
 	partition = fusion(partition, 0, 1);
 	if(recuperer_classe(partition, 1) != 0) {
 		puts("echec recuperer classe apres fusion\n");
+		printf("classe de 0 : %d\nclasse de 1 : %d\n", (int) recuperer_classe(partition, 0), (int) recuperer_classe(partition, 1));
 		return false;
 	}
 	return true;
@@ -68,4 +69,20 @@ bool testListerClasse() {
 	}
 	return true;
 }
-bool testListerPartition();
+
+bool testListerPartition() {
+	partition_t partition;
+	classe_t *classe;
+	int i;
+	
+	partition = creer(N);
+	for(i = 1; i < N-1; ++i) {
+		partition = fusion(partition, 0, i);
+	}
+	classe = lister_partition(partition);
+	if(classe[0] != 0 || classe[1] != N-1) {
+		puts("echec listage partition\n");
+		return false;
+	}
+	return true;
+}
