@@ -35,5 +35,7 @@ void minHeapify(binary_heap_t * heap, int val);
 void buildMinHeap(binary_heap_t * heap);
 
 void createHeap(int source_array[], int size, binary_heap_t* heap);
+
+void heapSort(binary_heap_t* heap);
 //void minHeapify(int array[], int index);
 //void buildMinHeap(binary_heap_t* heap);

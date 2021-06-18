@@ -16,8 +16,8 @@ int getRightChild(int index) {
 
 void printHeap(binary_heap_t heap) {
     int i;
-    printf("heap size = %d\n", heap.heapSize);
-    for (i = 1; i < heap.heapSize; i++)
+    printf("heap size = %d\n", heap.length);
+    for (i = 1; i < heap.length; i++)
     {
         printf("%d ", heap.array[i]);
     }
@@ -111,6 +111,16 @@ void createHeap(int source_array[], int size, binary_heap_t* heap) {
     }
 }
 
+void heapSort(binary_heap_t* heap) {
+    buildMinHeap(heap);
+    for (int i = heap->length; i > 1; i--)
+    {
+        permute(heap->array, 1, i);
+        (heap->heapSize)--;
+        minHeapify(heap, 1);
+    }
+}
+
 int main(void)
 {
     /*binary_heap_t heap;
@@ -141,7 +151,8 @@ int main(void)
     for(int i = 1; i<= 10; i++)
         heap2.array[i] = tab[i-1];
     printHeap(heap2);
-    buildMinHeap(&heap2);
+    //buildMinHeap(&heap2);
+    heapSort(&heap2);
     printHeap(heap2);
 
     return 0;
