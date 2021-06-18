@@ -17,6 +17,7 @@ bool testCreer() {
 			puts("echec creation\n");
 		}
 	}
+	puts("creer OK");
 	return code;
 }
 
@@ -34,6 +35,7 @@ bool testRecupererClasse() {
 		printf("classe de 0 : %d\nclasse de 1 : %d\n", (int) recuperer_classe(partition, 0), (int) recuperer_classe(partition, 1));
 		return false;
 	}
+	puts("recuperer classe OK");
 	return true;
 }
 
@@ -53,6 +55,7 @@ bool testFusion() {
 		puts("echec fusions combinees\n");
 		return false;
 	}
+	puts("fusion OK");
 	return true;
 }
 
@@ -67,6 +70,7 @@ bool testListerClasse() {
 		puts("echec listage classes\n");
 		return false;
 	}
+	puts("liste classe OK");
 	return true;
 }
 
@@ -84,5 +88,6 @@ bool testListerPartition() {
 		puts("echec listage partition\n");
 		return false;
 	}
+	puts("liste partition OK");
 	return true;
 }
