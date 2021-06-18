@@ -50,22 +50,39 @@ void permute(int array[], int i, int j) {
     array[j] = tmp;
 }
 
-int main(int argc, char const *argv[])
+void createHeap(int source_array[], int size, binary_heap_t* heap) {
+    int i;
+    heap->heapSize = 1;
+    heap->length = MAX;
+    for (i = 0; i < size; i++)
+    {
+        heapInsert(heap, source_array[i]);
+        printf("Val = %d\n", source_array[i]);
+    }
+}
+
+int main(void)
 {
     binary_heap_t heap;
     heap.heapSize = 1;
     heap.length = MAX;
     bool_t status;
-    status = heapInsert(&heap, 16);
+    //int tab[] = {41, 87, 14, 23, 90, 50, 64, 53, 5, 32};
+    //int tab_size = 10;
+    
+    status = heapInsert(&heap, 41);
+    status = heapInsert(&heap, 87);
     status = heapInsert(&heap, 14);
-    status = heapInsert(&heap, 10);
-    status = heapInsert(&heap, 8);
-    status = heapInsert(&heap, 7);
-    status = heapInsert(&heap, 9);
-    status = heapInsert(&heap, 3);
-    status = heapInsert(&heap, 2);
-    status = heapInsert(&heap, 4);
-    status = heapInsert(&heap, 1);
+    status = heapInsert(&heap, 23);
+    status = heapInsert(&heap, 90);
+    status = heapInsert(&heap, 50);
+    status = heapInsert(&heap, 64);
+    status = heapInsert(&heap, 53);
+    status = heapInsert(&heap, 5);
+    status = heapInsert(&heap, 32);
+    
+    //createHeap(tab, tab_size, &heap);
+    
     printHeap(heap);
     return 0;
 }

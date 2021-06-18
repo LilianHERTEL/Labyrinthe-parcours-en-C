@@ -18,5 +18,6 @@ int getRightChild(int index);
 void printHeap(binary_heap_t heap);
 bool_t heapInsert(binary_heap_t* heap, int val);
 void permute(int array[], int i, int j);
+void createHeap(int source_array[], int size, binary_heap_t* heap);
 //void minHeapify(int array[], int index);
 //void buildMinHeap(binary_heap_t* heap);
