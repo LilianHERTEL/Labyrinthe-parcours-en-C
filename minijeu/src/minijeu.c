@@ -83,6 +83,14 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Dessine l'etoile a l'ecran avec un certain angle
+ * 
+ * @param renderer Le rendu
+ * @param texture La texture appliquee pour l'etoile
+ * @param star Dimensions et position de l'etoile
+ * @param angle L'angle a appliquer
+ */
 void drawStar(SDL_Renderer *renderer, SDL_Texture * texture, SDL_Rect star, double angle)
 {
     SDL_Rect        source = {0};
@@ -95,6 +103,12 @@ void drawStar(SDL_Renderer *renderer, SDL_Texture * texture, SDL_Rect star, doub
     SDL_RenderCopyEx(renderer, texture, &source, &star, angle, NULL, SDL_FLIP_NONE);
 }
 
+/**
+ * @brief Calcule les dimensions de l'etoile
+ * 
+ * @param star Dimensions et position de l'etoile
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
 void starDimensions (SDL_Rect * star, SDL_Rect window_dimensions)
 {
     int               a,
