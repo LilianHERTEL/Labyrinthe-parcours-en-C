@@ -44,15 +44,65 @@ bool_t heapInsert(binary_heap_t* heap, int val) {
     return status;
 }
 
+/**
+ * @brief Permet de deplacer une valeur a la bonne place dans le tas
+ * 
+ * @param heap Le tas binaire
+ * @param val Indice de la valeur a deplacer
+ */
+void minHeapify(binary_heap_t * heap, int val)
+{
+    int left,
+        right,
+        min;
+    
+    left = getLeftChild(val);
+    right = getRightChild(val);
+
+    if(left <= heap->heapSize && heap->array[left] < heap->array[val])
+    {
+        min = left;
+    }
+    else
+    {
+        min = val;
+    }
+    if(right <= heap->heapSize && heap->array[right] < heap->array[min])
+    {
+        min = right;
+    }
+    if(min != val)
+    {
+        permute(heap->array, val, min);
+        heapInsertRec(heap, min);
+    }
+}
+
+/**
+ * @brief Construit un tas binaire minimum a partir d'un tas binaire quelconque
+ * 
+ * @param heap Tas binaire quelconque
+ */
+void buildMinHeap(binary_heap_t * heap)
+{
+    int i;
+
+    heap->heapSize = heap->length;
+    for(i = (heap->length / 2); i > 0; i--)
+    {
+        heapInsertRec(heap, i);
+    }
+}
+
 void permute(int array[], int i, int j) {
     int tmp = array[i];
     array[i] = array[j];
     array[j] = tmp;
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
-    binary_heap_t heap;
+    /*binary_heap_t heap;
     heap.heapSize = 1;
     heap.length = MAX;
     bool_t status;
@@ -66,6 +116,18 @@ int main(int argc, char const *argv[])
     status = heapInsert(&heap, 2);
     status = heapInsert(&heap, 4);
     status = heapInsert(&heap, 1);
-    printHeap(heap);
+    printHeap(heap);*/
+
+    binary_heap_t heap2;
+    heap2.length = MAX;
+    heap2.heapSize = MAX;
+    int tab[10] = {16,14,10,8,7,9,3,2,4,1};
+
+    for(int i = 1; i<= 10; i++)
+        heap2.array[i] = tab[i-1];
+    printHeap(heap2);
+    buildMinHeap(&heap2);
+    printHeap(heap2);
+
     return 0;
 }
