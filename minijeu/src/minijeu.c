@@ -388,6 +388,10 @@ bool_t ballCollision(SDL_Rect ball, SDL_Rect brick, int *** bricks, int n, int m
     if(topBall >= topPaddle && ball.x >= paddle.x && ball.x <= paddle.x + paddle.w)
     {
         speed->y = - speed->y;
+        if(ball.x > paddle.x + (paddle.w/2))
+            speed->x = speed->x -(paddle.x + (paddle.w/2) - ball.x)/15;
+        else
+            speed->x = - speed->x +(paddle.x + (paddle.w/2) - ball.x)/15;
     }
     else
     {
@@ -563,11 +567,11 @@ void gameLoop(SDL_Window * window, SDL_Renderer * renderer, int ** bricks, int n
                     {             
                         case SDLK_LEFT:                                // 'fleche gauche'
                         	//bouger la plateforme a gauche
-                            movePaddle(&paddle, brick, m, -1);
+                            movePaddle(&paddle, brick, m, -3);
                         	break;
                         case SDLK_RIGHT:
                         	//bouger la plateforme a droite
-                            movePaddle(&paddle, brick, m, 1);
+                            movePaddle(&paddle, brick, m, 3);
                         	break;
                         case SDLK_SPACE:                            // 'SPC'
                             paused = !paused;                       // basculement pause/unpause
