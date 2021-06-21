@@ -1,13 +1,12 @@
 #pragma once
 #include <stdio.h>
 #include "bool.h"
-#include "testbinary_heap.h"
 
 typedef struct binary_heap 
 {
-    int length;
-    int heapSize;
-    int* array;
+    int   length;
+    int   heapSize;
+    int * array;
 } binary_heap_t;
 
 /**
@@ -39,7 +38,7 @@ int getRightChild(int index);
  * 
  * @param heap Le tas binaire
  */
-void printHeap(binary_heap_t* heap);
+void printHeap(binary_heap_t heap);
 
 /**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array
