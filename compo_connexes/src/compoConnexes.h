@@ -6,8 +6,9 @@
 
 typedef int *graphe_t;
 
-void genererMatriceAdjacence(graphe_t graphe, int n);
-void afficherMatriceAdjacence(int* matrix, int n);
+graphe_t createAdjencyMatrix(int n);
+void afficherMatriceAdjacence(graphe_t matrix, int n);
 void afficherGraphe(graphe_t graphe);
-element_t** noeudsCompoConnexes(graphe_t graphe);
+element_t** noeudsCompoConnexes(graphe_t graphe, int n);
 void afficherSousGraphe(graphe_t graphe, element_t* sgraphe);
+partition_t grapheToPartition(graphe_t graphe, int n);
