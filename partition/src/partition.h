@@ -13,7 +13,7 @@ typedef struct {
 	int *hauteur;
 } partition_t;
 
-partition_t creer(ensemble_t ensemble, int n);
+partition_t creer(ensemble_t n);
 classe_t recuperer_classe(partition_t partition, element_t element);
 partition_t fusion(partition_t partition, element_t x, element_t y);
 element_t* lister_classe(partition_t partition, label_t labeli, int n);

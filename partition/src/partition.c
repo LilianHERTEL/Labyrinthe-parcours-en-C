@@ -1,11 +1,11 @@
 #include "partition.h"
 
-partition_t creer(ensemble_t ensemble, int n) {
+partition_t creer(ensemble_t ensemble) {
 	partition_t partition;
 	int i;
 	
-	partition.foret = malloc(sizeof(classe_t) * n);
-	partition.hauteur = malloc(sizeof(int) * n);
+	partition.foret = malloc(sizeof(classe_t) * ensemble);
+	partition.hauteur = malloc(sizeof(int) * ensemble);
 	if(partition.hauteur == NULL || partition.foret == NULL) {
 		return partition;
 	}
@@ -64,7 +64,7 @@ element_t* lister_classe(partition_t partition, label_t label, int n) {
 }
 
 classe_t* lister_partition(partition_t partition, int n) {
-	int i, k;
+	int i, k = 0;
 	classe_t *liste;
 	
 	liste = malloc(sizeof(classe_t) * n);
