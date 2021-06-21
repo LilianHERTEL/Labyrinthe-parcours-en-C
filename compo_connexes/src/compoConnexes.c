@@ -46,8 +46,10 @@ element_t** noeudsCompoConnexes(graphe_t graphe, int n) {
 		return NULL;
 	}
 	for(j = 0; j < i; ++j) {
-		noeud[j] = lister_classe(partition, i, n);
+		noeud[j] = lister_classe(partition, classe[j], n);
 	}
+	free(classe);
+	detruirePartition(partition);
 	return noeud;
 }
 
