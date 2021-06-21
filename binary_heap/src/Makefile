@@ -3,7 +3,7 @@ EXEC = ../bin/
 BIN = a.out
 DEBUG = -DDEBUG
 LFLAGS = -lSDL2
-OPTIONS = -Wall -Wextra -g
+OPTIONS = -Wall -Wextra -pg
 CC = gcc
 OBJ = $(FIC:.c=.o)
 ART = $(FIC:.c=.gch)

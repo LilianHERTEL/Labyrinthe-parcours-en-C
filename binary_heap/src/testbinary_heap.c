@@ -4,8 +4,8 @@ void test_MinHeapify()
 {
     binary_heap_t heap;
     int tab[3] = {2, 3, 1};
-    heap.heapSize = 3;
-    heap.length = 3;
+    heap.heapSize = 4;
+    heap.length = 4;
     for(int i = 1; i<= 3; i++)
         heap.array[i] = tab[i-1];
 

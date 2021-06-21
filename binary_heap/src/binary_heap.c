@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "binary_heap.h"
 #include "bool.h"
+#include <stdlib.h>
 
 /**
  * @brief Retourne l'indice du parent de l'indice index
@@ -46,7 +47,7 @@ void printHeap(binary_heap_t heap) {
     }
     printf("\n");
 }
-
+/*
 bool_t heapInsert(binary_heap_t* heap, int val) {
     bool_t status = false;
     int index, parent;
@@ -66,6 +67,7 @@ bool_t heapInsert(binary_heap_t* heap, int val) {
     }
     return status;
 }
+*/
 
 /**
  * @brief Permet de deplacer une valeur a la bonne place dans le tas
@@ -130,6 +132,7 @@ void permute(int array[], int i, int j) {
     array[j] = tmp;
 }
 
+/*
 void createHeap(int source_array[], int size, binary_heap_t* heap) {
     int i;
     heap->heapSize = 1;
@@ -139,7 +142,7 @@ void createHeap(int source_array[], int size, binary_heap_t* heap) {
         heapInsert(heap, source_array[i]);
         printf("Val = %d\n", source_array[i]);
     }
-}
+}*/
 
 void heapSort(binary_heap_t* heap) {
     buildMinHeap(heap);
@@ -151,6 +154,11 @@ void heapSort(binary_heap_t* heap) {
     }
 }
 
+int cmpfunc (const void * a, const void * b) {
+   return (*(int*)a - *(int*)b);
+}
+
+/*
 int main(void)
 {
     /*binary_heap_t heap2;
@@ -160,11 +168,26 @@ int main(void)
 
     for(int i = 1; i<= 10; i++)
         heap2.array[i] = tab[i-1];
-    printHeap(heap2);
+
+    qsort(tab, 10, sizeof(int), cmpfunc);
+    // make
+    // ../bin/a.out
+    // gprof ../bin/a.out gmon.out > analysis.txt
+    
+    //printHeap(heap2);
+
+    for (int i = 0; i < 10; i++)
+    {
+        printf("%d ", tab[i]);
+    }
+    
+    //printf("%d\n", heap2.array[0]);
     //buildMinHeap(&heap2);
+    /*
     heapSort(&heap2);
     printHeap(heap2);*/
     test_MinHeapify();
 
     return 0;
 }
+*/
