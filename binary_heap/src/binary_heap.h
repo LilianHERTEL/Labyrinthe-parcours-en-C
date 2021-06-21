@@ -38,7 +38,7 @@ int getRightChild(int index);
  * 
  * @param heap Le tas binaire
  */
-void printHeap(binary_heap_t heap);
+void printHeap(binary_heap_t* heap);
 bool_t heapInsert(binary_heap_t* heap, int val);
 
 /**

@@ -38,12 +38,12 @@ int getRightChild(int index) {
  * 
  * @param heap Le tas binaire
  */
-void printHeap(binary_heap_t heap) {
+void printHeap(binary_heap_t* heap) {
     int i;
-    printf("heap size = %d\n", heap.heapSize);
-    for (i = 1; i <= heap.heapSize; i++)
+    printf("heap size = %d\n", heap->length);
+    for (i = 1; i <= heap->length; i++)
     {
-        printf("%d ", heap.array[i]);
+        printf("%d ", heap->array[i]);
     }
     printf("\n");
 }
@@ -153,40 +153,3 @@ void heapSort(binary_heap_t* heap) {
         minHeapify(heap, 1);
     }
 }
-
-int cmpfunc (const void * a, const void * b) {
-   return (*(int*)a - *(int*)b);
-}
-
-
-/*int main(void)
-{
-    binary_heap_t heap2;
-    heap2.length = MAX;
-    heap2.heapSize = MAX;
-    int tab[10] = {16,14,10,8,7,9,3,2,4,1};
-
-    for(int i = 1; i<= 10; i++)
-        heap2.array[i] = tab[i-1];
-
-    qsort(tab, 10, sizeof(int), cmpfunc);
-    // make
-    // ../bin/a.out
-    // gprof ../bin/a.out gmon.out > analysis.txt
-    
-    //printHeap(heap2);
-
-    for (int i = 0; i < 10; i++)
-    {
-        printf("%d ", tab[i]);
-    }
-    
-    //printf("%d\n", heap2.array[0]);
-    //buildMinHeap(&heap2);
-    
-    heapSort(&heap2);
-    printHeap(heap2);
-    test_MinHeapify();
-
-    return 0;
-}*/
