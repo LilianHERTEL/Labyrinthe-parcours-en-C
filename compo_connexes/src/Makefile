@@ -26,6 +26,5 @@ $(EXEC):
 remake: clean 	
 	make 
 
-clean: 	rm -f $(OBJ) $(ART)
-
-
+clean: 	
+	rm -f $(OBJ) $(ART)
