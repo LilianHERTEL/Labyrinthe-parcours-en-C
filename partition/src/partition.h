@@ -18,5 +18,5 @@ partition_t fusion(partition_t partition, element_t x, element_t y);
 element_t* lister_classe(partition_t partition, label_t labeli, int n);
 classe_t* lister_partition(partition_t partition, int n);
 void detruirePartition(partition_t partition);
-void afficherClasse(classe_t *classe);
-void afficherForet(partition_t partition);
+void afficherClasse(classe_t *classe, int n);
+void afficherForet(partition_t partition, int n);

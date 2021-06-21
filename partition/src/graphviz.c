@@ -3,8 +3,8 @@
 void drawPartitionGraph(partition_t partition, int n, char * name)
 {
     Agraph_t    * graphe;
-    Agnode_t    * noeuds;
-    Agedge_t    * arretes;
+    Agnode_t    * noeuds[n];
+    //Agedge_t    * arrete;
     FILE        * fic;
     GVC_t       * graph_context;
     int           i,
@@ -34,14 +34,14 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
             for(i = 0; i<n; i++)
             {
                 sprintf(nom, "%d", partition.foret[i]);
-                noeuds = agnode(graphe, nom, 1);
+                noeuds[i] = agnode(graphe, nom, 1);
             }
 
             //Dessine les arretes
-            /*for(i = 0; i<n; i++)
+            for(i = 0; i<n; i++)
             {
-                arretes = agedge(graphe, noeuds[i], noeuds[recuperer_classe(partition, partition.foret[i])], NULL, 1);
-            }*/
+                agedge(graphe, noeuds[i], noeuds[recuperer_classe(partition, partition.foret[i])], NULL, 1);
+            }
 
             //  Ecriture sur la sortie standard en dot sans formatage
             //agwrite(graphe, stdout);
@@ -86,19 +86,23 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
 void partitionSimple()
 {
 	partition_t   test;
+    classe_t    * classes;
     int           n;
 
     n = 10;
     test = creer(n);
+    classes = lister_partition(test, n);
 
-    //afficherForet(test, n);
+    afficherForet(test, n);
 
     fusion(test, test.foret[1], test.foret[4]);
-    //afficherForet(test, n);
-    fusion(test, test.foret[9], test.foret[3]);
+    afficherForet(test, n);
+    afficherClasse(classes, n);
+    
+    //fusion(test, test.foret[9], test.foret[3]);
     //afficherForet(test, n);
 
-    drawPartitionGraph(test, n, "partitionSimple");
+    //drawPartitionGraph(test, n, "partitionSimple");
     
-    detruirePartition(&test);
+    detruirePartition(test);
 }

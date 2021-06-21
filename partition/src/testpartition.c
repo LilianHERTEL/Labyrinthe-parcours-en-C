@@ -62,7 +62,7 @@ bool testFusion() {
 	partition = fusion(partition, 10, 3);
 	if(recuperer_classe(partition, 10) != 2) {
 		puts("echec fusions combinees\n");
-		afficherForet(partition);
+		afficherForet(partition, n);
 		detruirePartition(partition);
 		return false;
 	}
@@ -71,21 +71,21 @@ bool testFusion() {
 	partition = fusion(partition, 8, 7);
 	if(recuperer_classe(partition, 8) != 7) {
 		puts("echec fusions combinees\n");
-		afficherForet(partition);
+		afficherForet(partition, n);
 		detruirePartition(partition);
 		return false;
 	}
 	partition = fusion(partition, 8, 9);
 	if(recuperer_classe(partition, 5) != 5 || recuperer_classe(partition, 7) != 5 || recuperer_classe(partition, 9) != 5) {
 		puts("echec fusions combinees\n");
-		afficherForet(partition);
+		afficherForet(partition, n);
 		detruirePartition(partition);
 		return false;
 	}
 	partition = fusion(partition, 6, 8);
 	if(recuperer_classe(partition, 4) != 5) {
 		puts("echec fusions combinees\n");
-		afficherForet(partition);
+		afficherForet(partition, n);
 		detruirePartition(partition);
 		return false;
 	}
@@ -107,7 +107,7 @@ bool testListerClasse() {
 	partition = fusion(partition, 0, 1);
 	element = lister_classe(partition, 0, n);
 	if(element[0] != 0 || element[1] != 1 || element[2] != -1) {
-		afficherForet(partition);
+		afficherForet(partition, n);
 		puts("echec listage classes\n");
 		detruirePartition(partition);
 		return false;
@@ -136,8 +136,8 @@ bool testListerPartition() {
 		++k;
 	}
 	if(classe[0] != 0 || classe[k] == n - 1) {
-		afficherForet(partition);
-		afficherClasse(classe);
+		afficherForet(partition, n);
+		afficherClasse(classe, n);
 		puts("echec listage partition\n");
 		detruirePartition(partition);
 		return false;
