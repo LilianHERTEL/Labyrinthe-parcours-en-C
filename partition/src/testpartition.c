@@ -48,36 +48,28 @@ bool testFusion() {
 		puts("echec fusion simple\n");
 		return false;
 	}
-	afficherForet(partition);
 	partition = fusion(partition, 2, 3);
-	afficherForet(partition);
 	partition = fusion(partition, 10, 3);
 	if(recuperer_classe(partition, 10) != 2) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
 		return false;
 	}
-	afficherForet(partition);	
 	partition = fusion(partition, 5, 9);
-	afficherForet(partition);
 	partition = fusion(partition, 4, 6);
-	afficherForet(partition);
 	partition = fusion(partition, 8, 7);
-	if(recuperer_classe(partition, 7) != 8) {
+	if(recuperer_classe(partition, 8) != 7) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
 		return false;
 	}
-	afficherForet(partition);
-	partition = fusion(partition, 7, 9);
-	if(recuperer_classe(partition, 5) != 5 || recuperer_classe(partition, 8) != 5 || recuperer_classe(partition, 9) != 5) {
+	partition = fusion(partition, 8, 9);
+	if(recuperer_classe(partition, 5) != 5 || recuperer_classe(partition, 7) != 5 || recuperer_classe(partition, 9) != 5) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
 		return false;
 	}
-	afficherForet(partition);
 	partition = fusion(partition, 6, 8);
-	afficherForet(partition);
 	if(recuperer_classe(partition, 4) != 5) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
@@ -95,6 +87,7 @@ bool testListerClasse() {
 	partition = fusion(partition, 0, 1);
 	element = lister_classe(partition, 0);
 	if(element[0] != 0 || element[1] != 1 || element[2] != -1) {
+		afficherForet(partition);
 		puts("echec listage classes\n");
 		return false;
 	}
@@ -108,16 +101,29 @@ bool testListerPartition() {
 	int i;
 	
 	partition = creer(N);
-	for(i = 1; i < N-1; ++i) {
+	for(i = 1; i < 2 * N / 3; ++i) {
 		partition = fusion(partition, 0, i);
 	}
 	classe = lister_partition(partition);
-	if(classe[0] != 0 || classe[1] != N-1) {
+	if(classe[0] != 0 || classe[N-1] != N-1) {
+		afficherForet(partition);
+		afficherClasse(classe);
 		puts("echec listage partition\n");
 		return false;
 	}
 	puts("liste partition OK");
+	free(classe);
 	return true;
+}
+
+void afficherClasse(classe_t *classe) {
+        int i = 0;
+
+        while(i < N && classe[i] != -1) {
+                printf("%d ", classe[i]);
+                ++i;
+        }
+        puts("");
 }
 
 void afficherForet(partition_t partition) {
