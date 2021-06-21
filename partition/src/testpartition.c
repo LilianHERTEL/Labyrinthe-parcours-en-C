@@ -92,6 +92,7 @@ bool testListerClasse() {
 		return false;
 	}
 	puts("liste classe OK");
+	free(element);
 	return true;
 }
 
