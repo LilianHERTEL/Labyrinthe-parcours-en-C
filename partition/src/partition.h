@@ -1,20 +1,22 @@
 #pragma once
 
 #include <stdlib.h>
-
-#define N 11
+#include <stdio.h>
 
 typedef int ensemble_t;
 typedef int classe_t;
 typedef int element_t;
 typedef int label_t;
 typedef struct {
-	classe_t foret[N];
-	int hauteur[N];
+	classe_t *foret;
+	int *hauteur;
 } partition_t;
 
-partition_t creer(ensemble_t ensemble);
+partition_t creer(ensemble_t n);
 classe_t recuperer_classe(partition_t partition, element_t element);
 partition_t fusion(partition_t partition, element_t x, element_t y);
-element_t* lister_classe(partition_t partition, label_t label);
-classe_t* lister_partition(partition_t partition);
+element_t* lister_classe(partition_t partition, label_t labeli, int n);
+classe_t* lister_partition(partition_t partition, int n);
+void detruirePartition(partition_t partition);
+void afficherClasse(classe_t *classe);
+void afficherForet(partition_t partition);
