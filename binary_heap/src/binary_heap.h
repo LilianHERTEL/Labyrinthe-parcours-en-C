@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include "bool.h"
+#include "testbinary_heap.h"
 
 typedef struct binary_heap 
 {
