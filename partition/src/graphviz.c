@@ -1,32 +1,50 @@
 #include "graphviz.h"
 
-void partitionSimple()
+void drawPartitionGraph(partition_t partition, int n, char * name)
 {
-	partition_t   test;
     Agraph_t    * graphe;
-    Agnode_t    * noeuds[N];
+    Agnode_t    * noeuds;
+    Agedge_t    * arretes;
     FILE        * fic;
     GVC_t       * graph_context;
     int           i,
                   sys;
-    char          nom[2];
+    char          nom[2],
+                  dotPath[50],
+                  pngPath[50],
+                  command[100],
+                * dir = "../graphviz/";
 
-    fic = fopen("partitionSimple.dot", "w");
+    strcpy(dotPath, dir);
+    strcat(dotPath, name);
+    strcat(dotPath, ".dot");
+    strcpy(pngPath, dir);
+    strcat(pngPath, name);
+    strcat(pngPath, ".png");
+
+    fic = fopen(dotPath, "w");
     if(fic)
     {
-        test = creer(N);
         graph_context = gvContext();
         if (graph_context)
         {
-            graphe = agopen("PartitionSimple", Agdirected, 0);
-            for(i = 0; i<N; i++)
+            graphe = agopen(name, Agdirected, 0);
+
+            // Dessine les noeuds
+            for(i = 0; i<n; i++)
             {
-                sprintf(nom, "%d", test.foret[i]);
-                noeuds[i] = agnode(graphe, nom, 1);
+                sprintf(nom, "%d", partition.foret[i]);
+                noeuds = agnode(graphe, nom, 1);
             }
 
+            //Dessine les arretes
+            /*for(i = 0; i<n; i++)
+            {
+                arretes = agedge(graphe, noeuds[i], noeuds[recuperer_classe(partition, partition.foret[i])], NULL, 1);
+            }*/
+
             //  Ecriture sur la sortie standard en dot sans formatage
-            agwrite(graphe, stdout);
+            //agwrite(graphe, stdout);
 
             //  Permet de dessiner le graphe "correctement"
             gvLayout(graph_context, graphe, "dot");
@@ -35,10 +53,14 @@ void partitionSimple()
             gvRender(graph_context, graphe, "dot", fic);
 
             //  Commande système pour généer une image à partir du fichier .dot
-            sys = system("dot -Tpng partitionSimple.dot -o partitionSimple.png");
+            strcpy(command, "dot -Tpng ");
+            strcat(command, dotPath);
+            strcat(command, " -o ");
+            strcat(command, pngPath);
+            sys = system(command);
             if (sys != 0)
             {
-                fprintf(stderr, "Impossible de lancer la commande : dot -Tpng partitionSimple.dot -o partitionSimple.png");
+                fprintf(stderr, "Impossible de lancer la commande : %s", command);
             }
 
             //  Libération mémoire du contexte du graphe
@@ -57,6 +79,26 @@ void partitionSimple()
     }
 	else
     {
-        fprintf(stderr, "Impossible d'ouvrir le fichier...");
+        fprintf(stderr, "Impossible d'ouvrir le fichier...\n");
     }
+}
+
+void partitionSimple()
+{
+	partition_t   test;
+    int           n;
+
+    n = 10;
+    test = creer(n);
+
+    //afficherForet(test);
+
+    fusion(test, test.foret[1], test.foret[4]);
+    //afficherForet(test);
+    fusion(test, test.foret[9], test.foret[3]);
+    //afficherForet(test);
+
+    drawPartitionGraph(test, n, "partitionSimple");
+    
+    detruirePartition(&test);
 }

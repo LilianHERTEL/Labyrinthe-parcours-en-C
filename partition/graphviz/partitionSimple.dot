@@ -1,5 +1,5 @@
-digraph PartitionSimple {
-	graph [bb="0,0,774,36"];
+digraph partitionSimple {
+	graph [bb="0,0,558,36"];
 	node [label="\N"];
 	0	 [height=0.5,
 		pos="27,18",
@@ -13,25 +13,16 @@ digraph PartitionSimple {
 	3	 [height=0.5,
 		pos="243,18",
 		width=0.75];
-	4	 [height=0.5,
+	5	 [height=0.5,
 		pos="315,18",
 		width=0.75];
-	5	 [height=0.5,
+	6	 [height=0.5,
 		pos="387,18",
 		width=0.75];
-	6	 [height=0.5,
+	7	 [height=0.5,
 		pos="459,18",
 		width=0.75];
-	7	 [height=0.5,
-		pos="531,18",
-		width=0.75];
 	8	 [height=0.5,
-		pos="603,18",
-		width=0.75];
-	9	 [height=0.5,
-		pos="675,18",
-		width=0.75];
-	10	 [height=0.5,
-		pos="747,18",
+		pos="531,18",
 		width=0.75];
 }
