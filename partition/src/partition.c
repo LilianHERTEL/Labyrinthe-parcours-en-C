@@ -107,3 +107,9 @@ void afficherForet(partition_t partition) {
         puts("");
 }
 
+classe_t classeMere(element_t element, partition_t partition) {
+	while(partition.foret[element] != element) {
+		element = partition.foret[element];
+	}
+	return element;
+}
