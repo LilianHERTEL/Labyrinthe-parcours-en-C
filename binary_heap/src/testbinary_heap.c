@@ -46,6 +46,9 @@ void testBuildMinHeap()
 {
     binary_heap_t heap;
     int           i,
+                  left,
+                  right,
+                  code = 0,
                   tab[4] = {0, 2, 3, 1};
     
     heap.length = 4;
@@ -57,9 +60,33 @@ void testBuildMinHeap()
             heap.array[i] = tab[i-1];
 
         printHeap(heap);
-        puts("Le tas devrait etre ");
+        puts("Le tas devrait etre un tas minimum");
         buildMinHeap(&heap);
-        printHeap(heap);
+
+        i = 1;
+        while(i<= heap.length && code == 0)         //On teste le tas pour savoir si il est minimum
+        {
+            left = getLeftChild(i);
+            right = getRightChild(i);
+            if(left <= heap.length && heap.array[left] < heap.array[i])
+            {
+                code = -1;
+            }
+            else if(right <= heap.length && heap.array[right] < heap.array[i])
+            {
+                code = -1;
+            }
+            i++;
+        }
+
+        if(code == 0)
+        {
+            puts("On a bien un tas minimum");
+        }
+        else
+        {
+            puts("Le tas n'est pas minimum");
+        }
     
         free(heap.array);
     }
