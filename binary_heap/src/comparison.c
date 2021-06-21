@@ -13,7 +13,7 @@ void callQSort(int* arrayQSort) {
     qsort(arrayQSort, SIZE, sizeof(int), cmpfunc);
 }
 
-/*int main(int argc, char const *argv[])
+void comparison(int argc, char const *argv[])
 {
     int i;
     time_t t;
@@ -52,4 +52,4 @@ void callQSort(int* arrayQSort) {
     free(heap.array);
 
     return 0;
-}*/
+}
