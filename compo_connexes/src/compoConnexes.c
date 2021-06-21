@@ -25,7 +25,7 @@ graphe_t createAdjencyMatrix(int n) {
 			for (int j = i; j < n; j++)
 			{
 				matrix[n*i + j] = rand()%2;
-				matrix[n*j + i] = matrix[n*i + j];
+				matrix[n*j + i] = 0/*matrix[n*i + j]*/;
 			}
 			matrix[n*i + i] = 0;
 		}
