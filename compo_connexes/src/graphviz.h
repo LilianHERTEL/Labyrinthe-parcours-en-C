@@ -6,6 +6,17 @@
 #include "partition.h"
 
 /**
+ * @brief Creer les differentes chaines de caracteres utiles pour dessiner le graphe
+ * 
+ * @param name Nom general des fichiers
+ * @param dir Chemin du dossier ou stcoker les fichiers
+ * @param dotpath Chemin du fichier .dot 
+ * @param pngPath Chemin du fichier png
+ * @param command Commande pour transformer le .dot en png
+ */
+void createStrings(char * name, char * dir, char * dotPath, char * pngPath, char * command);
+
+/**
  * @brief Creer le fichier .dot et le fichier png pour la partition en parametres
  * 
  * @param partition La partition a representer
