@@ -1,12 +1,12 @@
 #include "testpartition.h"
 
 bool testCreer() {
-	int i;
+	int i, n = 11;
 	partition_t test;
 	bool code = true;
 
-	test = creer(N);
-	for(i = 0; i < N; ++i) {
+	test = creer(n);
+	for(i = 0; i < n; ++i) {
 		if(test.foret[i] != i || test.hauteur[i] != 1) {
 			code = false;
 			puts("echec creation\n");
@@ -18,8 +18,9 @@ bool testCreer() {
 
 bool testRecupererClasse() {
 	partition_t partition;
+	int n = 12;
 	
-	partition = creer(N);
+	partition = creer(n);
 	if(recuperer_classe(partition, 1) != 1) {
 		puts("echec recuperer classe initiale\n");
 		return false;
@@ -36,8 +37,9 @@ bool testRecupererClasse() {
 
 bool testFusion() {
 	partition_t partition;
+	int n = 11;
 	
-	partition = creer(N);
+	partition = creer(n);
 	partition = fusion(partition, 0, 1);
 	if(recuperer_classe(partition, 1) != 0) {
 		puts("echec fusion simple\n");
@@ -77,10 +79,11 @@ bool testFusion() {
 bool testListerClasse() {
 	partition_t partition;
 	element_t *element;
+	int n = 11;
 	
-	partition = creer(N);
+	partition = creer(n);
 	partition = fusion(partition, 0, 1);
-	element = lister_classe(partition, 0);
+	element = lister_classe(partition, 0, n);
 	if(element[0] != 0 || element[1] != 1 || element[2] != -1) {
 		afficherForet(partition);
 		puts("echec listage classes\n");
@@ -94,14 +97,17 @@ bool testListerClasse() {
 bool testListerPartition() {
 	partition_t partition;
 	classe_t *classe;
-	int i;
+	int i, n = 11, k = 0;
 	
-	partition = creer(N);
-	for(i = 1; i < 2 * N / 3; ++i) {
+	partition = creer(n);
+	for(i = 1; i < 2 * n / 3; ++i) {
 		partition = fusion(partition, 0, i);
 	}
-	classe = lister_partition(partition);
-	if(classe[0] != 0 || classe[N-1] != N-1) {
+	classe = lister_partition(partition, n);
+	while(k < n && k > -1) {
+		++k;
+	}
+	if(classe[0] != 0 || classe[k] == n) {
 		afficherForet(partition);
 		afficherClasse(classe);
 		puts("echec listage partition\n");
@@ -113,9 +119,9 @@ bool testListerPartition() {
 }
 
 void afficherClasse(classe_t *classe) {
-        int i = 0;
+        int i = 0, n = 11;
 
-        while(i < N && classe[i] != -1) {
+        while(i < n && classe[i] != -1) {
                 printf("%d ", classe[i]);
                 ++i;
         }
@@ -123,9 +129,9 @@ void afficherClasse(classe_t *classe) {
 }
 
 void afficherForet(partition_t partition) {
-	int i;
+	int i, n = 11;
 	
-	for(i = 0; i < N; ++i) {
+	for(i = 0; i < n; ++i) {
 		printf("indice[%d] : %d (hauteur %d)\n", i, partition.foret[i], partition.hauteur[i]);
 	}
 	puts("");

@@ -4,6 +4,12 @@ partition_t creer(ensemble_t ensemble) {
 	partition_t partition;
 	int i;
 	
+	partition.foret = malloc(sizeof(classe_t) * ensemble);
+	partition.hauteur = malloc(sizeof(int) * ensemble);
+	if(partition.hauteur == NULL || partition.foret == NULL) {
+		return partition;
+	}
+
 	for(i = 0; i < (int) ensemble; ++i) {
 		partition.foret[i] = i;
 		partition.hauteur[i] = 1;
@@ -36,43 +42,48 @@ partition_t fusion(partition_t partition, element_t x, element_t y) {
 	return partition;
 }
 
-element_t* lister_classe(partition_t partition, label_t label) {
-	int i, k = 0;;
+element_t* lister_classe(partition_t partition, label_t label, int n) {
+	int i, k = 0;
 	element_t *liste;
 	
-	liste = malloc(sizeof(element_t) * N);
+	liste = malloc(sizeof(element_t) * n);
 	if(liste == NULL) {
 		return NULL;
 	}
 	
-	for(i = 0; i < N; ++i) {
+	for(i = 0; i < n; ++i) {
 		if((int) partition.foret[i] == (int) label) {
 			liste[k] = (element_t) i;
 			++k;
 		}
 	}
-	if(k < N) {
+	if(k < n) {
 		liste[k] = -1;
 	}
 	return liste;
 }
 
-classe_t* lister_partition(partition_t partition) {
-	int i, k;
+void detruirePartition(partition_t *partition) {
+	free(partition->foret);
+	free(partition->hauteur);
+}
+
+classe_t* lister_partition(partition_t partition, int n) {
+	int i, k = 0;
 	classe_t *liste;
 	
-	liste = malloc(sizeof(classe_t) * N);
+	liste = malloc(sizeof(classe_t) * n);
 	if(liste == NULL) {
 		return NULL;
 	}
 
-	for(i = 0; i < N; ++i) {
+	for(i = 0; i < n; ++i) {
 		if((int) partition.foret[i] == i) {
 			liste[k] = (classe_t) partition.foret[i];
 			++k;
 		}
 	}
-	if(k < N) {
+	if(k < n) {
 		liste[k] = -1;
 	}
 	return liste;
