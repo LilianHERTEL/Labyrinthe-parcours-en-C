@@ -153,27 +153,7 @@ void heapSort(binary_heap_t* heap) {
 
 int main(void)
 {
-    /*binary_heap_t heap;
-    heap.heapSize = 1;
-    heap.length = MAX;
-    bool_t status;
-    //int tab[] = {41, 87, 14, 23, 90, 50, 64, 53, 5, 32};
-    //int tab_size = 10;
-    
-    status = heapInsert(&heap, 41);
-    status = heapInsert(&heap, 87);
-    status = heapInsert(&heap, 14);
-    status = heapInsert(&heap, 10);
-    status = heapInsert(&heap, 8);
-    status = heapInsert(&heap, 7);
-    status = heapInsert(&heap, 9);
-    status = heapInsert(&heap, 3);
-    status = heapInsert(&heap, 2);
-    status = heapInsert(&heap, 4);
-    status = heapInsert(&heap, 1);
-    printHeap(heap);*/
-
-    binary_heap_t heap2;
+    /*binary_heap_t heap2;
     heap2.length = MAX;
     heap2.heapSize = MAX;
     int tab[10] = {16,14,10,8,7,9,3,2,4,1};
@@ -183,7 +163,8 @@ int main(void)
     printHeap(heap2);
     //buildMinHeap(&heap2);
     heapSort(&heap2);
-    printHeap(heap2);
+    printHeap(heap2);*/
+    test_MinHeapify();
 
     return 0;
 }
