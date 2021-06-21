@@ -40,8 +40,8 @@ int getRightChild(int index) {
  */
 void printHeap(binary_heap_t heap) {
     int i;
-    printf("heap size = %d\n", heap.length);
-    for (i = 1; i < heap.length; i++)
+    printf("heap size = %d\n", heap.heapSize);
+    for (i = 1; i <= heap.heapSize; i++)
     {
         printf("%d ", heap.array[i]);
     }
@@ -158,10 +158,10 @@ int cmpfunc (const void * a, const void * b) {
    return (*(int*)a - *(int*)b);
 }
 
-/*
-int main(void)
+
+/*int main(void)
 {
-    /*binary_heap_t heap2;
+    binary_heap_t heap2;
     heap2.length = MAX;
     heap2.heapSize = MAX;
     int tab[10] = {16,14,10,8,7,9,3,2,4,1};
@@ -183,11 +183,10 @@ int main(void)
     
     //printf("%d\n", heap2.array[0]);
     //buildMinHeap(&heap2);
-    /*
+    
     heapSort(&heap2);
-    printHeap(heap2);*/
+    printHeap(heap2);
     test_MinHeapify();
 
     return 0;
-}
-*/
+}*/

@@ -1,15 +1,12 @@
 #pragma once
 #include <stdio.h>
 #include "bool.h"
-#include "testbinary_heap.h"
-
-#define MAX 10
 
 typedef struct binary_heap 
 {
-    int length;
-    int heapSize;
-    int array[MAX];
+    int   length;
+    int   heapSize;
+    int * array;
 } binary_heap_t;
 
 /**

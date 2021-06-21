@@ -5,7 +5,7 @@
 
 #define SIZE 1000
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 {
     int i;
     time_t t;
@@ -17,4 +17,4 @@ int main(int argc, char const *argv[])
     }
 
     return 0;
-}
+}*/
