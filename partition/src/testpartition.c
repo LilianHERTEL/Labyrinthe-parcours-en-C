@@ -13,7 +13,7 @@ bool testCreer() {
 		}
 	}
 	puts("creer OK");
-	detruirePartition(&test);
+	detruirePartition(test);
 	return code;
 }
 
@@ -28,17 +28,17 @@ bool testRecupererClasse() {
 	}
 	if(recuperer_classe(partition, 1) != 1) {
 		puts("echec recuperer classe initiale\n");
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	partition = fusion(partition, 0, 1);
 	if(recuperer_classe(partition, 1) != 0) {
 		puts("echec recuperer classe apres fusion\n");
 		printf("classe de 0 : %d\nclasse de 1 : %d\n", (int) recuperer_classe(partition, 0), (int) recuperer_classe(partition, 1));
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
-	detruirePartition(&partition);
+	detruirePartition(partition);
 	puts("recuperer classe OK");
 	return true;
 }
@@ -55,7 +55,7 @@ bool testFusion() {
 	partition = fusion(partition, 0, 1);
 	if(recuperer_classe(partition, 1) != 0) {
 		puts("echec fusion simple\n");
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	partition = fusion(partition, 2, 3);
@@ -63,7 +63,7 @@ bool testFusion() {
 	if(recuperer_classe(partition, 10) != 2) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	partition = fusion(partition, 5, 9);
@@ -72,25 +72,25 @@ bool testFusion() {
 	if(recuperer_classe(partition, 8) != 7) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	partition = fusion(partition, 8, 9);
 	if(recuperer_classe(partition, 5) != 5 || recuperer_classe(partition, 7) != 5 || recuperer_classe(partition, 9) != 5) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	partition = fusion(partition, 6, 8);
 	if(recuperer_classe(partition, 4) != 5) {
 		puts("echec fusions combinees\n");
 		afficherForet(partition);
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	puts("fusion OK");
-	detruirePartition(&partition);
+	detruirePartition(partition);
 	return true;
 }
 
@@ -109,11 +109,11 @@ bool testListerClasse() {
 	if(element[0] != 0 || element[1] != 1 || element[2] != -1) {
 		afficherForet(partition);
 		puts("echec listage classes\n");
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	puts("liste classe OK");
-	detruirePartition(&partition);
+	detruirePartition(partition);
 	free(element);
 	return true;
 }
@@ -139,11 +139,11 @@ bool testListerPartition() {
 		afficherForet(partition);
 		afficherClasse(classe);
 		puts("echec listage partition\n");
-		detruirePartition(&partition);
+		detruirePartition(partition);
 		return false;
 	}
 	puts("liste partition OK");
-	detruirePartition(&partition);
+	detruirePartition(partition);
 	free(classe);
 	return true;
 }
