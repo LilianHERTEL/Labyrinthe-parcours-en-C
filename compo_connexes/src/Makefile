@@ -1,6 +1,6 @@
 FIC = $(shell ls *.c) 
-EXEC = ../bin/ 
-BIN = minijeu 
+EXEC = ../bin/
+BIN = connexe
 DEBUG = -DDEBUG 
 LFLAGS = 
 OPTIONS = -Wall -Wextra -g 
