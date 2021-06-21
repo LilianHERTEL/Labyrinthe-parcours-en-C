@@ -10,5 +10,6 @@ bool testRecupererClasse();
 bool testFusion();
 bool testListerClasse();
 bool testListerPartition();
+bool testClasseMere();
 void afficherForet(partition_t partition);
 void afficherClasse(classe_t *classe);
