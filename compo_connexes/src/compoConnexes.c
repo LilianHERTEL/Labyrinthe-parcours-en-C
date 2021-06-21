@@ -1,38 +1,49 @@
 #include "compoConnexes.h"
+#include <stdlib.h>
+#include <time.h>
 
-void genererMatriceAdjacence(graphe_t *graphe, int n) {
-	int i, j;
-
-	srand(time(0));
-	graphe = malloc(sizeof(int) * n * n);
-	if(graphe == NULL) {
-		return;
-	}
-
-	for(i = 0; i < n; ++i) {
-		for(j = i; j < n; ++j) {
-			(*graphe)[n * i][j] = rand() % 2;
-		}
-	}
-}
-
-void afficherMatriceAdjacence(graphe_t graphe, int n) {
+void afficherMatriceAdjacence(graphe_t matrix, int n) {
 	int i, j;
 	for (i = 0; i < n; i++)
 	{
 		for (j = 0; j < n; j++)
 		{
-			printf("%d ", graphe[i][j]);
+			printf("%d ", matrix[i*n+j]);
 		}
 		printf("\n");
 	}
 }
 
-int main(int argc, char const *argv[])
+graphe_t createAdjencyMatrix(int n) {
+	graphe_t matrix = NULL;
+	srand(time(NULL));
+	matrix = (int*)malloc(n*n*sizeof(int));
+	if (matrix != NULL)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = i; j < n; j++)
+			{
+				matrix[n*i + j] = rand()%2;
+				matrix[n*j + i] = matrix[n*i + j];
+			}
+			matrix[n*i + i] = 0;
+		}
+	}
+	else
+	{
+		puts("Error: memory allocation\n");
+	}
+	return matrix;
+}
+
+int main(void)
 {
-	graphe_t graph;
 	int n = 10;
-	genererMatriceAdjacence(&graph, n);
-	afficherMatriceAdjacence(graph, n);
+	graphe_t matrix;
+	
+	matrix = createAdjencyMatrix(n);
+	afficherMatriceAdjacence(matrix, n);
+
 	return 0;
 }
