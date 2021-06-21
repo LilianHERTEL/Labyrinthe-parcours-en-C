@@ -147,22 +147,3 @@ bool testListerPartition() {
 	free(classe);
 	return true;
 }
-
-void afficherClasse(classe_t *classe) {
-        int i = 0, n = 11;
-
-        while(i < n && classe[i] != -1) {
-                printf("%d ", classe[i]);
-                ++i;
-        }
-        puts("");
-}
-
-void afficherForet(partition_t partition) {
-	int i, n = 11;
-	
-	for(i = 0; i < n; ++i) {
-		printf("indice[%d] : %d (hauteur %d)\n", i, partition.foret[i], partition.hauteur[i]);
-	}
-	puts("");
-}
