@@ -43,6 +43,28 @@ bool testRecupererClasse() {
 	return true;
 }
 
+bool testClasseMere() {
+	partition_t partition;
+        int n = 11;
+
+        partition = creer(n);
+        partition = fusion(partition, 0, 1);
+        partition = fusion(partition, 2, 3);
+        partition = fusion(partition, 10, 3);
+        partition = fusion(partition, 5, 9);
+        partition = fusion(partition, 4, 6);
+        partition = fusion(partition, 8, 7);
+        partition = fusion(partition, 8, 9);
+        partition = fusion(partition, 6, 8);
+	if(classeMere(10, partition) != 2 || classeMere(5, partition) != 5) {
+		puts("erreur classe mere");
+		return false;
+	}
+	puts("classe mere OK");
+        detruirePartition(partition);
+        return true;
+}
+
 bool testFusion() {
 	partition_t partition;
 	int n = 11;

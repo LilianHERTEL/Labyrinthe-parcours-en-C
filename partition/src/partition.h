@@ -20,3 +20,4 @@ classe_t* lister_partition(partition_t partition, int n);
 void detruirePartition(partition_t partition);
 void afficherClasse(classe_t *classe, int n);
 void afficherForet(partition_t partition, int n);
+classe_t classeMere(element_t element, partition_t partition);
