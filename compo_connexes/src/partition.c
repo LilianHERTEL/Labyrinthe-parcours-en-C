@@ -88,8 +88,8 @@ classe_t* lister_partition(partition_t partition, int n) {
 	return liste;
 }
 
-void afficherClasse(classe_t *classe) {
-        int i = 0, n = 11;
+void afficherClasse(classe_t *classe, int n) {
+        int i = 0;
 
         while(i < n && classe[i] != -1) {
                 printf("%d ", classe[i]);
@@ -98,8 +98,8 @@ void afficherClasse(classe_t *classe) {
         puts("");
 }
 
-void afficherForet(partition_t partition) {
-        int i, n = 11;
+void afficherForet(partition_t partition, int n) {
+        int i;
 
         for(i = 0; i < n; ++i) {
                 printf("indice[%d] : %d (hauteur %d)\n", i, partition.foret[i], partition.hauteur[i]);
@@ -107,3 +107,9 @@ void afficherForet(partition_t partition) {
         puts("");
 }
 
+classe_t classeMere(element_t element, partition_t partition) {
+	while(partition.foret[element] != element) {
+		element = partition.foret[element];
+	}
+	return element;
+}
