@@ -3,6 +3,7 @@
 void genererMatriceAdjacence(graphe_t *graphe) {
 	int i, j;
 
+	srand(time(0));
 	graphe = malloc(sizeof(int) * N * N);
 	if(graphe == NULL) {
 		return NULL;
