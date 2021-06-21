@@ -47,27 +47,6 @@ void printHeap(binary_heap_t* heap) {
     }
     printf("\n");
 }
-/*
-bool_t heapInsert(binary_heap_t* heap, int val) {
-    bool_t status = false;
-    int index, parent;
-    index = heap->heapSize;
-    if (index < heap->length)
-    {
-        heap->array[index] = val;
-        heap->heapSize++;
-        parent = getParent(index);
-        while (heap->array[index] < heap->array[parent] && index != 1)
-        {
-            permute(heap->array, parent, index);
-            index = parent;
-            parent = getParent(index);
-        }
-        status = true;
-    }
-    return status;
-}
-*/
 
 /**
  * @brief Permet de deplacer une valeur a la bonne place dans le tas
@@ -132,18 +111,11 @@ void permute(int array[], int i, int j) {
     array[j] = tmp;
 }
 
-/*
-void createHeap(int source_array[], int size, binary_heap_t* heap) {
-    int i;
-    heap->heapSize = 1;
-    heap->length = MAX;
-    for (i = 0; i < size; i++)
-    {
-        heapInsert(heap, source_array[i]);
-        printf("Val = %d\n", source_array[i]);
-    }
-}*/
-
+/**
+ * @brief Tri par tas du tableau
+ * 
+ * @param heap Le tas binaire à trier
+ */
 void heapSort(binary_heap_t* heap) {
     buildMinHeap(heap);
     for (int i = heap->length; i > 1; i--)

@@ -40,7 +40,6 @@ int getRightChild(int index);
  * @param heap Le tas binaire
  */
 void printHeap(binary_heap_t* heap);
-bool_t heapInsert(binary_heap_t* heap, int val);
 
 /**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array
@@ -66,8 +65,9 @@ void minHeapify(binary_heap_t * heap, int val);
  */
 void buildMinHeap(binary_heap_t * heap);
 
-void createHeap(int source_array[], int size, binary_heap_t* heap);
-
+/**
+ * @brief Tri par tas du tableau
+ * 
+ * @param heap Le tas binaire à trier
+ */
 void heapSort(binary_heap_t* heap);
-//void minHeapify(int array[], int index);
-//void buildMinHeap(binary_heap_t* heap);
