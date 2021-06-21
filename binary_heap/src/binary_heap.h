@@ -38,7 +38,7 @@ int getRightChild(int index);
  * 
  * @param heap Le tas binaire
  */
-void printHeap(binary_heap_t* heap);
+void printHeap(binary_heap_t heap);
 
 /**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array

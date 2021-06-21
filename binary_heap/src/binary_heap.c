@@ -38,12 +38,12 @@ int getRightChild(int index) {
  * 
  * @param heap Le tas binaire
  */
-void printHeap(binary_heap_t* heap) {
+void printHeap(binary_heap_t heap) {
     int i;
-    printf("heap size = %d\n", heap->length);
-    for (i = 1; i <= heap->length; i++)
+    printf("heap size = %d\n", heap.length);
+    for (i = 1; i <= heap.length; i++)
     {
-        printf("%d ", heap->array[i]);
+        printf("%d ", heap.array[i]);
     }
     printf("\n");
 }
