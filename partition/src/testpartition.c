@@ -1,10 +1,5 @@
 #include "testpartition.h"
 
-int main() {
-	(testCreer() && testRecupererClasse() && testFusion() && testListerClasse() && testListerPartition()) ? puts("tests ok") : puts("erreur tests");
-	return 0;
-}
-
 bool testCreer() {
 	int i;
 	partition_t test;
