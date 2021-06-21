@@ -5,6 +5,4 @@
 #include <graphviz/cgraph.h>
 #include "partition.h"
 
-#include "testpartition.h"
-
 void partitionSimple();

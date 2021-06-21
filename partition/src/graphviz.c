@@ -91,12 +91,12 @@ void partitionSimple()
     n = 10;
     test = creer(n);
 
-    //afficherForet(test);
+    //afficherForet(test, n);
 
     fusion(test, test.foret[1], test.foret[4]);
-    //afficherForet(test);
+    //afficherForet(test, n);
     fusion(test, test.foret[9], test.foret[3]);
-    //afficherForet(test);
+    //afficherForet(test, n);
 
     drawPartitionGraph(test, n, "partitionSimple");
     
