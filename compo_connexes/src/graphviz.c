@@ -118,6 +118,13 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
     }
 }
 
+/**
+ * @brief Creer le fichier .dot et le fichier png pour la matrice d'adjacence en parametres
+ * 
+ * @param matrix La matrice d'adjacence a representer
+ * @param n Le nombre d'elements dans la partition
+ * @param name Nom pour les fichiers generes
+ */
 void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
 {
     
@@ -127,8 +134,8 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
     int           i = 0,
                   j = 0,
                   sys;
-    char          nodeName[3],
-                  nodeName2[3],
+    char          nodeName[11],
+                  nodeName2[11],
                   dotPath[50],
                   pngPath[50],
                   command[100],
@@ -154,7 +161,7 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
             // Dessine les arretes
             for(i = 0; i < n; i++)
             {
-                for(j = 0; j < n; j++)
+                for(j = i; j < n; j++)
                 {
                     sprintf(nodeName, "%d", i);
                     if(matrix[i*n + j] == 1)

@@ -44,6 +44,7 @@ int main(void)
 	
 	matrix = createAdjencyMatrix(n);
 	afficherMatriceAdjacence(matrix, n);
+	drawAdjencyMatrixGraph(matrix, n, "exempleMatAdjacence");
 
 	return 0;
 }

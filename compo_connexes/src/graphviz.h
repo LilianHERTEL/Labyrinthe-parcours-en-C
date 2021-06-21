@@ -24,3 +24,12 @@ void createStrings(char * name, char * dir, char * dotPath, char * pngPath, char
  * @param name Nom pour les fichiers generes
  */
 void drawPartitionGraph(partition_t partition, int n, char * name);
+
+/**
+ * @brief Creer le fichier .dot et le fichier png pour la matrice d'adjacence en parametres
+ * 
+ * @param matrix La matrice d'adjacence a representer
+ * @param n Le nombre d'elements dans la partition
+ * @param name Nom pour les fichiers generes
+ */
+void drawAdjencyMatrixGraph(int * matrix, int n, char * name);
