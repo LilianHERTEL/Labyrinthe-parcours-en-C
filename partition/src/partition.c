@@ -63,6 +63,11 @@ element_t* lister_classe(partition_t partition, label_t label, int n) {
 	return liste;
 }
 
+void detruirePartition(partition_t *partition) {
+	free(partition->foret);
+	free(partition->hauteur);
+}
+
 classe_t* lister_partition(partition_t partition, int n) {
 	int i, k = 0;
 	classe_t *liste;
