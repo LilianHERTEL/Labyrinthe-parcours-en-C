@@ -6,7 +6,7 @@
 #include <graphviz/gvc.h>
 #include <graphviz/cgraph.h>
 #include "partition.h"
-#include "compoConnexes2.h"
+#include "grapheListeAretes.h"
 
 /**
  * @brief Creer les differentes chaines de caracteres utiles pour dessiner le graphe
