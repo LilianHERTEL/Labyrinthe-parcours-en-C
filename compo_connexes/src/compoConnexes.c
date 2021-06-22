@@ -91,19 +91,3 @@ void afficherNoeudsCompoConnexes(element_t ** noeuds, int n_noeuds, int n)
 		afficherClasse(noeuds[i], n);
 	}
 }
-
-int main(void)
-{
-	int n = 5, noeudsI;
-	graphe_t matrix;
-	element_t ** noeuds;
-	
-	matrix = createAdjencyMatrix(n);
-	afficherMatriceAdjacence(matrix, n);
-	drawAdjencyMatrixGraph(matrix, n, "exempleMatAdjacence");
-	noeuds = noeudsCompoConnexes(matrix, n, &noeudsI);
-	puts("");
-	afficherNoeudsCompoConnexes(noeuds, noeudsI, n);
-
-	return 0;
-}
