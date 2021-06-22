@@ -1,6 +1,6 @@
 #include "kruskal.h"
 
-arete_t * arbreCouvrantPoidsMin(couples_graphe_t graph)
+arete_t * arbreCouvrantPoidsMin(couples_graphe_t graph, int * tailleListe)
 {
     arete_t       * listeAretes;
     partition_t     partition;
@@ -26,6 +26,7 @@ arete_t * arbreCouvrantPoidsMin(couples_graphe_t graph)
                 j++;
             }
         }
+        *tailleListe = j;
     }
     
     return listeAretes;
