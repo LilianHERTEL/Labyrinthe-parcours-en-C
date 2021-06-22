@@ -15,7 +15,7 @@ bool testNoeudsCompoConnexes() {
 	matrix = createAdjencyMatrix(n);
 	element = noeudsCompoConnexes(matrix, n, &nclasses);
     afficherNoeudsCompoConnexes(element, n, nclasses);
-	for(i = 0; i < n; ++i) {
+	for(i = 0; i < nclasses; ++i) {
 		free(element[i]);
 	}
 	free(element);
