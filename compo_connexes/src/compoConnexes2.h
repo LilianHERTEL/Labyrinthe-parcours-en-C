@@ -11,8 +11,9 @@ typedef struct
 
 typedef struct
 {
-    int noeuds;
+    int nbNoeuds;
     arete_t* aretes;
 } graphe_t;
 
 void genererGraphe(graphe_t graphe, int n);
+void afficherGraphe(graphe_t graphe); // affiche dans la console (pour tests)
