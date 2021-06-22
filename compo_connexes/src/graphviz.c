@@ -91,7 +91,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
                   command[100],
                 * dir = "../graphviz/";
     classe_t    * classes;
-    element_t   * elements;
+    element_t   * elements = NULL;
 
     createStrings(name, dir, dotPath, pngPath, command);
 
