@@ -103,6 +103,9 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
         {
             graph = agopen(name, Agdirected, 0);
 
+            agattr(graph, AGRAPH, "label", "");
+            agset(graph, "label", name);
+
             classes = lister_partition(partition, n);
 
             // Dessine les noeuds
@@ -181,6 +184,9 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
         {
             graph = agopen(name, Agundirected, 0);
 
+            agattr(graph, AGRAPH, "label", "");
+            agset(graph, "label", name);
+
             // Dessine les noeuds
             for(i = 0; i < n; i++)
             {
@@ -219,14 +225,14 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
     }
 }
 
-void drawCouplesGraph(couples_graphe_t sourceGraph, char* name) {
-    Agraph_t    * graphe;
+void drawCouplesGraph(couples_graphe_t sourceGraph, char* name, arete_t * listeA, int tailleListeA) {
+    Agraph_t    * graph;
     FILE        * fic;
     GVC_t       * graph_context;
-    int           i = 0,
-                  sys;
+    int           i = 0;
     char          nodeName[11],
                   nodeName2[11],
+                  poids[11],
                   dotPath[50],
                   pngPath[50],
                   command[100],
@@ -238,15 +244,18 @@ void drawCouplesGraph(couples_graphe_t sourceGraph, char* name) {
     if(fic)
     {
         graph_context = gvContext();
+
         if (graph_context)
         {
-            graphe = agopen(name, Agundirected, 0);
+            graph = agopen(name, Agundirected, 0);
 
-            // Dessine les noeuds
+            agattr(graph, AGRAPH, "label", "");
+            agset(graph, "label", name);
+
             for(i = 0; i < sourceGraph.nbNoeuds; i++)
             {
                 sprintf(nodeName, "%d", i);
-                agnode(graphe, nodeName, 1);
+                agnode(graph, nodeName, 1);
             }
 
             // Dessine les arretes
@@ -254,13 +263,26 @@ void drawCouplesGraph(couples_graphe_t sourceGraph, char* name) {
             {
                 sprintf(nodeName, "%d", sourceGraph.aretes[i].noeudDeb);
                 sprintf(nodeName2, "%d", sourceGraph.aretes[i].noeudFin);
-                agedge(graphe, agnode(graphe, nodeName, 1), agnode(graphe, nodeName2, 1), NULL, 1);
+                sprintf(poids, "%d", sourceGraph.aretes[i].poids);
+                agedge(graph, agnode(graph, nodeName, 1), agnode(graph, nodeName2, 1), poids, 1);
             }
 
-            generateGraphviz(graph_context, graphe, fic);
+            agattr(graph, AGEDGE, "color", "black");
+            if(listeA)
+            {
+                for(i = 0; i < tailleListeA; i++)
+                {
+                    sprintf(nodeName, "%d", listeA[i].noeudDeb);
+                    sprintf(nodeName2, "%d", listeA[i].noeudFin);
+                    sprintf(poids, "%d", listeA[i].poids);
+                    agset(agedge(graph, agnode(graph, nodeName, 1), agnode(graph, nodeName2, 1), poids, 0), "color", "red");
+                }
+            }
+
+            generateGraphviz(graph_context, graph, fic);
             generatePng(command);
 
-            freeAll(graph_context, graphe);
+            freeAll(graph_context, graph);
             fclose(fic);
         }
         else

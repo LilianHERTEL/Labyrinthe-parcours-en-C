@@ -66,4 +66,4 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name);
  * 
  * @param graph Le graphe à représenter (sous forme de couples d'aretes + nombre d'aretes)
  */
-void drawCouplesGraph(couples_graphe_t sourceGraph, char* name);
+void drawCouplesGraph(couples_graphe_t sourceGraph, char* name, arete_t * listeA, int tailleListeA);

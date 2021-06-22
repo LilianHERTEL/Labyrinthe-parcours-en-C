@@ -5,9 +5,12 @@ int main(void)
 	//(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
 	
 	couples_graphe_t graph;
+	arete_t * arbreCouvrant;
+	int tailleArbreCouvrant;
+
 	genererGraphe(&graph, 10); 
-	ordonnerAretesCroissant(&graph);
-	drawCouplesGraph(graph, "testCouplesGraphe");
+	arbreCouvrant = arbreCouvrantPoidsMin(graph, &tailleArbreCouvrant);
+	drawCouplesGraph(graph, "testCouplesGrapheKruskal", arbreCouvrant, tailleArbreCouvrant);
 	
 	return 0;
 }
