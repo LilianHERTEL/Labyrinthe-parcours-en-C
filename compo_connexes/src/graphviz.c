@@ -91,7 +91,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
                   command[100],
                 * dir = "../graphviz/";
     classe_t    * classes;
-    element_t   * elements;
+    element_t   * elements = NULL;
 
     createStrings(name, dir, dotPath, pngPath, command);
 
@@ -132,6 +132,10 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
             generateGraphviz(graph_context, graph, fic);
             generatePng(command);
 
+            free(classes);
+            if(elements != NULL) {
+                free(elements);
+            }
             freeAll(graph_context, graph);
             fclose(fic);
         }

@@ -25,6 +25,7 @@ bool_t testNoeudsCompoConnexes() {
 		free(element[i]);
 	}
 	free(element);
+	free(matrix);
 	puts("validation manuelle : y/n");
 	fscanf(stdin, "%c%*c", &c);
 	if(c == 'y' || c == 'Y') {
