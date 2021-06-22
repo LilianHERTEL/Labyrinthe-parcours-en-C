@@ -56,7 +56,7 @@ partition_t grapheToPartition(graphe_t graphe, int n) {
 	return partition;
 }
 
-element_t** noeudsCompoConnexes(graphe_t graphe, int n) {
+element_t** noeudsCompoConnexes(graphe_t graphe, int n, int * noeudsI) {
 	partition_t partition;
 	element_t **noeud;
 	classe_t *classe;
@@ -68,6 +68,7 @@ element_t** noeudsCompoConnexes(graphe_t graphe, int n) {
 		++i;
 	}
 	noeud = malloc(sizeof(element_t *) * i);
+	*noeudsI = i;
 	if(noeud == NULL) {
 		fputs("erreur allocation de memoire noeudcompoconnexe\n", stderr);
 		return NULL;
@@ -80,15 +81,29 @@ element_t** noeudsCompoConnexes(graphe_t graphe, int n) {
 	return noeud;
 }
 
+void afficherNoeudsCompoConnexes(element_t ** noeuds, int n_noeuds, int n)
+{
+	int i; 
+	printf("Il y a %d classes : \n", n_noeuds);
+	for(i = 0; i < n_noeuds ; i++)
+	{
+		printf("Classe %d : ", i);
+		afficherClasse(noeuds[i], n);
+	}
+}
+
 int main(void)
 {
-	int n = 10;
+	int n = 5, noeudsI;
 	graphe_t matrix;
-	partition_t partition;
+	element_t ** noeuds;
 	
 	matrix = createAdjencyMatrix(n);
 	afficherMatriceAdjacence(matrix, n);
 	drawAdjencyMatrixGraph(matrix, n, "exempleMatAdjacence");
+	noeuds = noeudsCompoConnexes(matrix, n, &noeudsI);
+	puts("");
+	afficherNoeudsCompoConnexes(noeuds, noeudsI, n);
 
 	return 0;
 }
