@@ -19,4 +19,4 @@ bool_t initializeSDL(void);
  * @param window fenêtre à fermer
  * @param renderer rendu à fermer
  */
-void quitSDL(bool_t status, char const *msg, SDL_Window *window, SDL_Renderer *renderer);
+void quitSDL(bool_t status, char const* msg, SDL_Window* window, SDL_Renderer* renderer);

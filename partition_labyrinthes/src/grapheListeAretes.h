@@ -25,3 +25,7 @@ void ordonnerAretesCroissant(couples_graphe_t * graph);
 int comparArete(const void * arete_1, const void * arete_2);
 bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin);
 void supprimerGraphe(couples_graphe_t graphe);
+
+void printAretes(couples_graphe_t graph);
+void permute(arete_t *aretes, int i, int j);
+void fisherYate(couples_graphe_t *graph);
