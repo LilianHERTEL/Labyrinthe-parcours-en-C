@@ -6,6 +6,10 @@ int main(void)
 	return 0;
 }
 
+bool testNoeudsCompoConnexes() {
+	graphe_t graphe;
+}
+
 bool testCreateAdjencyMatrix() {
 	graphe_t matrix = NULL;
         int n = 10;
@@ -42,5 +46,4 @@ bool testGrapheToPartition() {
 	}
 	fputs("graphe non conforme\n", stderr);
 	return false;
-
 }
