@@ -6,7 +6,7 @@
  * @param argc 
  * @param argv 
  * @return int
- */
+ *//*
 int main(int argc, char const *argv[])
 {
     SDL_Window *window;
@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
 
     if (SDL_GetCurrentDisplayMode(0, &screen) != 0)
     {
-        end_sdl(0, "ERROR GET_DISPLAY_MODE", window, renderer);
+        quitSDL(0, "ERROR GET_DISPLAY_MODE", window, renderer);
         exit(EXIT_FAILURE);
     }
 
@@ -50,3 +50,4 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+*/
