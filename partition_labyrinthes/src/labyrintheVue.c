@@ -47,8 +47,27 @@ int main(int argc, char const *argv[])
 
                 /*****TRAITEMENT*****/
 
+    int i, j;
+    int n = 3, m =4;
+    int tab[3][4] = {{1, 2, 8, 9},
+                        {8, 4, 1, 2},
+                        {2, 6, 15, 15}};
+    int ** grille;
+
+    grille = (int**)malloc(sizeof(int*)*n);
+    for(i=0; i<m; i++)
+        grille[i] = (int*)malloc(sizeof(int));
+
+    for(i=0; i<n; i++)
+    {
+        for(j = 0; j<m; j++)
+        {
+            grille[i][j] = tab[i][j];
+        }
+    }
+
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(window, renderer);
+    drawLab(window, renderer, grille, n, m);
     SDL_RenderPresent(renderer);
 
     SDL_Delay(1000);
@@ -58,19 +77,67 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void drawLab(SDL_Window * window, SDL_Renderer * renderer)
+void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m)
 {
     SDL_Rect positionLab = {0},
-             window_dimensions = {0};
+             window_dimensions = {0}, 
+             tile = {0};
+    int      a,
+             b,
+             i = 0,
+             j = 0;
 
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
 
-    positionLab.h = window_dimensions.h * 0.9;
-    positionLab.w = window_dimensions.w * 0.9;
-    positionLab.x = (window_dimensions.w - positionLab.w) / 2 ;
-    positionLab.y = (window_dimensions.h - positionLab.h) / 2 ;
+    a = window_dimensions.h * 0.9;
+    b = window_dimensions.w * 0.9;
+    positionLab.h = positionLab.w = a <= b ? a : b;
+    positionLab.x = (window_dimensions.w - positionLab.w) /2;
+    positionLab.y = (window_dimensions.h - positionLab.h) /2;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderFillRect(renderer, &positionLab);
+    tile.w = positionLab.w / m;
+    tile.h = positionLab.h / n;
+
+    for(i = 0; i < n; i++) {
+		tile.y = positionLab.x + tile.h * i;
+		for(j = 0; j < m; j++) {
+			tile.x = positionLab.y + tile.w * j;
+            SDL_SetRenderDrawColor(renderer, 255, 60, 20, 255);
+			SDL_RenderFillRect(renderer, &tile);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            if(grille[i][j] & NORD) // TODO faire des rectangles au lieu de lignes
+            {
+                SDL_RenderDrawLine(renderer, 
+                                    tile.x, 
+                                    tile.y, 
+                                    tile.x + tile.w, 
+                                    tile.y);
+            }
+            if(grille[i][j] & SUD)
+            {
+                SDL_RenderDrawLine(renderer, 
+                                    tile.x, 
+                                    tile.y + tile.h, 
+                                    tile.x + tile.w, 
+                                    tile.y + tile.h);
+            }
+            if(grille[i][j] & EST)
+            {
+                SDL_RenderDrawLine(renderer, 
+                                    tile.x + tile.w, 
+                                    tile.y, 
+                                    tile.x + tile.w, 
+                                    tile.y + tile.h);
+            }
+            if(grille[i][j] & OUEST)
+            {
+                SDL_RenderDrawLine(renderer, 
+                                    tile.x, 
+                                    tile.y, 
+                                    tile.x, 
+                                    tile.y + tile.h);
+            }
+		}
+	}
 
 }
