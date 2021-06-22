@@ -48,7 +48,7 @@ partition_t grapheToPartition(graphe_t graphe, int n) {
 	}
 	for(i = 0; i < n; ++i) {
 		for(j = i + 1; j < n; ++j) {
-			if(graphe[i][j] == 1) {
+			if(graphe[i * n + j] == 1) {
 				fusion(partition, i, j);
 			}
 		}
@@ -84,6 +84,7 @@ int main(void)
 {
 	int n = 10;
 	graphe_t matrix;
+	partition_t partition;
 	
 	matrix = createAdjencyMatrix(n);
 	afficherMatriceAdjacence(matrix, n);
