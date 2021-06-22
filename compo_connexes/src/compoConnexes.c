@@ -79,16 +79,3 @@ element_t** noeudsCompoConnexes(graphe_t graphe, int n) {
 	detruirePartition(partition);
 	return noeud;
 }
-
-int main(void)
-{
-	int n = 10;
-	graphe_t matrix;
-	partition_t partition;
-	
-	matrix = createAdjencyMatrix(n);
-	afficherMatriceAdjacence(matrix, n);
-	drawAdjencyMatrixGraph(matrix, n, "exempleMatAdjacence");
-
-	return 0;
-}
