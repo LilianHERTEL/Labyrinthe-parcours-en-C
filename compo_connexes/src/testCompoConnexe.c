@@ -20,7 +20,7 @@ bool testNoeudsCompoConnexes() {
 	matrix = createAdjencyMatrix(n);
 	element = noeudsCompoConnexes(matrix, n, &nclasses);
     afficherNoeudsCompoConnexes(element, n, nclasses);
-	for(i = 0; i < n; ++i) {
+	for(i = 0; i < nclasses; ++i) {
 		free(element[i]);
 	}
 	free(element);
@@ -53,17 +53,21 @@ bool testGrapheToPartition() {
 	char c = 0;
 
 	matrix = createAdjencyMatrix(n);
-        if(matrix == NULL) {
-                fputs("erreur creation de la matrice avant test dans grapheToPartition\n", stderr);
-                return false;
-        }
+	if(matrix == NULL) {
+			fputs("erreur creation de la matrice avant test dans grapheToPartition\n", stderr);
+			return false;
+	}
 	partition = grapheToPartition(matrix, n);
-	drawAdjencyMatrixGraph(matrix, n, "testGrapehToPartition");
+	if(partition.foret == NULL || partition.hauteur == NULL) {
+		free(matrix);
+		return false;
+	}
+	drawAdjencyMatrixGraph(matrix, n, "testGrapheToPartition");
 	afficherForet(partition, n);
 	puts("validation manuelle : y/n");
 	fscanf(stdin, "%c%*c", &c);
 	free(matrix);
-        detruirePartition(partition);
+    detruirePartition(partition);
 	if(c == 'y' || c == 'Y') {
 		return true;
 	}
