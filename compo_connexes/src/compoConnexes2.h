@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "partition.h"
+#include "bool.h"
 
 typedef struct
 {
@@ -18,4 +19,4 @@ typedef struct
 } couples_graphe_t;
 
 void genererGraphe(couples_graphe_t* graphe, int n);
-void afficherGraphe(couples_graphe_t graphe); // affiche dans la console (pour tests)
+bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin);

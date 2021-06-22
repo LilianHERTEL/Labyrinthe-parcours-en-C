@@ -9,15 +9,15 @@ int main(void)
 	element_t **element;
 	int noeudsI;
 
-        //matrix = createAdjencyMatrix(n);
-        //afficherMatriceAdjacence(matrix, n);
-        //drawAdjencyMatrixGraph(matrix, n, "exempleMatAdjacence");
-	//partition = grapheToPartition(matrix, n);
-	//afficherForet(partition, n);
-	//element = noeudsCompoConnexes(matrix, n, &noeudsI);
-        //afficherNoeudsCompoConnexes(element, n, noeudsI);	
-	
-	genererGraphe(&graph, n);
+        genererGraphe(&graph, n);
         drawCouplesGraph(graph, "exempleCouplesGraphe");
+
+        matrix = createAdjencyMatrix(n);
+        afficherMatriceAdjacence(matrix, n);
+        drawAdjencyMatrixGraph(matrix, n, "exempleMatAdjacence");
+	partition = grapheToPartition(matrix, n);
+	afficherForet(partition, n);
+	element = noeudsCompoConnexes(matrix, n, &noeudsI);
+        afficherNoeudsCompoConnexes(element, n, noeudsI);	
         return 0;
 }
