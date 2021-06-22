@@ -11,7 +11,7 @@ typedef struct
 
 typedef struct
 {
-    int* noeuds;
+    int noeuds;
     arete_t* aretes;
 } graphe_t;
 
