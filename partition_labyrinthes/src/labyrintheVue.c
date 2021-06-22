@@ -47,9 +47,30 @@ int main(int argc, char const *argv[])
 
                 /*****TRAITEMENT*****/
 
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+    drawLab(window, renderer);
+    SDL_RenderPresent(renderer);
+
     SDL_Delay(1000);
 
     quitSDL(true, "SDL END", window, renderer);
 
     return 0;
+}
+
+void drawLab(SDL_Window * window, SDL_Renderer * renderer)
+{
+    SDL_Rect positionLab = {0},
+             window_dimensions = {0};
+
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+
+    positionLab.h = window_dimensions.h * 0.9;
+    positionLab.w = window_dimensions.w * 0.9;
+    positionLab.x = (window_dimensions.w - positionLab.w) / 2 ;
+    positionLab.y = (window_dimensions.h - positionLab.h) / 2 ;
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderFillRect(renderer, &positionLab);
+
 }
