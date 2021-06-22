@@ -55,8 +55,8 @@ int main(int argc, char const *argv[])
     int ** grille;
 
     grille = (int**)malloc(sizeof(int*)*n);
-    for(i=0; i<m; i++)
-        grille[i] = (int*)malloc(sizeof(int));
+    for(i=0; i<n; i++)
+        grille[i] = (int*)malloc(sizeof(int)*m) ;
 
     for(i=0; i<n; i++)
     {
@@ -70,7 +70,7 @@ int main(int argc, char const *argv[])
     drawLab(window, renderer, grille, n, m);
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(1000);
+    SDL_Delay(2000);
 
     quitSDL(true, "SDL END", window, renderer);
 
@@ -81,7 +81,8 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
 {
     SDL_Rect positionLab = {0},
              window_dimensions = {0}, 
-             tile = {0};
+             tile = {0},
+             wall = {0};
     int      a,
              b,
              i = 0,
@@ -92,51 +93,59 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
     a = window_dimensions.h * 0.9;
     b = window_dimensions.w * 0.9;
     positionLab.h = positionLab.w = a <= b ? a : b;
-    positionLab.x = (window_dimensions.w - positionLab.w) /2;
-    positionLab.y = (window_dimensions.h - positionLab.h) /2;
+    positionLab.x = (window_dimensions.w - positionLab.w ) /2;
+    positionLab.y = (window_dimensions.h - positionLab.h ) /2;
 
-    tile.w = positionLab.w / m;
-    tile.h = positionLab.h / n;
+    SDL_SetRenderDrawColor(renderer, 220, 60, 20, 255);
+	SDL_RenderFillRect(renderer, &positionLab);
+
+
+    a = positionLab.w / m;
+    b = positionLab.h / n;
+    tile.w = tile.h = a <= b ? a : b;
 
     for(i = 0; i < n; i++) {
-		tile.y = positionLab.x + tile.h * i;
+		tile.y = positionLab.y + tile.h * i;
 		for(j = 0; j < m; j++) {
-			tile.x = positionLab.y + tile.w * j;
-            SDL_SetRenderDrawColor(renderer, 255, 60, 20, 255);
-			SDL_RenderFillRect(renderer, &tile);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            if(grille[i][j] & NORD) // TODO faire des rectangles au lieu de lignes
+			tile.x = positionLab.x + tile.w * j;
+
+            if(grille[i][j] & NORD)
             {
-                SDL_RenderDrawLine(renderer, 
-                                    tile.x, 
-                                    tile.y, 
-                                    tile.x + tile.w, 
-                                    tile.y);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                wall.x = tile.x - (tile.w * 0.1)/2;
+                wall.y = tile.y - (tile.h * 0.1)/2;
+                wall.w = tile.w + (tile.w * 0.1);
+                wall.h = tile.h * 0.1;
+                SDL_RenderFillRect(renderer, &wall);
             }
             if(grille[i][j] & SUD)
             {
-                SDL_RenderDrawLine(renderer, 
-                                    tile.x, 
-                                    tile.y + tile.h, 
-                                    tile.x + tile.w, 
-                                    tile.y + tile.h);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                wall.x = tile.x - (tile.w * 0.1)/2;
+                wall.y = tile.y + tile.h - (tile.h * 0.1)/2;
+                wall.w = tile.w + (tile.h * 0.1);
+                wall.h = tile.h * 0.1;
+                SDL_RenderFillRect(renderer, &wall);
             }
             if(grille[i][j] & EST)
             {
-                SDL_RenderDrawLine(renderer, 
-                                    tile.x + tile.w, 
-                                    tile.y, 
-                                    tile.x + tile.w, 
-                                    tile.y + tile.h);
+                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                wall.x = tile.x + tile.w - (tile.w * 0.1)/2;
+                wall.y = tile.y - (tile.h * 0.1)/2;
+                wall.w = tile.w * 0.1;
+                wall.h = tile.h + (tile.h * 0.1);
+                SDL_RenderFillRect(renderer, &wall);
             }
             if(grille[i][j] & OUEST)
             {
-                SDL_RenderDrawLine(renderer, 
-                                    tile.x, 
-                                    tile.y, 
-                                    tile.x, 
-                                    tile.y + tile.h);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                wall.x = tile.x - (tile.w * 0.1)/2;
+                wall.y = tile.y - (tile.h * 0.1)/2;
+                wall.w = tile.w * 0.1;
+                wall.h = tile.h + (tile.h * 0.1);
+                SDL_RenderFillRect(renderer, &wall);
             }
+            
 		}
 	}
 
