@@ -2,7 +2,7 @@
 
 int main(void)
 {
-	(testCreateAdjencyMatrix() && testGrapheToPartition()) ? puts("tests OK") : puts("echec tests");
+	(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
 	return 0;
 }
 

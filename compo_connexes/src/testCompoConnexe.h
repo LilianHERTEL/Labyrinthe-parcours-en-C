@@ -9,3 +9,4 @@ typedef enum {false, true} bool;
 
 bool testCreateAdjencyMatrix();
 bool testGrapheToPartition();
+bool testNoeudsCompoConnexes();
