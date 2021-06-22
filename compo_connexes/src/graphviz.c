@@ -132,6 +132,10 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
             generateGraphviz(graph_context, graph, fic);
             generatePng(command);
 
+            free(classes);
+            if(elements != NULL) {
+                free(elements);
+            }
             freeAll(graph_context, graph);
             fclose(fic);
         }
