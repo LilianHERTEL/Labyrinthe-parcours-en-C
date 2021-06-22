@@ -1,7 +1,8 @@
 #pragma once
 
-#include "partition.h"
+#include <stdlib.h>
 #include <time.h>
+#include "partition.h"
 
 typedef struct
 {
@@ -11,8 +12,10 @@ typedef struct
 
 typedef struct
 {
-    int noeuds;
+    int nbNoeuds;
+    int nbAretes;
     arete_t* aretes;
-} graphe_t;
+} couples_graphe_t;
 
-void genererGraphe(graphe_t graphe, int n);
+void genererGraphe(couples_graphe_t* graphe, int n);
+void afficherGraphe2(couples_graphe_t graphe); // affiche dans la console (pour tests)

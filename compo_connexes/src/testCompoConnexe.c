@@ -53,7 +53,7 @@ bool testGrapheToPartition() {
                 return false;
         }
 	partition = grapheToPartition(matrix, n);
-	afficherGraphe(matrix, n);
+	drawAdjencyMatrixGraph(matrix, n, "testGrapehToPartition");
 	afficherForet(partition, n);
 	puts("validation manuelle : y/n");
 	fscanf(stdin, "%c%*c", &c);

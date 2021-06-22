@@ -1,7 +1,6 @@
 #pragma once
 
 #include "partition.h"
-#include "graphviz.h"
 #include <time.h>
 
 typedef int *graphe_t;
@@ -18,14 +17,6 @@ graphe_t createAdjencyMatrix(int n);
  * @param n la taille de la matrice
  */
 void afficherMatriceAdjacence(graphe_t matrix, int n);
-
-
-/** 
- * @brief dessine un graphe dans ../graphviz/graphe.png
- * @param graphe le graphe
- * @param n la taille de la matrice d'adjacence du graphe
- */
-void afficherGraphe(graphe_t graphe, int n);
 
 /** 
  * @brief Calcule les noeuds de chacune des composantes connexes du graphe
