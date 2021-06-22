@@ -5,8 +5,6 @@
 #include "grapheListeAretes.h"
 #include "graphviz.h"
 
-typedef enum {false, true} bool;
-
-bool testCreateAdjencyMatrix();
-bool testGrapheToPartition();
-bool testNoeudsCompoConnexes();
+bool_t testCreateAdjencyMatrix();
+bool_t testGrapheToPartition();
+bool_t testNoeudsCompoConnexes();
