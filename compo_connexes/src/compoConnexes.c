@@ -1,6 +1,4 @@
 #include "compoConnexes.h"
-#include <stdlib.h>
-#include <time.h>
 
 void afficherMatriceAdjacence(graphe_t matrix, int n) {
 	int i, j;
@@ -81,11 +79,11 @@ element_t** noeudsCompoConnexes(graphe_t graphe, int n, int * noeudsI) {
 	return noeud;
 }
 
-void afficherNoeudsCompoConnexes(element_t ** noeuds, int n_noeuds, int n)
+void afficherNoeudsCompoConnexes(element_t ** noeuds, int n, int nclasse)
 {
 	int i; 
-	printf("Il y a %d classes : \n", n_noeuds);
-	for(i = 0; i < n_noeuds ; i++)
+	printf("Il y a %d classes : \n", nclasse);
+	for(i = 0; i < nclasse ; i++)
 	{
 		printf("Classe %d : ", i);
 		afficherClasse(noeuds[i], n);

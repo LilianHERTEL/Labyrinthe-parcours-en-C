@@ -1,4 +1,4 @@
-#include "compoConnexes2.h"
+#include "grapheListeAretes.h"
 
 void genererGraphe(couples_graphe_t* graphe, int nbNoeuds) {
     int i, nbAretes = 0, deb, fin;

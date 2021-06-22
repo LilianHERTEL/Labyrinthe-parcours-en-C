@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "partition.h"
@@ -20,3 +21,4 @@ typedef struct
 
 void genererGraphe(couples_graphe_t* graphe, int n);
 bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin);
+void afficherGraphe2(couples_graphe_t graphe);
