@@ -7,7 +7,25 @@ int main(void)
 }
 
 bool testNoeudsCompoConnexes() {
-	graphe_t graphe;
+	graphe_t matrix;
+	element_t **element;
+	int n = 5, nclasses, i;
+	char c;
+
+	matrix = createAdjencyMatrix(n);
+	element = noeudsCompoConnexes(matrix, n, &nclasses);
+    afficherNoeudsCompoConnexes(element, n, nclasses);
+	for(i = 0; i < n; ++i) {
+		free(element[i]);
+	}
+	free(element);
+	puts("validation manuelle : y/n");
+	fscanf(stdin, "%c%*c", &c);
+	if(c == 'y' || c == 'Y') {
+		return true;
+	}
+	fputs("erreur noeudcompoconnexe\n", stderr);
+	return false;
 }
 
 bool testCreateAdjencyMatrix() {
