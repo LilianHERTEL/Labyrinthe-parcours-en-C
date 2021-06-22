@@ -1,23 +1,28 @@
 #include "grapheListeAretes.h"
 
 void genererGraphe(couples_graphe_t* graphe, int nbNoeuds) {
-    int i, nbAretes = 0;
+    int i, nbAretes = 0, deb, fin;
     graphe->nbNoeuds = nbNoeuds;
     srand(time(NULL));
-    nbAretes = rand()%nbNoeuds;
-    graphe->aretes = (arete_t*)malloc(nbNoeuds * sizeof(arete_t));
+    nbAretes = rand()%(nbNoeuds*2) + nbNoeuds/2;
+    graphe->aretes = (arete_t*)malloc(nbAretes * sizeof(arete_t));
     if (graphe->aretes != NULL)
     {
-        graphe->nbAretes = nbAretes;
-        //printf("nb = %d\n", graphe->nbAretes);
+        graphe->nbAretes = 0;
         for (i = 0; i < nbAretes; i++)
         {
             graphe->aretes[i].poids = rand() % 30; 
-            graphe->aretes[i].noeudDeb = rand()%nbNoeuds;
-            //printf("deb = %d\n", graphe->aretes[i].noeudDeb);
-            graphe->aretes[i].noeudFin = rand()%(nbNoeuds-graphe->aretes[i].noeudDeb) + graphe->aretes[i].noeudDeb;
-            //printf("fin = %d\n", graphe->aretes[i].noeudFin);
+            do {
+                deb = rand()%nbNoeuds;
+                fin = rand()%(nbNoeuds-deb) + deb;
+                graphe->aretes[i].noeudDeb = deb;
+                graphe->aretes[i].noeudFin = fin;
+            }
+            while (aretePasValide(graphe, deb, fin));
+            
+            (graphe->nbAretes)++;
         }
+        graphe->nbAretes = nbAretes;
     }
     else
     {
@@ -43,4 +48,15 @@ int comparArete(const void * arete_1, const void * arete_2)
         return 0;
     }
     return -1;
+}
+
+bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin) {
+    bool_t status = false;
+    int i;
+    if (deb == fin) status = true;
+    for (i = 0; i < graphe->nbAretes; i++)
+    {
+        if (graphe->aretes[i].noeudDeb == deb && graphe->aretes[i].noeudFin == fin) status = true;
+    }
+    return status;
 }

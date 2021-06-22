@@ -11,7 +11,7 @@ int main(void)
 	return 0;
 }
 
-bool testNoeudsCompoConnexes() {
+bool_t testNoeudsCompoConnexes() {
 	graphe_t matrix;
 	element_t **element;
 	int n = 5, nclasses, i;
@@ -33,7 +33,7 @@ bool testNoeudsCompoConnexes() {
 	return false;
 }
 
-bool testCreateAdjencyMatrix() {
+bool_t testCreateAdjencyMatrix() {
 	graphe_t matrix = NULL;
         int n = 10;
 
@@ -46,7 +46,7 @@ bool testCreateAdjencyMatrix() {
 	return true;
 }
 
-bool testGrapheToPartition() {
+bool_t testGrapheToPartition() {
 	graphe_t matrix = NULL;
 	partition_t partition;
 	int n = 3;

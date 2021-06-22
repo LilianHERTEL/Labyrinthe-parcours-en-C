@@ -1,0 +1,13 @@
+graph testGrapheToPartition {
+	graph [bb="0,0,198,36"];
+	node [label="\N"];
+	0	 [height=0.5,
+		pos="27,18",
+		width=0.75];
+	1	 [height=0.5,
+		pos="99,18",
+		width=0.75];
+	2	 [height=0.5,
+		pos="171,18",
+		width=0.75];
+}
