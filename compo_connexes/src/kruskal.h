@@ -5,4 +5,4 @@
 #include "grapheListeAretes.h"
 
 
-arete_t * arbreCouvrantPoidsMin(couples_graphe_t graph);
+arete_t * arbreCouvrantPoidsMin(couples_graphe_t graph, int * tailleListe);

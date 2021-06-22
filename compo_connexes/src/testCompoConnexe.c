@@ -2,14 +2,22 @@
 
 int main(void)
 {
-	testGrapheToPartition();
+	arete_t *arbreCouvrant;
+	couples_graphe_t graph;
+	int tailleArbreCouvrant = 10;
 	//(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
 	/*
 	couples_graphe_t graph;
+	arete_t * arbreCouvrant;
+	int tailleArbreCouvrant;
+
 	genererGraphe(&graph, 10); 
 	ordonnerAretesCroissant(&graph);
 	supprimerGraphe(graph);
 	*/
+	arbreCouvrant = arbreCouvrantPoidsMin(graph, &tailleArbreCouvrant);
+	drawCouplesGraph(graph, "testCouplesGrapheKruskal", arbreCouvrant, tailleArbreCouvrant);
+	
 	return 0;
 }
 
