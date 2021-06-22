@@ -4,8 +4,6 @@ arete_t * arbreCouvrantPoidsMin(couples_graphe_t graph)
 {
     arete_t       * listeAretes;
     partition_t     partition;
-    classe_t        classe1,
-                    classe2;
     element_t       elem1,
                     elem2;
     int             i,
