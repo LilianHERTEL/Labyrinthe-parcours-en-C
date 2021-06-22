@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "grapheListeAretes.h"
 
+/*
 int main(void)
 {
     int n = 10;
@@ -11,3 +12,4 @@ int main(void)
     printAretes(graph);
     return 0;
 }
+*/

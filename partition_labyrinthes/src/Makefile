@@ -1,6 +1,6 @@
 FIC = $(shell ls *.c) 
 EXEC = ../bin/
-BIN = connexe
+BIN = labyrinthe
 DEBUG = -DDEBUG 
 LFLAGS = -lSDL2 
 OPTIONS = -Wall -Wextra -g 
