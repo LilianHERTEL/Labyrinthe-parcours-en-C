@@ -2,7 +2,7 @@ FIC = $(shell ls *.c)
 EXEC = ../bin/
 BIN = connexe
 DEBUG = -DDEBUG 
-LFLAGS = `pkg-config libgvc --cflags` -g -O2 -lcgraph -lgvc
+LFLAGS = -lSDL2 
 OPTIONS = -Wall -Wextra -g 
 CC = gcc 
 OBJ = $(FIC:.c=.o) 
