@@ -79,7 +79,7 @@ void generatePng(char * command)
  */
 void drawPartitionGraph(partition_t partition, int n, char * name)
 {
-    Agraph_t    * graphe;
+    Agraph_t    * graph;
     FILE        * fic;
     GVC_t       * graph_context;
     int           i = 0,
@@ -101,7 +101,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
         graph_context = gvContext();
         if (graph_context)
         {
-            graphe = agopen(name, Agdirected, 0);
+            graph = agopen(name, Agdirected, 0);
 
             classes = lister_partition(partition, n);
 
@@ -109,7 +109,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
             while(i < n && classes[i] != -1)
             {
                 sprintf(indexClasse, "%d", classes[i]);
-                agnode(graphe, indexClasse, 1);
+                agnode(graph, indexClasse, 1);
                 i++;
             }
 
@@ -122,22 +122,22 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
                 while(j < n && elements[j] != -1)
                 {
                     sprintf(indexElement, "%d", elements[j]);
-                    agedge(graphe, agnode(graphe, indexElement, 1), agnode(graphe, indexClasse, 1), NULL, 1);
+                    agedge(graph, agnode(graph, indexElement, 1), agnode(graph, indexClasse, 1), NULL, 1);
                     j++;
                 }
                 i++;
                 j=0;
             }
 
-            generateGraphviz(graph_context, graphe, fic);
+            generateGraphviz(graph_context, graph, fic);
             generatePng(command);
 
-            freeAll(graph_context, graphe);
+            freeAll(graph_context, graph);
             fclose(fic);
         }
         else
         {
-            fprintf(stderr, "Impossible de créer le contexte de graphe...");
+            fprintf(stderr, "Impossible de créer le contexte de graphe...\n");
         }
     }
 	else
@@ -155,8 +155,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
  */
 void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
 {
-    
-    Agraph_t    * graphe;
+    Agraph_t    * graph;
     FILE        * fic;
     GVC_t       * graph_context;
     int           i = 0,
@@ -176,13 +175,13 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
         graph_context = gvContext();
         if (graph_context)
         {
-            graphe = agopen(name, Agundirected, 0);
+            graph = agopen(name, Agundirected, 0);
 
             // Dessine les noeuds
             for(i = 0; i < n; i++)
             {
                 sprintf(nodeName, "%d", i);
-                agnode(graphe, nodeName, 1);
+                agnode(graph, nodeName, 1);
             }
 
             // Dessine les arretes
@@ -194,20 +193,20 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
                     if(matrix[i*n + j] == 1)
                     {
                         sprintf(nodeName2, "%d", j);
-                        agedge(graphe, agnode(graphe, nodeName, 1), agnode(graphe, nodeName2, 1), NULL, 1);
+                        agedge(graph, agnode(graph, nodeName, 1), agnode(graph, nodeName2, 1), NULL, 1);
                     }
                 }
             }
 
-            generateGraphviz(graph_context, graphe, fic);
+            generateGraphviz(graph_context, graph, fic);
             generatePng(command);
 
-            freeAll(graph_context, graphe);
+            freeAll(graph_context, graph);
             fclose(fic);
         }
         else
         {
-            fprintf(stderr, "Impossible de créer le contexte de graphe...");
+            fprintf(stderr, "Impossible de créer le contexte de graphe...\n");
         }
     }
 	else
