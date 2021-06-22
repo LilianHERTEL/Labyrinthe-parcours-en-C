@@ -11,7 +11,7 @@ void genererGraphe(couples_graphe_t* graphe, int nbNoeuds) {
         graphe->nbAretes = 0;
         for (i = 0; i < nbAretes; i++)
         {
-            graphe->aretes[i].poids = rand() % 30; 
+            graphe->aretes[i].poids = 1; 
             do {
                 deb = rand()%nbNoeuds;
                 fin = rand()%(nbNoeuds-deb) + deb;

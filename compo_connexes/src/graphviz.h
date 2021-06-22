@@ -17,7 +17,7 @@
  * @param pngPath Chemin du fichier png
  * @param command Commande pour transformer le .dot en png
  */
-void createStrings(char * name, char * dir, char * dotPath, char * pngPath, char * command);
+void createStrings(char *name, char *dir, char *dotPath, char *pngPath, char *command);
 
 /**
  * @brief Libere les choses propres a graphviz
@@ -25,7 +25,7 @@ void createStrings(char * name, char * dir, char * dotPath, char * pngPath, char
  * @param graph_context 
  * @param graph 
  */
-void freeAll(GVC_t * graph_context, Agraph_t * graph);
+void freeAll(GVC_t *graph_context, Agraph_t *graph);
 
 /**
  * @brief Genere le fichier .dot du graphe
@@ -34,14 +34,14 @@ void freeAll(GVC_t * graph_context, Agraph_t * graph);
  * @param graph 
  * @param fic 
  */
-void generateGraphviz(GVC_t * graph_context, Agraph_t * graph, FILE * fic);
+void generateGraphviz(GVC_t *graph_context, Agraph_t *graph, FILE *fic);
 
 /**
  * @brief 
  * 
  * @param command Commande système pour generer une image à partir du fichier .dot
  */
-void generatePng(char * command);
+void generatePng(char *command);
 
 /**
  * @brief Creer le fichier .dot et le fichier png pour la partition en parametres
@@ -50,7 +50,7 @@ void generatePng(char * command);
  * @param n Le nombre d'elements dans la partition
  * @param name Nom pour les fichiers generes
  */
-void drawPartitionGraph(partition_t partition, int n, char * name);
+void drawPartitionGraph(partition_t partition, int n, char *name);
 
 /**
  * @brief Creer le fichier .dot et le fichier png pour la matrice d'adjacence en parametres
@@ -59,11 +59,14 @@ void drawPartitionGraph(partition_t partition, int n, char * name);
  * @param n Le nombre d'elements dans la partition
  * @param name Nom pour les fichiers generes
  */
-void drawAdjencyMatrixGraph(int * matrix, int n, char * name);
+void drawAdjencyMatrixGraph(int *matrix, int n, char *name);
 
 /**
- * @brief Creer le fichier .dot et le fichier png pour representer un rgaphe sous forme de couples d'aretes + nombre d'aretes
+ * @brief Creer le fichier .dot et le fichier png pour le graphe (couple) en parametres
  * 
- * @param graph Le graphe à représenter (sous forme de couples d'aretes + nombre d'aretes)
+ * @param sourceGraph Graphe sous forme couple d'arete + nombre de noeuds
+ * @param name Nom pour les fichiers generes
+ * @param listeA Liste d'aretes a colorier en rouge (exemple : arbre couvrant) peut etre null
+ * @param tailleListeA Taille de la liste d'aretes
  */
-void drawCouplesGraph(couples_graphe_t sourceGraph, char* name, arete_t * listeA, int tailleListeA);
+void drawCouplesGraph(couples_graphe_t sourceGraph, char *name, arete_t *listeA, int tailleListeA);
