@@ -1,7 +1,6 @@
 #pragma once
 
 #include "partition.h"
-#include "graphviz.h"
 #include <time.h>
 
 typedef int *graphe_t;

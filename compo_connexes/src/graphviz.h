@@ -1,9 +1,12 @@
+#pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <graphviz/gvc.h>
 #include <graphviz/cgraph.h>
 #include "partition.h"
+#include "compoConnexes2.h"
 
 /**
  * @brief Creer les differentes chaines de caracteres utiles pour dessiner le graphe
@@ -33,3 +36,10 @@ void drawPartitionGraph(partition_t partition, int n, char * name);
  * @param name Nom pour les fichiers generes
  */
 void drawAdjencyMatrixGraph(int * matrix, int n, char * name);
+
+/**
+ * @brief Creer le fichier .dot et le fichier png pour representer un rgaphe sous forme de couples d'aretes + nombre d'aretes
+ * 
+ * @param graph Le graphe à représenter (sous forme de couples d'aretes + nombre d'aretes)
+ */
+void drawCouplesGraph(couples_graphe_t sourceGraph, char* name);
