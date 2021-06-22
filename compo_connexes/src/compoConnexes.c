@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+void afficherGraphe(graphe_t graphe, int n) {
+	drawAdjencyMatrixGraph(graphe, n, "graphe");
+}
+
 void afficherMatriceAdjacence(graphe_t matrix, int n) {
 	int i, j;
 	for (i = 0; i < n; i++)
