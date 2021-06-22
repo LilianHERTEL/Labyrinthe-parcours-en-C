@@ -27,6 +27,50 @@ void createStrings(char * name, char * dir, char * dotPath, char * pngPath, char
 }
 
 /**
+ * @brief Libere les choses propres a graphviz
+ * 
+ * @param graph_context 
+ * @param graph 
+ */
+void freeAll(GVC_t * graph_context, Agraph_t * graph)
+{
+    //  Libération mémoire du contexte du graphe
+    gvFreeLayout(graph_context, graph);
+    //  Libération mémoire du graphe
+    agclose(graph);
+}
+
+/**
+ * @brief Genere le fichier .dot du graphe
+ * 
+ * @param graph_context 
+ * @param graph 
+ * @param fic 
+ */
+void generateGraphviz(GVC_t * graph_context, Agraph_t * graph, FILE * fic)
+{
+    //agwrite(graph, stdout);                      //  Ecriture sur la sortie standard en dot sans formatage
+    gvLayout(graph_context, graph, "dot");         //  Permet de dessiner le graphe "correctement"
+    gvRender(graph_context, graph, "dot", fic);    //  Génération du fichier .dot
+}
+
+/**
+ * @brief 
+ * 
+ * @param command Commande système pour generer une image à partir du fichier .dot
+ */
+void generatePng(char * command)
+{
+    int sys;
+
+    sys = system(command);
+    if (sys != 0)
+    {
+        fprintf(stderr, "Impossible de lancer la commande : %s\n", command);
+    }
+}
+
+/**
  * @brief Creer le fichier .dot et le fichier png pour la partition en parametres
  * 
  * @param partition La partition a representer
@@ -39,8 +83,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
     FILE        * fic;
     GVC_t       * graph_context;
     int           i = 0,
-                  j = 0,
-                  sys;
+                  j = 0;
     char          indexClasse[3],
                   indexElement[3],
                   dotPath[50],
@@ -86,25 +129,10 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
                 j=0;
             }
 
-            //  Ecriture sur la sortie standard en dot sans formatage
-            //agwrite(graphe, stdout);
-            //  Permet de dessiner le graphe "correctement"
-            gvLayout(graph_context, graphe, "dot");
-            //  Génération du fichier .dot
-            gvRender(graph_context, graphe, "dot", fic);
+            generateGraphviz(graph_context, graphe, fic);
+            generatePng(command);
 
-            //  Commande système pour generer une image à partir du fichier .dot
-            sys = system(command);
-            if (sys != 0)
-            {
-                fprintf(stderr, "Impossible de lancer la commande : %s", command);
-            }
-
-            //  Libération mémoire du contexte du graphe
-            gvFreeLayout(graph_context, graphe);
-            //  Libération mémoire du graphe
-            agclose(graphe);
-            //  Fermeture du fichier
+            freeAll(graph_context, graphe);
             fclose(fic);
         }
         else
@@ -132,8 +160,7 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
     FILE        * fic;
     GVC_t       * graph_context;
     int           i = 0,
-                  j = 0,
-                  sys;
+                  j = 0;
     char          nodeName[11],
                   nodeName2[11],
                   dotPath[50],
@@ -172,25 +199,10 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
                 }
             }
 
-            //  Ecriture sur la sortie standard en dot sans formatage
-            //agwrite(graphe, stdout);
-            //  Permet de dessiner le graphe "correctement"
-            gvLayout(graph_context, graphe, "dot");
-            //  Génération du fichier .dot
-            gvRender(graph_context, graphe, "dot", fic);
+            generateGraphviz(graph_context, graphe, fic);
+            generatePng(command);
 
-            //  Commande système pour generer une image à partir du fichier .dot
-            sys = system(command);
-            if (sys != 0)
-            {
-                fprintf(stderr, "Impossible de lancer la commande : %s", command);
-            }
-
-            //  Libération mémoire du contexte du graphe
-            gvFreeLayout(graph_context, graphe);
-            //  Libération mémoire du graphe
-            agclose(graphe);
-            //  Fermeture du fichier
+            freeAll(graph_context, graphe);
             fclose(fic);
         }
         else
