@@ -4,9 +4,8 @@
 #include "compoConnexes.h"
 #include "grapheListeAretes.h"
 #include "graphviz.h"
+#include "kruskal.h"
 
-typedef enum {false, true} bool;
-
-bool testCreateAdjencyMatrix();
-bool testGrapheToPartition();
-bool testNoeudsCompoConnexes();
+bool_t testCreateAdjencyMatrix();
+bool_t testGrapheToPartition();
+bool_t testNoeudsCompoConnexes();
