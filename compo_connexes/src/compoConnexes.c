@@ -1,6 +1,4 @@
 #include "compoConnexes.h"
-#include <stdlib.h>
-#include <time.h>
 
 void afficherMatriceAdjacence(graphe_t matrix, int n) {
 	int i, j;

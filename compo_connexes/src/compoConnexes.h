@@ -1,7 +1,9 @@
 #pragma once
 
-#include "partition.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
+#include "partition.h"
 
 typedef int *graphe_t;
 
