@@ -2,7 +2,12 @@
 
 int main(void)
 {
-	(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
+	//(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
+	
+	couples_graphe_t graph;
+	genererGraphe(&graph, 10); 
+	ordonnerAretesCroissant(&graph);
+	
 	return 0;
 }
 
