@@ -20,6 +20,30 @@
 void createStrings(char * name, char * dir, char * dotPath, char * pngPath, char * command);
 
 /**
+ * @brief Libere les choses propres a graphviz
+ * 
+ * @param graph_context 
+ * @param graph 
+ */
+void freeAll(GVC_t * graph_context, Agraph_t * graph);
+
+/**
+ * @brief Genere le fichier .dot du graphe
+ * 
+ * @param graph_context 
+ * @param graph 
+ * @param fic 
+ */
+void generateGraphviz(GVC_t * graph_context, Agraph_t * graph, FILE * fic);
+
+/**
+ * @brief 
+ * 
+ * @param command Commande système pour generer une image à partir du fichier .dot
+ */
+void generatePng(char * command);
+
+/**
  * @brief Creer le fichier .dot et le fichier png pour la partition en parametres
  * 
  * @param partition La partition a representer
