@@ -36,6 +36,7 @@ void freeAll(GVC_t * graph_context, Agraph_t * graph)
 {
     //  Libération mémoire du contexte du graphe
     gvFreeLayout(graph_context, graph);
+    gvFreeContext(graph_context);
     //  Libération mémoire du graphe
     agclose(graph);
 }
@@ -206,12 +207,12 @@ void drawAdjencyMatrixGraph(int * matrix, int n, char * name)
             generatePng(command);
 
             freeAll(graph_context, graph);
-            fclose(fic);
         }
         else
         {
             fprintf(stderr, "Impossible de créer le contexte de graphe...\n");
         }
+        fclose(fic);
     }
 	else
     {
@@ -287,10 +288,7 @@ void drawCouplesGraph(couples_graphe_t sourceGraph, char* name) {
                 fprintf(stderr, "Impossible de lancer la commande : %s", command);
             }
 
-            //  Libération mémoire du contexte du graphe
-            gvFreeLayout(graph_context, graphe);
-            //  Libération mémoire du graphe
-            agclose(graphe);
+	    freeAll(graph_context, graphe);
             //  Fermeture du fichier
             fclose(fic);
         }

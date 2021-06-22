@@ -60,3 +60,7 @@ bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin) {
     }
     return status;
 }
+
+void supprimerGraphe(couples_graphe_t graphe) {
+    free(graphe.aretes);
+}

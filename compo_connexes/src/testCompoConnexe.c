@@ -2,12 +2,14 @@
 
 int main(void)
 {
+	testGrapheToPartition();
 	//(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
-	
+	/*
 	couples_graphe_t graph;
 	genererGraphe(&graph, 10); 
 	ordonnerAretesCroissant(&graph);
-	
+	supprimerGraphe(graph);
+	*/
 	return 0;
 }
 
@@ -55,8 +57,8 @@ bool_t testGrapheToPartition() {
 
 	matrix = createAdjencyMatrix(n);
 	if(matrix == NULL) {
-			fputs("erreur creation de la matrice avant test dans grapheToPartition\n", stderr);
-			return false;
+		fputs("erreur creation de la matrice avant test dans grapheToPartition\n", stderr);
+		return false;
 	}
 	partition = grapheToPartition(matrix, n);
 	if(partition.foret == NULL || partition.hauteur == NULL) {
@@ -68,7 +70,7 @@ bool_t testGrapheToPartition() {
 	puts("validation manuelle : y/n");
 	fscanf(stdin, "%c%*c", &c);
 	free(matrix);
-    detruirePartition(partition);
+	detruirePartition(partition);
 	if(c == 'y' || c == 'Y') {
 		return true;
 	}

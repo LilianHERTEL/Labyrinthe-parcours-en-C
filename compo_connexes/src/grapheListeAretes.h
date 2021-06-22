@@ -25,3 +25,4 @@ void genererGraphe(couples_graphe_t* graphe, int n);
 void ordonnerAretesCroissant(couples_graphe_t * graph);
 int comparArete(const void * arete_1, const void * arete_2);
 bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin);
+void supprimerGraphe(couples_graphe_t graphe);
