@@ -246,48 +246,17 @@ void drawCouplesGraph(couples_graphe_t sourceGraph, char* name) {
             }
 
             // Dessine les arretes
-            printf("NB ARETES = %d\n", sourceGraph.nbAretes);
             for (i = 0; i < sourceGraph.nbAretes; i++)
             {
                 sprintf(nodeName, "%d", sourceGraph.aretes[i].noeudDeb);
                 sprintf(nodeName2, "%d", sourceGraph.aretes[i].noeudFin);
                 agedge(graphe, agnode(graphe, nodeName, 1), agnode(graphe, nodeName2, 1), NULL, 1);
             }
-            
-            /*
-            for(i = 0; i < n; i++)
-            {
-                for(j = i; j < n; j++)
-                {
-                    sprintf(nodeName, "%d", i);
-                    if(matrix[i*n + j] == 1)
-                    {
-                        sprintf(nodeName2, "%d", j);
-                        agedge(graphe, agnode(graphe, nodeName, 1), agnode(graphe, nodeName2, 1), NULL, 1);
-                    }
-                }
-            }
-            */
 
-            //  Ecriture sur la sortie standard en dot sans formatage
-            //agwrite(graphe, stdout);
-            //  Permet de dessiner le graphe "correctement"
-            gvLayout(graph_context, graphe, "dot");
-            //  Génération du fichier .dot
-            gvRender(graph_context, graphe, "dot", fic);
+            generateGraphviz(graph_context, graphe, fic);
+            generatePng(command);
 
-            //  Commande système pour generer une image à partir du fichier .dot
-            sys = system(command);
-            if (sys != 0)
-            {
-                fprintf(stderr, "Impossible de lancer la commande : %s", command);
-            }
-
-            //  Libération mémoire du contexte du graphe
-            gvFreeLayout(graph_context, graphe);
-            //  Libération mémoire du graphe
-            agclose(graphe);
-            //  Fermeture du fichier
+            freeAll(graph_context, graphe);
             fclose(fic);
         }
         else

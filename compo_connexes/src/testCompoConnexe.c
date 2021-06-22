@@ -7,6 +7,7 @@ int main(void)
 	couples_graphe_t graph;
 	genererGraphe(&graph, 10); 
 	ordonnerAretesCroissant(&graph);
+	drawCouplesGraph(graph, "testCouplesGraphe");
 	
 	return 0;
 }
