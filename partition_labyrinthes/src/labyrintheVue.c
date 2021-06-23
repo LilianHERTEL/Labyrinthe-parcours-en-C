@@ -12,12 +12,12 @@ int main(int argc, char const *argv[])
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     SDL_DisplayMode screen;
-    SDL_Texture * texture;
+    SDL_Texture *texture;
 
     (void)argc;
     (void)argv;
 
-                /*****INITIALISATION*****/
+    /*****INITIALISATION*****/
     if (!initializeSDL())
     {
         quitSDL(false, "Error : SDL initialization", window, renderer);
@@ -47,27 +47,28 @@ int main(int argc, char const *argv[])
     }
 
     texture = loadTextureFromImage("../images/texture.png", renderer);
-    if(texture == NULL) {
+    if (texture == NULL)
+    {
         quitSDL(0, " error texture\n", window, renderer);
         exit(EXIT_FAILURE);
     }
 
-                /*****TRAITEMENT*****/
+    /*****TRAITEMENT*****/
 
     int i, j;
-    int n = 3, m =4;
+    int n = 3, m = 4;
     int tab[3][4] = {{1, 2, 8, 9},
-                        {8, 4, 1, 2},
-                        {2, 6, 15, 15}};
-    int ** grille;
+                     {8, 4, 1, 2},
+                     {2, 6, 15, 15}};
+    int **grille;
 
-    grille = (int**)malloc(sizeof(int*)*n);
-    for(i=0; i<n; i++)
-        grille[i] = (int*)malloc(sizeof(int)*m) ;
+    grille = (int **)malloc(sizeof(int *) * n);
+    for (i = 0; i < n; i++)
+        grille[i] = (int *)malloc(sizeof(int) * m);
 
-    for(i=0; i<n; i++)
+    for (i = 0; i < n; i++)
     {
-        for(j = 0; j<m; j++)
+        for (j = 0; j < m; j++)
         {
             grille[i][j] = tab[i][j];
         }
@@ -84,24 +85,34 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m, SDL_Texture * texture)
+/**
+ * @brief Dessine le labyrinthe a l'ecran
+ * 
+ * @param window La fenetre
+ * @param renderer Le rendu de la fenetre
+ * @param grid La grille representant le labyrinthe
+ * @param n Le nombre de lignes de la grille
+ * @param m Le nombre de colonnes de la grille
+ * @param texture La texture chargée, pour les murs et le sol
+ */
+void drawLab(SDL_Window *window, SDL_Renderer *renderer, int **grid, int n, int m, SDL_Texture *texture)
 {
     SDL_Rect positionLab = {0},
              tile = {0},
-             wallNS = {0},                         // Nord et Sud destination
-             wallEO = {0},                         // Est et Ouest destination
-             wallSourceNS = {0, 64, 64, 12},       // Nord et Sud source
-             wallSourceEO = {0, 0, 12, 64},        // Est et Ouest source
-             groundSource = {0, 384, 96, 96};
-    int      a,
-             b,
-             i = 0,
-             j = 0;
+             wallNS = {0},              // Nord et Sud destination
+        wallEO = {0},                   // Est et Ouest destination
+        wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
+        wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
+        groundSource = {0, 384, 96, 96};
+    int a,
+        b,
+        i = 0,
+        j = 0;
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
 
-    a = positionLab.w / m ;
-    b = positionLab.h / n ;
+    a = positionLab.w / m;
+    b = positionLab.h / n;
     tile.w = tile.h = a <= b ? a : b;
 
     wallEO.w = tile.w * 0.1;
@@ -110,52 +121,53 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
     wallNS.w = tile.w + (tile.w * 0.1);
     wallNS.h = tile.h * 0.1;
 
-    positionLab.x = (positionLab.w - tile.w * m ) /2;
-    positionLab.y = (positionLab.h - tile.h * n ) /2;
+    positionLab.x = (positionLab.w - tile.w * m) / 2;
+    positionLab.y = (positionLab.h - tile.h * n) / 2;
 
-    for(i = 0; i < n; i++) {
-		tile.y = positionLab.y + tile.h * i;
-		for(j = 0; j < m; j++) {
-			tile.x = positionLab.x + tile.w * j;
+    for (i = 0; i < n; i++)
+    {
+        tile.y = positionLab.y + tile.h * i;
+        for (j = 0; j < m; j++)
+        {
+            tile.x = positionLab.x + tile.w * j;
             SDL_RenderCopy(renderer, texture, &groundSource, &tile);
 
-            if(grille[i][j] & SUD)
+            if (grid[i][j] & SUD)
             {
-                wallNS.x = tile.x - (tile.w * 0.1)/2;
-                wallNS.y = tile.y + tile.h - (tile.h * 0.1)/2;
+                wallNS.x = tile.x - (tile.w * 0.1) / 2;
+                wallNS.y = tile.y + tile.h - (tile.h * 0.1) / 2;
                 SDL_RenderFillRect(renderer, &wallNS);
                 SDL_RenderCopy(renderer, texture, &wallSourceNS, &wallNS);
             }
-            if(grille[i][j] & EST)
-            { 
-                wallEO.x = tile.x + tile.w - (tile.w * 0.1)/2;
-                wallEO.y = tile.y - (tile.h * 0.1)/2;
+            if (grid[i][j] & EST)
+            {
+                wallEO.x = tile.x + tile.w - (tile.w * 0.1) / 2;
+                wallEO.y = tile.y - (tile.h * 0.1) / 2;
                 SDL_RenderFillRect(renderer, &wallEO);
                 SDL_RenderCopy(renderer, texture, &wallSourceEO, &wallEO);
             }
-		}
-	}
+        }
+    }
 
     // Grand mur de gauche
     tile.x = positionLab.x;
-    wallEO.x = tile.x - (tile.w * 0.1)/2; 
-    for(i = 0; i < n; i++)
+    wallEO.x = tile.x - (tile.w * 0.1) / 2;
+    for (i = 0; i < n; i++)
     {
         tile.y = positionLab.y + tile.h * i;
-        wallEO.y = tile.y - (tile.h * 0.1)/2;
+        wallEO.y = tile.y - (tile.h * 0.1) / 2;
         SDL_RenderFillRect(renderer, &wallEO);
         SDL_RenderCopy(renderer, texture, &wallSourceEO, &wallEO);
     }
 
     // Grand mur du haut
     tile.y = positionLab.y;
-    wallNS.y = tile.y - (tile.h * 0.1)/2;
-    for(i = 0; i < m; i++)
+    wallNS.y = tile.y - (tile.h * 0.1) / 2;
+    for (i = 0; i < m; i++)
     {
         tile.x = positionLab.x + tile.w * i;
-        wallNS.x = tile.x - (tile.w * 0.1)/2;
+        wallNS.x = tile.x - (tile.w * 0.1) / 2;
         SDL_RenderFillRect(renderer, &wallNS);
         SDL_RenderCopy(renderer, texture, &wallSourceNS, &wallNS);
     }
-
 }
