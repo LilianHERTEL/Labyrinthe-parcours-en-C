@@ -1,8 +1,8 @@
 #include "dijkstra.h"
-
-bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
+/*
+bool_t dijkstra(couples_graphe_t graphe, int source, int cible, int *chemin, int n) {
 	binary_heap_t tas;
-	bool found = false;
+	bool_t found = false;
 	int *prec, cour;
 
 	tas.array = malloc(sizeof(int) * n);
@@ -39,4 +39,4 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 		}
 	}
 	return dist, prev;
-}
+}*/

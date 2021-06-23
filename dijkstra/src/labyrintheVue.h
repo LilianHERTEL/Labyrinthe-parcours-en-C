@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "mySDL.h"
+#include "grapheListeAretes.h"
+#include "kruskal_non_arbo.h"
 
 typedef enum
 {
@@ -14,4 +16,11 @@ typedef enum
     OUEST = 8
 }directions;
 
-void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m, SDL_Texture * wallTexture, SDL_Texture * groundTexture);
+void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m);
+
+void dimensionPerso(SDL_Rect * perso, SDL_Rect tile);
+
+void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest);
+
+void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture);
+

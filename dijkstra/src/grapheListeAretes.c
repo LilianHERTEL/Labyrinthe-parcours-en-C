@@ -45,7 +45,7 @@ void ordonnerAretesCroissant(couples_graphe_t *graph)
     qsort(graph->aretes, graph->nbAretes, sizeof(arete_t), comparArete);
 }
 
-void permute(arete_t aretes[], int i, int j)
+void exchange(arete_t aretes[], int i, int j)
 {
     arete_t tmp = aretes[i];
     aretes[i] = aretes[j];
@@ -59,7 +59,7 @@ void fisherYate(couples_graphe_t *graph)
     for (i = graph->nbAretes - 1; i > 1; i--)
     {
         j = rand() % i + 1;
-        permute(graph->aretes, i, j);
+        exchange(graph->aretes, i, j);
     }
 }
 
