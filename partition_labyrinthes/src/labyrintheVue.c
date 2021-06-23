@@ -66,17 +66,17 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect dest = {0};
-    int n = 10, tailleLabyrintheCouvrant, m;
+    int n = 20, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     arete_t* labyrintheCouvrant;
     int** grille;
 
     m=n;
     genererGrapheLabyrinthe(&graph, n);
-    labyrintheCouvrant = arbreCouvrantPoidsMin(graph, &tailleLabyrintheCouvrant);
+    //labyrintheCouvrant = arbreCouvrantPoidsMin(graph, &tailleLabyrintheCouvrant);
+    labyrintheCouvrant = grapheLaby(graph, &tailleLabyrintheCouvrant, 0.7);
     grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
-    displayGrid(grille, n, n);
-    drawCouplesGraph(graph, "labyrinthe_arbo", labyrintheCouvrant, tailleLabyrintheCouvrant);
+    //drawCouplesGraph(graph, "labyrinthe_arbo", labyrintheCouvrant, tailleLabyrintheCouvrant);
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionTile(&tile, positionLab, n, m);

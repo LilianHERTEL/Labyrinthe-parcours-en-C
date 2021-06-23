@@ -10,6 +10,7 @@
 #include "kruskal.h"
 #include "graphviz.h"
 #include "matrice.h"
+#include "labyrinthe_non_arbo.h"
 
 // Type direction (pour savoir quels murs placer)
 typedef enum

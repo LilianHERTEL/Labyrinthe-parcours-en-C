@@ -12,14 +12,15 @@ arete_t * grapheLaby(couples_graphe_t graph, int * tailleListe, float densite) {
     listeAretes = (arete_t *)malloc(sizeof(arete_t) * graph.nbAretes);
     if(listeAretes)
     {
-        ordonnerAretesCroissant(&graph);
+        //ordonnerAretesCroissant(&graph);
+        fisherYate(&graph);
         partition = creer(graph.nbNoeuds);
 
         for(i = 0; i < graph.nbAretes; i++)
         {
             elem1 = graph.aretes[i].noeudDeb;
             elem2 = graph.aretes[i].noeudFin;
-            if(classeMere(elem1, partition) != classeMere(elem2, partition) || (float) rand() / (float) RAND_MAX < densite)
+            if(classeMere(elem1, partition) != classeMere(elem2, partition) || (float) rand() / (float) RAND_MAX > densite)
             {   
                 fusion(partition, elem1, elem2);
                 listeAretes[j] = graph.aretes[i];
