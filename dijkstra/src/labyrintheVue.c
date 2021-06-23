@@ -66,7 +66,7 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect dest = {0};
-    int n = 15, tailleLabyrintheCouvrant, m;
+    int n = 35, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     arete_t* labyrintheCouvrant;
     int** grille;
@@ -82,6 +82,13 @@ int main(int argc, char const *argv[])
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
     drawLab(renderer, grille, n, m, tile, positionLab, texture);
+
+    int deb, fin;
+    deb = randomNoeud(graph, -1);
+    fin = randomNoeud(graph, deb);
+
+    drawOtherTile(renderer, deb, n, m, tile, positionLab, texture);
+    drawOtherTile(renderer, fin, n, m, tile, positionLab, texture);
 
     drawperso(renderer, perso, dest);
 
@@ -138,6 +145,7 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
     positionLab.x = (positionLab.w - tile.w * m) / 2;
     positionLab.y = (positionLab.h - tile.h * n) / 2;
 
+    // Sols
     for (i = 0; i < n; i++)
     {
         tile.y = positionLab.y + tile.h * i;
@@ -145,6 +153,16 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         {
             tile.x = positionLab.x + tile.w * j;
             SDL_RenderCopy(renderer, texture, &groundSource, &tile);
+        }
+    }
+
+    // Murs
+    for (i = 0; i < n; i++)
+    {
+        tile.y = positionLab.y + tile.h * i;
+        for (j = 0; j < m; j++)
+        {
+            tile.x = positionLab.x + tile.w * j;
 
             if (grid[i][j] & SUD)
             {
@@ -184,4 +202,23 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         SDL_RenderFillRect(renderer, &wallNS);
         SDL_RenderCopy(renderer, texture, &wallSourceNS, &wallNS);
     }
+}
+
+void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture * texture)
+{
+    int i, j;
+    SDL_Rect source = {35, 0, 35, 30};
+
+    i = indiceNoeud/n;
+    j = indiceNoeud - i * n;
+
+    positionLab.x = (positionLab.w - tile.w * m) / 2;
+    positionLab.y = (positionLab.h - tile.h * n) / 2;
+
+    tile.y = positionLab.y + tile.h * i + tile.h * 0.1;
+    tile.x = positionLab.x + tile.w * j + tile.w * 0.1;
+    tile.w = tile.h = tile.w * 0.8;
+
+    SDL_RenderFillRect(renderer, &tile);
+    SDL_RenderCopy(renderer, texture, &source, &tile);
 }

@@ -33,3 +33,4 @@ void fisherYate(couples_graphe_t *graph);
 
 void genererGrapheLabyrinthe(couples_graphe_t *graphe, int size);
 int **arbreCouvrantToMatrice(arete_t *arbre, int nbAretes, int taille);
+int randomNoeud(couples_graphe_t graph, int noeudDeb);
