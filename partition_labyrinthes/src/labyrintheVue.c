@@ -12,7 +12,10 @@ int main(int argc, char const *argv[])
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     SDL_DisplayMode screen;
-    SDL_Texture *texture;
+    SDL_Texture *texture,
+        *perso;
+    SDL_Rect positionLab = {0},
+             tile = {0};
 
     (void)argc;
     (void)argv;
@@ -53,43 +56,37 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // // TRAITEMENT
-    /*
-    int i, j;
-    int n = 3, m = 4;
-    int tab[3][4] = {{1, 2, 8, 9},
-                     {8, 4, 1, 2},
-                     {2, 6, 15, 15}};*//*
-    int **grille;
-    couples_graphe_t graph;
-    arete_t* labyrintheCouvrant;
-    int tailleLabyrintheCouvrant = 3;*/
-    /*
-    grille = (int **)malloc(sizeof(int *) * n);
-    for (i = 0; i < n; i++)
-        grille[i] = (int *)malloc(sizeof(int) * m);
-
-    for (i = 0; i < n; i++)
+    perso = loadTextureFromImage("../images/persos.png", renderer);
+    if (perso == NULL)
     {
-        for (j = 0; j < m; j++)
-        {
-            grille[i][j] = tab[i][j];
-        }
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
     }
-    */
-    
-    int n = 10, tailleLabyrintheCouvrant;
+
+    // // TRAITEMENT
+
+    SDL_Rect dest = {0};
+    int n = 10, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     arete_t* labyrintheCouvrant;
     int** grille;
+
+    m=n;
     genererGrapheLabyrinthe(&graph, n);
     labyrintheCouvrant = arbreCouvrantPoidsMin(graph, &tailleLabyrintheCouvrant);
     grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
     displayGrid(grille, n, n);
     drawCouplesGraph(graph, "labyrinthe_arbo", labyrintheCouvrant, tailleLabyrintheCouvrant);
 
+    SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
+    dimensionTile(&tile, positionLab, n, m);
+    dimensionPerso(&dest, tile);
+
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(window, renderer, grille, n, n, texture);
+    drawLab(renderer, grille, n, m, tile, positionLab, texture);
+
+    drawperso(renderer, perso, dest);
+
     SDL_RenderPresent(renderer);
 
     SDL_Delay(120000);
@@ -99,36 +96,40 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-
-/**
- * @brief Dessine le labyrinthe a l'ecran
- * 
- * @param window La fenetre
- * @param renderer Le rendu de la fenetre
- * @param grid La grille representant le labyrinthe
- * @param n Le nombre de lignes de la grille
- * @param m Le nombre de colonnes de la grille
- * @param texture La texture chargée, pour les murs et le sol
- */
-void drawLab(SDL_Window *window, SDL_Renderer *renderer, int **grid, int n, int m, SDL_Texture *texture)
+void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
 {
-    SDL_Rect positionLab = {0},
-             tile = {0},
-             wallNS = {0},              // Nord et Sud destination
+    int a,
+        b;
+
+    a = positionLab.w / m;
+    b = positionLab.h / n;
+    tile->w = tile->h = a <= b ? a : b;
+}
+
+void dimensionPerso(SDL_Rect * dest, SDL_Rect tile)
+{
+    dest->w = tile.w * 0.5;
+    dest->h = tile.h * 0.5;
+}
+
+void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
+{
+    SDL_Rect source = {0};
+
+    source.w = 57;
+    source.h = 43;
+    SDL_RenderCopy(renderer, perso, &source, &dest);
+}
+
+void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture)
+{
+    SDL_Rect wallNS = {0},              // Nord et Sud destination
         wallEO = {0},                   // Est et Ouest destination
         wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
         wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
         groundSource = {0, 384, 96, 96};
-    int a,
-        b,
-        i = 0,
+    int i = 0,
         j = 0;
-
-    SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
-
-    a = positionLab.w / m;
-    b = positionLab.h / n;
-    tile.w = tile.h = a <= b ? a : b;
 
     wallEO.w = tile.w * 0.1;
     wallEO.h = tile.h + (tile.h * 0.1);

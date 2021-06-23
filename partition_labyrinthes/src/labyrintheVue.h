@@ -20,14 +20,10 @@ typedef enum
     OUEST = 8
 } directions;
 
-/**
- * @brief Dessine le labyrinthe a l'ecran
- * 
- * @param window La fenetre
- * @param renderer Le rendu de la fenetre
- * @param grid La grille representant le labyrinthe
- * @param n Le nombre de lignes de la grille
- * @param m Le nombre de colonnes de la grille
- * @param texture La texture chargée, pour les murs et le sol
- */
-void drawLab(SDL_Window *window, SDL_Renderer *renderer, int **grid, int n, int m, SDL_Texture *texture);
+void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m);
+
+void dimensionPerso(SDL_Rect * perso, SDL_Rect tile);
+
+void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest);
+
+void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture);
