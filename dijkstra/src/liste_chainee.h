@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "bool.h"
 
 /***************************************/
 /* Structure d'une liste chainee       */
@@ -18,18 +19,13 @@
 typedef struct maillon
 {
     int                 v;
-    int                 usine;
     struct maillon    * suiv;
 }maillon_t, *liste_t;
 
 /********************/
 /* Type booleen     */
 /********************/
-typedef enum bool
-{
-    false = 0,
-    true = 1
-}booleen_t;
+typedef bool_t booleen_t;
 
 /***************************************/
 /* Initialisation d'une liste a NULL   */
@@ -39,7 +35,7 @@ maillon_t * initialisation_liste();
 /********************************************/
 /* Creer un maillon a partir d'une valeur   */
 /********************************************/
-maillon_t * creerMaillon(int val, int u);
+maillon_t * creerMaillon(int val);
 
 /******************************************************************************************/
 /* Creer une liste, triée dans l'ordre décroissant, des k premières valeurs d'une matrice */

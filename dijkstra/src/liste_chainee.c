@@ -36,7 +36,7 @@ liste_t initialisation_liste()
 /* val : valeur que contiendra le maillon                                 */
 /* u : numero de l'usine                                                  */
 /**************************************************************************/
-maillon_t * creerMaillon(int val, int u)
+maillon_t * creerMaillon(int val)
 {
     maillon_t   * elt;
 
@@ -45,7 +45,6 @@ maillon_t * creerMaillon(int val, int u)
     {
         elt->v = val;
         elt->suiv = NULL;
-        elt->usine = u;
     }
 
     return elt;
@@ -81,7 +80,7 @@ booleen_t creerListe_kPremierElem_matrice(int k, int **matrice, liste_t *l, int 
         while(*j<m && k>0 && ok)
         {
             maillon_t *elt; 
-            elt = creerMaillon(matrice[*i][*j], *j);
+            elt = creerMaillon(matrice[*i][*j]);
             if(elt)
             {
                 pos = recherche_prec(l, matrice[*i][*j], &trouve); 
@@ -141,7 +140,7 @@ booleen_t creerListe_kppv_matrice(int k, int **matrice, liste_t *l, int n, int m
             {
                 if(matrice[i][j] < (*l)->v)
                 {
-                    elt = creerMaillon(matrice[i][j],j); 
+                    elt = creerMaillon(matrice[i][j]); 
                     if(elt)
                     {
                         supp_lch(l);
@@ -295,7 +294,7 @@ void libererListe(liste_t l)
 /* et le supprime de la liste si le numero correspond a l'entier souhaite */
 /*                                                                        */
 /* Lexique :                                                              */
-/* u usine                                                                */
+/* u valeur                                                                */
 /* l liste                                                                */
 /**************************************************************************/
 void supprimer_occurrence(int u, liste_t *l)
@@ -307,7 +306,7 @@ void supprimer_occurrence(int u, liste_t *l)
     m = *l;
     while(m != NULL)
     {
-        if(m->usine == u)
+        if(m->v == u)
         {
             m = m->suiv;
             supp_lch(prec);

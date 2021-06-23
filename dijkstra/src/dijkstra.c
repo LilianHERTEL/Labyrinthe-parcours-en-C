@@ -1,17 +1,18 @@
 #include "dijkstra.h"
 
-bool_t dijkstra(couples_graphe_t graphe, int source, int cible, int *chemin, int n) {
+bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n) {
 	binary_heap_t tas;
 	bool_t found = false;
 	node_t cour, noeudVoisin;
+	maillon_t *maillon;
 	float newdist;
-	int k = 0, u, voisin, *prec, i;
+	int u, voisin, *prec, i;
 
 	//initialisation
 	tas.array = malloc(sizeof(int) * n);
 	prec = malloc(sizeof(int) * n);
-	chemin = malloc(sizeof(int) * n);
-	if(chemin == NULL || tas.array == NULL || prec == NULL) {
+	*chemin = initialisation_liste();
+	if(tas.array == NULL || prec == NULL) {
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
@@ -90,9 +91,11 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, int *chemin, int
 	if(prec[u] != -1 || u == source) {
 		while(prec[u] != -1) {
 			//on ajoute le numero courant
-			chemin[k] = prec[u];
+			//chemin[k] = prec[u];
+			maillon = creerMaillon(prec[u]);
+			ajout_lch(chemin, maillon);
 			u = prec[u];
-			++k;
+			//++k;
 		}
 	}
 
