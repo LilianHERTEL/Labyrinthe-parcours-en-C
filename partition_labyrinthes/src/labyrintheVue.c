@@ -83,8 +83,6 @@ int main(int argc, char const *argv[])
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
     drawLab(renderer, grille, n, m, tile, positionLab, texture);
 
-    dest.w = 50;
-    dest.h = 50;
     drawperso(renderer, perso, dest);
 
     SDL_RenderPresent(renderer);
@@ -108,8 +106,8 @@ void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
 
 void dimensionPerso(SDL_Rect * dest, SDL_Rect tile)
 {
-    dest->w = tile.w * 0.9;
-    dest->h = tile.h * 0.9;
+    dest->w = tile.w * 0.5;
+    dest->h = tile.h * 0.5;
 }
 
 void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
