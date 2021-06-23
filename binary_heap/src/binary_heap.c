@@ -53,6 +53,79 @@ void printHeap(binary_heap_t heap)
 }
 
 /**
+ * @brief Retourne la valeur minimum du tas
+ * 
+ * @param heap Le tas
+ * @return int La valeur minimum
+ */
+int heap_minimum(binary_heap_t heap)
+{
+    return heap.array[1];
+}
+
+/**
+ * @brief Extrait le plus petit element du tas
+ * 
+ * @param heap Le tas
+ * @return int La valeur de l'element si tas non vide, M_INFINI sinon
+ */
+int heapExtractMin(binary_heap_t *heap)
+{
+    int min; 
+
+    if(heap->heapSize < 1)
+    {
+        fprintf(stderr, "heap underflow");
+        min = M_INFINI;
+    }
+    else
+    {
+        min = heap->array[1];
+        heap->array[1] = heap->array[heap->heapSize];
+        heap->heapSize = heap->heapSize - 1;
+        minHeapify(heap, 1);
+    }
+    return min;
+}
+
+/**
+ * @brief Ajoute un element de valeur key dans le tas et le fait remonter a la bonne place
+ * 
+ * @param heap Le tas
+ * @param i Indice du nouvel element
+ * @param key La valeur de l'element
+ */
+void heapDecreaseKey(binary_heap_t *heap, int i, int key)
+{
+    if(key > heap->array[i])
+    {
+        fprintf(stderr, "new key is greater than current key");
+    }
+    else
+    {
+        heap->array[i] = key;
+        while(i > 1 && heap->array[getParent(i)] > heap->array[i])
+        {
+            permute(heap->array, i, getParent(i));
+            i = getParent(i);
+        }
+    }
+}
+
+/**
+ * @brief Insere un element dans le tas 
+ * 
+ * @param heap Le tas
+ * @param key La valeur de l'element
+ */
+void minHeapInsert(binary_heap_t * heap, int key)
+{
+    heap->heapSize = heap->heapSize + 1;
+    heap->array[heap->heapSize] = M_INFINI;
+    heapDecreaseKey(heap, heap->heapSize, key);
+}
+
+/**
  * @brief Permet de deplacer une valeur a la bonne place dans le tas
  * 
  * @param heap Le tas binaire

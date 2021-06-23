@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "bool.h"
 
+#define M_INFINI -1
+
 typedef struct binary_heap 
 {
     int   length;
@@ -39,6 +41,39 @@ int getRightChild(int index);
  * @param heap Le tas binaire
  */
 void printHeap(binary_heap_t heap);
+
+/**
+ * @brief Retourne la valeur minimum du tas
+ * 
+ * @param heap Le tas
+ * @return int La valeur minimum
+ */
+int heap_minimum(binary_heap_t heap);
+
+/**
+ * @brief Extrait le plus petit element du tas
+ * 
+ * @param heap Le tas
+ * @return int La valeur de l'element si tas non vide, M_INFINI sinon
+ */
+int heapExtractMin(binary_heap_t *heap);
+
+/**
+ * @brief Ajoute un element de valeur key dans le tas et le fait remonter a la bonne place
+ * 
+ * @param heap Le tas
+ * @param i Indice du nouvel element
+ * @param key La valeur de l'element
+ */
+void heapDecreaseKey(binary_heap_t *heap, int i, int key);
+
+/**
+ * @brief Insere un element dans le tas 
+ * 
+ * @param heap Le tas
+ * @param key La valeur de l'element
+ */
+void minHeapInsert(binary_heap_t * heap, int key);
 
 /**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array
