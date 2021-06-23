@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "binary_heap.h"
 #include "grapheListeAretes.h"
 #include "bool.h"
