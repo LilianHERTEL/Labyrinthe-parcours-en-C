@@ -67,7 +67,7 @@ void minHeapify(binary_heap_t *heap, int val)
     left = getLeftChild(val);
     right = getRightChild(val);
 
-    if (left <= heap->heapSize && heap->array[left] < heap->array[val])
+    if (left <= heap->heapSize && heap->array[left].dist < heap->array[val].dist)
     {
         min = left;
     }
@@ -75,7 +75,7 @@ void minHeapify(binary_heap_t *heap, int val)
     {
         min = val;
     }
-    if (right <= heap->heapSize && heap->array[right] < heap->array[min])
+    if (right <= heap->heapSize && heap->array[right].dist < heap->array[min].dist)
     {
         min = right;
     }
