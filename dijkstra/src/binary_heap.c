@@ -121,7 +121,7 @@ void heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
 void minHeapInsert(binary_heap_t * heap, node_t key)
 {
     heap->heapSize = heap->heapSize + 1;
-    heap->array[heap->heapSize].num = -1;
+    heap->array[heap->heapSize] = key;
     heapDecreaseKey(heap, heap->heapSize, key);
 }
 
