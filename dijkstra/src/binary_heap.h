@@ -52,7 +52,7 @@ void printHeap(binary_heap_t heap);
  * @param i Indice du premier element
  * @param j Indice du deuxieme element
  */
-void permute(int array[], int i, int j);
+void permute(node_t array[], int i, int j);
 
 /**
  * @brief Permet de deplacer une valeur a la bonne place dans le tas

@@ -1,11 +1,11 @@
 #include "dijkstra.h"
 
-bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
+bool_t dijkstra(couples_graphe_t graphe, int source, int cible, int *chemin, int n) {
 	binary_heap_t tas;
-	bool found = false;
-	noeud_t cour, voisin, *prec;
+	bool_t found = false;
+	node_t cour;
 	float newdist;
-	int k = 0, u;
+	int k = 0, u, voisin, *prec;
 
 	//initialisation
 	tas.array = malloc(sizeof(int) * n);
@@ -33,14 +33,16 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 	*/
 
 	//on insert d'abord la source
-	tas.array[source] = 0;
-	minHeapInsert(tas, graphe.aretes[i].noeudFin);
+	cour.num = source;
+	cour.dist = 0;
+	minHeapInsert(tas, cour);
 
 	//boucle principale tant qu'on a pas trouve et que le tas n'est pas vide
 	while(found == false && tas.heapSize != 0) {
 		
 		//on prend le premier de la file d'attente
-        	cour = heap_minimum(tas);
+        	cour.num = heap_minimum(tas);
+			cour.dist = tas.array[cour.num].dist;
 
 		//tant qu'on n'a pas atteint la cible
 		if(cour.num != cible) {
@@ -55,7 +57,7 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 					if(getFromHeap(graphe.aretes[i].noeudFin, &voisin)) {
 					
 						//on calcule la distance de la source au voisin en passant par le noeud courant
-						newdist = (graphe.aretes[cour.num].poids + graphe.aretes[tas.array[voisin]].poids / 2.0) + cour.dist;
+						newdist = (graphe.aretes[cour.num].poids + graphe.aretes[tas.array[voisin].num].poids / 2.0) + cour.dist;
 
 						//si elle est plus courte que la distance precedente, alors on la remplace
 						if(tas.array[voisin].dist > newdist) {

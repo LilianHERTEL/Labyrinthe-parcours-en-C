@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "bool.h"
+#include "matrice.h"
 
 typedef struct
 {
@@ -27,5 +28,8 @@ bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin);
 void supprimerGraphe(couples_graphe_t graphe);
 
 void printAretes(couples_graphe_t graph);
-void permute(arete_t *aretes, int i, int j);
+void exchange(arete_t *aretes, int i, int j);
 void fisherYate(couples_graphe_t *graph);
+
+void genererGrapheLabyrinthe(couples_graphe_t *graphe, int size);
+int **arbreCouvrantToMatrice(arete_t *arbre, int nbAretes, int taille);

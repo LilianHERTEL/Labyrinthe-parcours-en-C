@@ -5,4 +5,4 @@
 #include "partition.h"
 #include "grapheListeAretes.h"
 
-arete_t * grapheLaby(couples_graphe_t graph, int * tailleListe, float densite);
+arete_t *kruskal_non_arbo(couples_graphe_t graph, int *tailleListe, float densite);

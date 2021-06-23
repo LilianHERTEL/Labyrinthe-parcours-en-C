@@ -2,7 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "binary_heap_t"
+#include "binary_heap.h"
+#include "grapheListeAretes.h"
 #include "bool.h"
 
-bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n);
+bool_t dijkstra(couples_graphe_t graphe, int source, int cible, int *chemin, int n);

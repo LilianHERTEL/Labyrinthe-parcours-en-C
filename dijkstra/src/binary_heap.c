@@ -109,9 +109,9 @@ void buildMinHeap(binary_heap_t *heap)
  * @param i Indice du premier element
  * @param j Indice du deuxieme element
  */
-void permute(int array[], int i, int j)
+void permute(node_t array[], int i, int j)
 {
-    int tmp = array[i];
+    node_t tmp = array[i];
     array[i] = array[j];
     array[j] = tmp;
 }
