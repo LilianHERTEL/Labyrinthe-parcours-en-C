@@ -89,7 +89,7 @@ int main(int argc, char const *argv[])
 
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(120000);
+    SDL_Delay(2000);
 
     quitSDL(true, "SDL END", window, renderer);
 
@@ -127,7 +127,7 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         wallEO = {0},                   // Est et Ouest destination
         wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
         wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
-        groundSource = {0, 384, 96, 96};
+        groundSource = {96, 126, 64, 64};
     int i = 0,
         j = 0;
 
