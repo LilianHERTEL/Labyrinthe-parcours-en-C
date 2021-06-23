@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdio.h>
-#include "kruskal.h"
 #include <stdlib.h>
 #include "grapheListeAretes.h"
 #include "partition.h"

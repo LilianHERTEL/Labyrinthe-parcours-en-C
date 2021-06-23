@@ -2,7 +2,7 @@ FIC = $(shell ls *.c)
 EXEC = ../bin/
 BIN = labyrinthe
 DEBUG = -DDEBUG 
-LFLAGS = -lSDL2 `pkg-config libgvc --cflags` -g -O2 -lcgraph -lgvc
+LFLAGS = -lSDL2 -lSDL2_image `pkg-config libgvc --cflags` -g -O2 -lcgraph -lgvc
 OPTIONS = -Wall -Wextra -g 
 CC = gcc 
 OBJ = $(FIC:.c=.o) 
