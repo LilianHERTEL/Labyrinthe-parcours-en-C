@@ -106,19 +106,25 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
 
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
 
-    a = window_dimensions.h * 0.9;
-    b = window_dimensions.w * 0.9;
+    wallSource.x = 128;
+    wallSource.y = 128;
+
+    groundSource.h = 128;
+    groundSource.w = 128;
+
+    a = window_dimensions.h ;
+    b = window_dimensions.w ;
     positionLab.h = positionLab.w = a <= b ? a : b;
-    positionLab.x = (window_dimensions.w - positionLab.w ) /2;
-    positionLab.y = (window_dimensions.h - positionLab.h ) /2;
-
-    SDL_SetRenderDrawColor(renderer, 220, 60, 20, 255);
-	SDL_RenderFillRect(renderer, &positionLab);
-
 
     a = positionLab.w / m;
     b = positionLab.h / n;
     tile.w = tile.h = a <= b ? a : b;
+
+    positionLab.x = (window_dimensions.w - tile.w * m ) /2;
+    positionLab.y = (window_dimensions.h - tile.h * n ) /2;
+
+    //SDL_SetRenderDrawColor(renderer, 220, 60, 20, 255);
+	//SDL_RenderFillRect(renderer, &positionLab);
 
     for(i = 0; i < n; i++) {
 		tile.y = positionLab.y + tile.h * i;
@@ -127,7 +133,9 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
             SDL_RenderCopy(renderer, groundTexture, &groundSource, &tile);
             if(grille[i][j] & NORD)
             {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                wallSource.h = 128 / 2;
+                wallSource.w = 128;
+                
                 wall.x = tile.x - (tile.w * 0.1)/2;
                 wall.y = tile.y - (tile.h * 0.1)/2;
                 wall.w = tile.w + (tile.w * 0.1);
@@ -137,7 +145,9 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
             }
             if(grille[i][j] & SUD)
             {
-                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                wallSource.h = 128 / 2;
+                wallSource.w = 128;
+                
                 wall.x = tile.x - (tile.w * 0.1)/2;
                 wall.y = tile.y + tile.h - (tile.h * 0.1)/2;
                 wall.w = tile.w + (tile.h * 0.1);
@@ -147,7 +157,9 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
             }
             if(grille[i][j] & EST)
             {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                wallSource.h = 128;
+                wallSource.w = 128 / 2;
+                
                 wall.x = tile.x + tile.w - (tile.w * 0.1)/2;
                 wall.y = tile.y - (tile.h * 0.1)/2;
                 wall.w = tile.w * 0.1;
@@ -157,7 +169,9 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
             }
             if(grille[i][j] & OUEST)
             {
-                SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                wallSource.h = 128;
+                wallSource.w = 128 / 2;
+
                 wall.x = tile.x - (tile.w * 0.1)/2;
                 wall.y = tile.y - (tile.h * 0.1)/2;
                 wall.w = tile.w * 0.1;
