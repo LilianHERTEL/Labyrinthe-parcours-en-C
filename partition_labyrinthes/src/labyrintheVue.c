@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
     (void)argc;
     (void)argv;
 
-    /*****INITIALISATION*****/
+    // // INITIALISATION
     if (!initializeSDL())
     {
         quitSDL(false, "Error : SDL initialization", window, renderer);
@@ -53,8 +53,7 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    /*****TRAITEMENT*****/
-
+    // // TRAITEMENT
     int i, j;
     int n = 3, m = 4;
     int tab[3][4] = {{1, 2, 8, 9},
@@ -84,6 +83,7 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
 
 /**
  * @brief Dessine le labyrinthe a l'ecran
