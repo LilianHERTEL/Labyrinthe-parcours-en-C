@@ -12,6 +12,8 @@ int main(int argc, char const *argv[])
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     SDL_DisplayMode screen;
+    SDL_Texture * wallTexture,
+                * groundTexture;
 
     (void)argc;
     (void)argv;
@@ -45,6 +47,18 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
+    wallTexture = loadTextureFromImage("../images/textures.png", renderer);
+    if(wallTexture == NULL) {
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
+    groundTexture = loadTextureFromImage("../images/textures2.png", renderer);
+    if(groundTexture == NULL) {
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
                 /*****TRAITEMENT*****/
 
     int i, j;
@@ -67,7 +81,7 @@ int main(int argc, char const *argv[])
     }
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(window, renderer, grille, n, m);
+    drawLab(window, renderer, grille, n, m, wallTexture, groundTexture);
     SDL_RenderPresent(renderer);
 
     SDL_Delay(2000);
@@ -77,12 +91,14 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m)
+void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m, SDL_Texture * wallTexture, SDL_Texture * groundTexture)
 {
     SDL_Rect positionLab = {0},
              window_dimensions = {0}, 
              tile = {0},
-             wall = {0};
+             wall = {0},
+             wallSource = {0},
+             groundSource = {0};
     int      a,
              b,
              i = 0,
@@ -108,7 +124,7 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
 		tile.y = positionLab.y + tile.h * i;
 		for(j = 0; j < m; j++) {
 			tile.x = positionLab.x + tile.w * j;
-
+            SDL_RenderCopy(renderer, groundTexture, &groundSource, &tile);
             if(grille[i][j] & NORD)
             {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -117,6 +133,7 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
                 wall.w = tile.w + (tile.w * 0.1);
                 wall.h = tile.h * 0.1;
                 SDL_RenderFillRect(renderer, &wall);
+                SDL_RenderCopy(renderer, wallTexture, &wallSource, &wall);
             }
             if(grille[i][j] & SUD)
             {
@@ -126,6 +143,7 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
                 wall.w = tile.w + (tile.h * 0.1);
                 wall.h = tile.h * 0.1;
                 SDL_RenderFillRect(renderer, &wall);
+                SDL_RenderCopy(renderer, wallTexture, &wallSource, &wall);
             }
             if(grille[i][j] & EST)
             {
@@ -135,6 +153,7 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
                 wall.w = tile.w * 0.1;
                 wall.h = tile.h + (tile.h * 0.1);
                 SDL_RenderFillRect(renderer, &wall);
+                SDL_RenderCopy(renderer, wallTexture, &wallSource, &wall);
             }
             if(grille[i][j] & OUEST)
             {
@@ -144,6 +163,7 @@ void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n,
                 wall.w = tile.w * 0.1;
                 wall.h = tile.h + (tile.h * 0.1);
                 SDL_RenderFillRect(renderer, &wall);
+                SDL_RenderCopy(renderer, wallTexture, &wallSource, &wall);
             }
             
 		}
