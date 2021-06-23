@@ -205,7 +205,7 @@ bool_t isInHeap(binary_heap_t heap, int key, int* pos) {
     {
         curr++;
     }
-    if (heap.array[curr].num == key)
+    if (curr < heap.heapSize)
     {
         trouve = true;
         *pos = curr;
