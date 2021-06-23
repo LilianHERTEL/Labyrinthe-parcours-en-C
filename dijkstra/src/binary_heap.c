@@ -99,7 +99,7 @@ void heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
 {
     if(key.dist > heap->array[i].dist)
     {
-        fprintf(stderr, "new key is greater than current key");
+        fprintf(stderr, "new key is greater than current key\n");
     }
     else
     {

@@ -42,7 +42,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	while(found == false && tas.heapSize != 0) {
 		
 		//on prend le premier de la file d'attente
-        cour = heap_minimum(tas);
+        cour = heapExtractMin(&tas);
 
 		//tant qu'on n'a pas atteint la cible
 		if(cour.num != cible) {

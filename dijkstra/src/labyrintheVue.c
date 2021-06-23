@@ -70,6 +70,8 @@ int main(int argc, char const *argv[])
     couples_graphe_t graph;
     arete_t* labyrintheCouvrant;
     int** grille;
+    liste_t chemin;
+    maillon_t *cour;
 
     m=n;
     genererGrapheLabyrinthe(&graph, n);
@@ -91,6 +93,14 @@ int main(int argc, char const *argv[])
     drawOtherTile(renderer, fin, n, m, tile, positionLab, texture);
 
     drawperso(renderer, perso, dest);
+
+    if(dijkstra(graph, deb, fin, &chemin, n * m)) {
+        cour = chemin;
+        while(cour != NULL) {
+            drawOtherTile(renderer, cour->v, n, m, tile, positionLab, texture);
+        }
+        libererListe(chemin);
+    }
 
     SDL_RenderPresent(renderer);
 
