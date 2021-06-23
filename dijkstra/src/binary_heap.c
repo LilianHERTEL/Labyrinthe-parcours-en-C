@@ -47,7 +47,7 @@ void printHeap(binary_heap_t heap)
     printf("heap size = %d\n", heap.length);
     for (i = 1; i <= heap.length; i++)
     {
-        printf("%d ", heap.array[i]);
+        printf("numero : %d distance : %f\n", heap.array[i].num, heap.array[i].dist);
     }
     printf("\n");
 }
