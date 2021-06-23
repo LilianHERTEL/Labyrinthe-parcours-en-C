@@ -101,6 +101,9 @@ int main(int argc, char const *argv[])
         }
         libererListe(chemin);
     }
+    else {
+        fprintf(stderr, "erreur dijkstra\n");
+    }
 
     SDL_RenderPresent(renderer);
 
