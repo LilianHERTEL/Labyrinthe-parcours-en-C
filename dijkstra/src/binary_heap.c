@@ -47,9 +47,82 @@ void printHeap(binary_heap_t heap)
     printf("heap size = %d\n", heap.length);
     for (i = 1; i <= heap.length; i++)
     {
-        printf("numero : %d distance : %f\n", heap.array[i].num, heap.array[i].dist);
+        printf("%d ", heap.array[i].num);
     }
     printf("\n");
+}
+
+/**
+ * @brief Retourne la valeur minimum du tas
+ * 
+ * @param heap Le tas
+ * @return node_t La valeur minimum
+ */
+node_t heap_minimum(binary_heap_t heap)
+{
+    return heap.array[1];
+}
+
+/**
+ * @brief Extrait le plus petit element du tas
+ * 
+ * @param heap Le tas
+ * @return node_t La valeur de l'element si tas non vide, M_INFINI sinon
+ */
+node_t heapExtractMin(binary_heap_t *heap)
+{
+    node_t min; 
+
+    if(heap->heapSize < 1)
+    {
+        fprintf(stderr, "heap underflow");
+        min.num = -1;
+    }
+    else
+    {
+        min = heap->array[1];
+        heap->array[1] = heap->array[heap->heapSize];
+        heap->heapSize = heap->heapSize - 1;
+        minHeapify(heap, 1);
+    }
+    return min;
+}
+
+/**
+ * @brief Ajoute un element de valeur key dans le tas et le fait remonter a la bonne place
+ * 
+ * @param heap Le tas
+ * @param i Indice du nouvel element
+ * @param key La valeur de l'element
+ */
+void heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
+{
+    if(key.dist > heap->array[i].dist)
+    {
+        fprintf(stderr, "new key is greater than current key");
+    }
+    else
+    {
+        heap->array[i] = key;
+        while(i > 1 && heap->array[getParent(i)].dist > heap->array[i].dist)
+        {
+            permute(heap->array, i, getParent(i));
+            i = getParent(i);
+        }
+    }
+}
+
+/**
+ * @brief Insere un element dans le tas 
+ * 
+ * @param heap Le tas
+ * @param key La valeur de l'element
+ */
+void minHeapInsert(binary_heap_t * heap, node_t key)
+{
+    heap->heapSize = heap->heapSize + 1;
+    heap->array[heap->heapSize].num = -1;
+    heapDecreaseKey(heap, heap->heapSize, key);
 }
 
 /**
@@ -114,6 +187,30 @@ void permute(node_t array[], int i, int j)
     node_t tmp = array[i];
     array[i] = array[j];
     array[j] = tmp;
+}
+
+/**
+ * @brief Cherche si une valeur est présente dans le tas
+ * 
+ * @param heap le tas binaire
+ * @param key la valeur cherchée
+ * @param pos la position de l'élément trouvé (-1 si non trouvé)
+ * @return bool_t 
+ */
+bool_t isInHeap(binary_heap_t heap, int key, int* pos) {
+    int curr = 1;
+    bool_t trouve = false;
+    *pos = -1;
+    while (curr < heap.heapSize && heap.array[curr].num != key)
+    {
+        curr++;
+    }
+    if (heap.array[curr].num == key)
+    {
+        trouve = true;
+        *pos = curr;
+    }
+    return trouve;
 }
 
 /**

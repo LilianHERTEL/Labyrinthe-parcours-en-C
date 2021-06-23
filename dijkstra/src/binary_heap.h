@@ -2,10 +2,14 @@
 #include <stdio.h>
 #include "bool.h"
 
-typedef struct {
-	int num;
-	float dist;
+#define M_INFINI -1
+
+typedef struct
+{
+    float dist;
+    int num;
 } node_t;
+
 
 typedef struct binary_heap 
 {
@@ -46,6 +50,39 @@ int getRightChild(int index);
 void printHeap(binary_heap_t heap);
 
 /**
+ * @brief Retourne la valeur minimum du tas
+ * 
+ * @param heap Le tas
+ * @return node_t La valeur minimum
+ */
+node_t heap_minimum(binary_heap_t heap);
+
+/**
+ * @brief Extrait le plus petit element du tas
+ * 
+ * @param heap Le tas
+ * @return node_t La valeur de l'element si tas non vide, M_INFINI sinon
+ */
+node_t heapExtractMin(binary_heap_t *heap);
+
+/**
+ * @brief Ajoute un element de valeur key dans le tas et le fait remonter a la bonne place
+ * 
+ * @param heap Le tas
+ * @param i Indice du nouvel element
+ * @param key La valeur de l'element
+ */
+void heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
+
+/**
+ * @brief Insere un element dans le tas 
+ * 
+ * @param heap Le tas
+ * @param key La valeur de l'element
+ */
+void minHeapInsert(binary_heap_t * heap, node_t key);
+
+/**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array
  * 
  * @param array Tableau de valeurs
@@ -68,6 +105,16 @@ void minHeapify(binary_heap_t * heap, int val);
  * @param heap Tas binaire quelconque
  */
 void buildMinHeap(binary_heap_t * heap);
+
+/**
+ * @brief Cherche si une valeur est présente dans le tas
+ * 
+ * @param heap le tas binaire
+ * @param key la valeur cherchée
+ * @param pos la position de l'élément trouvé (-1 si non trouvé)
+ * @return bool_t 
+ */
+bool_t isInHeap(binary_heap_t heap, int key, int* pos);
 
 /**
  * @brief Tri par tas du tableau
