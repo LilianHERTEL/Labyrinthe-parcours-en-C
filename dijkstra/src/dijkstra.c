@@ -3,32 +3,38 @@
 bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 	binary_heap_t tas;
 	bool found = false;
-	int *prec, cour;
+	int *dist, *liste, *prec;
+	noeud_t cour, voisin;
 
 	tas.array = malloc(sizeof(int) * n);
-	if(tas.array == NULL) {
+	//liste = malloc(sizeof(int) * n);
+	//prec = malloc(sizeof(int) * n);
+	//dist = malloc(sizeof(int) * n);
+	if(liste == NULL || prec == NULL || dist == NULL) {
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
 	tas.length = n;
-	heapSize = n;
+	tas.heapSize = n;
+	
 	for(i = 0; i < n; ++i) {
-		tas.array[i] = INT_MAX;
+		tas.array[i].num = i;
+		tas.array[i].dist = INT_MAX;
+		//dist[graphe[] = INT_MAX;
+		//prec[i] = -1;
 	}
 	tas.array[source] = 0;
-	while(found == false) {
-        	cour = min();
-		if(cour != cible) {
-			for() {//for each neighbor v of u
-				alt = dist[u] + length(u, v)
-				if(alt < dist[v]) {
-					dist[v] = alt;
-					prev[v] = u;
-			                if(trouve[node] == false) {
-						Q.decrease_priority(v, alt)
-					}
-					else {
-						add;
+	while(found == false && tas.heapSize != 0) {
+        	cour = heap_minimum(tas);
+		if(cour.num != cible) {
+			for(i = 0; i < n; ++i) {//for each neighbor v of u
+				if(graphe.aretes[i].noeudDeb == cour.num) {
+					if(getFromHeap(graphe.aretes[i].noeudFin, &voisin)) {
+						newdist = (graphe.aretes[cour.num].poids + graphe.aretes[tas.array[voisin]].poids / 2.0) + cour.dist;
+						if(tas.array[voisin].dist > newdist) {
+							//prev[v] = u;
+							tas.array[voisin].dist = newdist;
+						}
 					}
 				}
 			}
@@ -38,5 +44,7 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 			//nettoyer
 		}
 	}
-	return dist, prev;
+
+	free(tas.array);
+	return found;
 }
