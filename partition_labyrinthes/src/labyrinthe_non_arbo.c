@@ -7,7 +7,6 @@ arete_t * grapheLaby(couples_graphe_t graph, int * tailleListe, float densite) {
                     elem2;
     int             i,
                     j = 0;
-    float 	    alpha = 0;
 
     srand(time(0));
     listeAretes = (arete_t *)malloc(sizeof(arete_t) * graph.nbAretes);
