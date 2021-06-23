@@ -13,7 +13,8 @@ arete_t * arbreCouvrantPoidsMin(couples_graphe_t graph, int * tailleListe)
     listeAretes = (arete_t *)malloc(sizeof(arete_t) * graph.nbAretes);
     if(listeAretes)
     {
-        ordonnerAretesCroissant(&graph);
+        //ordonnerAretesCroissant(&graph);
+        fisherYate(&graph);
         partition = creer(graph.nbNoeuds);
 
         for(i = 0; i < graph.nbAretes; i++)
