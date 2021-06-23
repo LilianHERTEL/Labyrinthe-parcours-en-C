@@ -20,9 +20,14 @@ arete_t * grapheLaby(couples_graphe_t graph, int * tailleListe, float densite) {
         {
             elem1 = graph.aretes[i].noeudDeb;
             elem2 = graph.aretes[i].noeudFin;
-            if(classeMere(elem1, partition) != classeMere(elem2, partition) || (float) rand() / (float) RAND_MAX > densite)
+            if(classeMere(elem1, partition) != classeMere(elem2, partition))
             {   
-                fusion(partition, elem1, elem2);
+                partition = fusion(partition, elem1, elem2);
+                listeAretes[j] = graph.aretes[i];
+                j++;
+            }
+            else if ((float) rand() / (float) RAND_MAX > densite)
+            {
                 listeAretes[j] = graph.aretes[i];
                 j++;
             }

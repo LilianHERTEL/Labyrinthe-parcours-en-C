@@ -66,7 +66,7 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect dest = {0};
-    int n = 20, tailleLabyrintheCouvrant, m;
+    int n = 25, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     arete_t* labyrintheCouvrant;
     int** grille;
@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
     m=n;
     genererGrapheLabyrinthe(&graph, n);
     //labyrintheCouvrant = arbreCouvrantPoidsMin(graph, &tailleLabyrintheCouvrant);
-    labyrintheCouvrant = grapheLaby(graph, &tailleLabyrintheCouvrant, 0.7);
+    labyrintheCouvrant = grapheLaby(graph, &tailleLabyrintheCouvrant, 0.9);
     grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
     //drawCouplesGraph(graph, "labyrinthe_arbo", labyrintheCouvrant, tailleLabyrintheCouvrant);
 
