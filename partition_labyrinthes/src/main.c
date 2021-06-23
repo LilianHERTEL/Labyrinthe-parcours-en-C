@@ -5,6 +5,8 @@
 #include "kruskal.h"
 #include "matrice.h"
 
+
+/*
 int main(void)
 {
     int n = 10, tailleLabyrintheCouvrant;
@@ -19,4 +21,4 @@ int main(void)
     drawCouplesGraph(graph, "labyrinthe_arbo", labyrintheCouvrant, tailleLabyrintheCouvrant);
 
     return 0;
-}
+}*/
