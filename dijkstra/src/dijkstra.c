@@ -5,16 +5,24 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 	bool found = false;
 	noeud_t cour, voisin, *prec;
 	float newdist;
+	int k = 0, u;
 
+	//initialisation
 	tas.array = malloc(sizeof(int) * n);
-	prec = malloc(sizeof(noeud_t) * n);
-	if(prec == NULL || tas.array == NULL) {
+	prec = malloc(sizeof(int) * n);
+	chemin = malloc(sizeof(int) * n);
+	if(chemin == NULL || tas.array == NULL || prec == NULL) {
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
+	memset(prec, -1, sizeof(int) * n);
+
 	tas.length = n;
 	tas.heapSize = n;
-	
+
+	/*
+	 * inutile si on insert au fur et a mesure
+	 *
 	//initialisation du tas
 	for(i = 0; i < n; ++i) {
 		tas.array[i].num = i;
@@ -22,7 +30,11 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 		//dist[graphe[] = INT_MAX;
 		//prec[i] = -1;
 	}
+	*/
+
+	//on insert d'abord la source
 	tas.array[source] = 0;
+	minHeapInsert(tas, graphe.aretes[i].noeudFin);
 
 	//boucle principale tant qu'on a pas trouve et que le tas n'est pas vide
 	while(found == false && tas.heapSize != 0) {
@@ -37,35 +49,51 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 			for(i = 0; i < n; ++i) {
 				if(graphe.aretes[i].noeudDeb == cour.num) {
 					/*
-					 * vu qu'on a mis tous les voisins au debut, pas besoin de verifier
-					 *
+					 * si on met tous les voisins au debut, pas besoin de verifier
+					 */
 					//si le voisin est dans le tas
 					if(getFromHeap(graphe.aretes[i].noeudFin, &voisin)) {
-					*/
+					
 						//on calcule la distance de la source au voisin en passant par le noeud courant
 						newdist = (graphe.aretes[cour.num].poids + graphe.aretes[tas.array[voisin]].poids / 2.0) + cour.dist;
 
 						//si elle est plus courte que la distance precedente, alors on la remplace
 						if(tas.array[voisin].dist > newdist) {
-							//prev[v] = u;
+
+							//on definit le noeud courant en tant que precedent du voisin
+							prec[tas.array[voisin].num] = cour.num;
+
+							//on met a jour sa distance
 							tas.array[voisin].dist = newdist;
 						}
-					/*
 					}
-					
+
+					//si le voisin n'est pas dans le tas
 					else {
 						//ajouter le voisin au tas
+						minHeapInsert(tas, graphe.aretes[i].noeudFin);
 					}
-					*/
 				}
 			}
 		}
 		else {
+			//cible trouvee
 			found == true;
-			//nettoyer
 		}
 	}
 
+	//on remonte le tableau des precedents en partant de la cible
+	u = cible;
+	if(prec[u] != -1 || u == source) {
+		while(prec[u] != -1) {
+			//on ajoute le numero courant
+			chemin[k] = prec[u];
+			u = prec[u];
+			++k;
+		}
+	}
+
+	free(prec);
 	free(tas.array);
 	return found;
 }
