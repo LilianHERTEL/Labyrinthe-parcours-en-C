@@ -190,6 +190,30 @@ void permute(int array[], int i, int j)
 }
 
 /**
+ * @brief Cherche si une valeur est présente dans le tas
+ * 
+ * @param heap le tas binaire
+ * @param key la valeur cherchée
+ * @param pos la position de l'élément trouvé (-1 si non trouvé)
+ * @return bool_t 
+ */
+bool_t isInHeap(binary_heap_t heap, int key, int* pos) {
+    int curr = 1;
+    bool_t trouve = false;
+    *pos = -1;
+    while (curr < heap.heapSize && heap.array[curr] != key)
+    {
+        curr++;
+    }
+    if (heap.array[curr] == key)
+    {
+        trouve = true;
+        *pos = curr;
+    }
+    return trouve;
+}
+
+/**
  * @brief Tri par tas du tableau
  * 
  * @param heap Le tas binaire à trier

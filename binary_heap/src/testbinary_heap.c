@@ -63,6 +63,18 @@ void testBuildMinHeap()
         puts("Le tas devrait etre un tas minimum");
         buildMinHeap(&heap);
 
+        bool_t ok = isInHeap(heap, 4);
+        if (ok)
+        {
+            printf("TROUVE!\n");
+        }
+        else
+        {
+            printf("NON!\n");
+        }
+        
+        
+
         i = 1;
         while(i<= heap.length && code == 0)         //On teste le tas pour savoir si il est minimum
         {

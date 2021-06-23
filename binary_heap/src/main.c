@@ -7,7 +7,7 @@ int main()
     //test_MinHeapify();
     testBuildMinHeap();
 
-    comparison(100000);
+    //comparison(100000);
 
     return 0;
 }

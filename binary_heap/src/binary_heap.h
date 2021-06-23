@@ -100,6 +100,16 @@ void minHeapify(binary_heap_t * heap, int val);
 void buildMinHeap(binary_heap_t * heap);
 
 /**
+ * @brief Cherche si une valeur est présente dans le tas
+ * 
+ * @param heap le tas binaire
+ * @param key la valeur cherchée
+ * @param pos la position de l'élément trouvé (-1 si non trouvé)
+ * @return bool_t 
+ */
+bool_t isInHeap(binary_heap_t heap, int key, int* pos);
+
+/**
  * @brief Tri par tas du tableau
  * 
  * @param heap Le tas binaire à trier
