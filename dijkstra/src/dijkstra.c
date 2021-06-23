@@ -5,6 +5,7 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 	bool found = false;
 	int *dist, *liste, *prec;
 	noeud_t cour, voisin;
+	float newdist;
 
 	tas.array = malloc(sizeof(int) * n);
 	//liste = malloc(sizeof(int) * n);
@@ -17,25 +18,48 @@ bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 	tas.length = n;
 	tas.heapSize = n;
 	
+	//initialisation du tas
 	for(i = 0; i < n; ++i) {
 		tas.array[i].num = i;
-		tas.array[i].dist = INT_MAX;
+		tas.array[i].dist = FLT_MAX;
 		//dist[graphe[] = INT_MAX;
 		//prec[i] = -1;
 	}
 	tas.array[source] = 0;
+
+	//boucle principale tant qu'on a pas trouve et que le tas n'est pas vide
 	while(found == false && tas.heapSize != 0) {
+		
+		//on prend le premier de la file d'attente
         	cour = heap_minimum(tas);
+
+		//tant qu'on n'a pas atteint la cible
 		if(cour.num != cible) {
-			for(i = 0; i < n; ++i) {//for each neighbor v of u
+
+			//pour tous les voisins du noeud courant
+			for(i = 0; i < n; ++i) {
 				if(graphe.aretes[i].noeudDeb == cour.num) {
+					/*
+					 * vu qu'on a mis tous les voisins au debut, pas besoin de verifier
+					 *
+					//si le voisin est dans le tas
 					if(getFromHeap(graphe.aretes[i].noeudFin, &voisin)) {
+					*/
+						//on calcule la distance de la source au voisin en passant par le noeud courant
 						newdist = (graphe.aretes[cour.num].poids + graphe.aretes[tas.array[voisin]].poids / 2.0) + cour.dist;
+
+						//si elle est plus courte que la distance precedente, alors on la remplace
 						if(tas.array[voisin].dist > newdist) {
 							//prev[v] = u;
 							tas.array[voisin].dist = newdist;
 						}
+					/*
 					}
+					
+					else {
+						//ajouter le voisin au tas
+					}
+					*/
 				}
 			}
 		}
