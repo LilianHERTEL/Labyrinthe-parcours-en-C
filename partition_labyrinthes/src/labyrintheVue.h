@@ -5,6 +5,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "mySDL.h"
+#include "grapheListeAretes.h"
+#include "labyrinthe_arbo.h"
+#include "kruskal.h"
+#include "graphviz.h"
+#include "matrice.h"
 
 // Type direction (pour savoir quels murs placer)
 typedef enum

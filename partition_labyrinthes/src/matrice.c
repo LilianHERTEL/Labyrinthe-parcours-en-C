@@ -44,6 +44,7 @@ int ** allocGrid(int n, int m)
             grid = NULL;
         }
     } 
+    setToZero(grid, n, m);
     return grid;
 }
 
@@ -66,5 +67,18 @@ void displayGrid(int ** grid, int n, int m)
             printf("%d ", grid[i][j]);
         }
         printf("\n");
+    }
+}
+
+void setToZero(int ** grid, int n, int m) {
+    int i,
+        j;
+    
+    for(i=0; i<n; i++)
+    {
+        for(j=0; j<m; j++)
+        {
+            grid[i][j] = 15;
+        }
     }
 }

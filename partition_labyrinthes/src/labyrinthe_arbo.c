@@ -78,14 +78,13 @@ int** arbreCouvrantToMatrice(arete_t* arbre, int nbAretes, int taille) {
             c = deb - l*taille;
 
             if (fin == deb+1) {
-                matrice[l][c] += 4;
+                matrice[l][c] -= 4;
             }
             if (fin == deb + taille)
             {
-                matrice[l][c] += 2;
+                matrice[l][c] -= 2;
             }
         }
     }
-    
     return matrice;
 }

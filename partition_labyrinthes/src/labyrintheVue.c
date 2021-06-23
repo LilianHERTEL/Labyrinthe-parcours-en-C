@@ -54,13 +54,17 @@ int main(int argc, char const *argv[])
     }
 
     // // TRAITEMENT
+    /*
     int i, j;
     int n = 3, m = 4;
     int tab[3][4] = {{1, 2, 8, 9},
                      {8, 4, 1, 2},
-                     {2, 6, 15, 15}};
+                     {2, 6, 15, 15}};*//*
     int **grille;
-
+    couples_graphe_t graph;
+    arete_t* labyrintheCouvrant;
+    int tailleLabyrintheCouvrant = 3;*/
+    /*
     grille = (int **)malloc(sizeof(int *) * n);
     for (i = 0; i < n; i++)
         grille[i] = (int *)malloc(sizeof(int) * m);
@@ -72,12 +76,23 @@ int main(int argc, char const *argv[])
             grille[i][j] = tab[i][j];
         }
     }
+    */
+    
+    int n = 10, tailleLabyrintheCouvrant;
+    couples_graphe_t graph;
+    arete_t* labyrintheCouvrant;
+    int** grille;
+    genererGrapheLabyrinthe(&graph, n);
+    labyrintheCouvrant = arbreCouvrantPoidsMin(graph, &tailleLabyrintheCouvrant);
+    grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
+    displayGrid(grille, n, n);
+    drawCouplesGraph(graph, "labyrinthe_arbo", labyrintheCouvrant, tailleLabyrintheCouvrant);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(window, renderer, grille, n, m, texture);
+    drawLab(window, renderer, grille, n, n, texture);
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(2000);
+    SDL_Delay(120000);
 
     quitSDL(true, "SDL END", window, renderer);
 

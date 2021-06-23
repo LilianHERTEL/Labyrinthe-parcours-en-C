@@ -29,3 +29,12 @@ int ** allocGrid(int n, int m);
  * @param m nombre de colonnes
  */
 void displayGrid(int ** grid, int n, int m);
+
+/**
+ * @brief Initialize tous les éléments de la matrice à 0
+ * 
+ * @param grid matrice d'entiers
+ * @param n nombre de lignes
+ * @param m nombre de colonnes
+ */
+void setToZero(int ** grid, int n, int m);

@@ -5,7 +5,6 @@
 #include "kruskal.h"
 #include "matrice.h"
 
-
 /*
 int main(void)
 {
