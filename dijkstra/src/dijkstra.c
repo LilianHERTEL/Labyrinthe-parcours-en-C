@@ -3,15 +3,12 @@
 bool dijkstra(graphe_t graphe, int source, int cible, int *chemin, int n) {
 	binary_heap_t tas;
 	bool found = false;
-	int *dist, *liste, *prec;
-	noeud_t cour, voisin;
+	noeud_t cour, voisin, *prec;
 	float newdist;
 
 	tas.array = malloc(sizeof(int) * n);
-	//liste = malloc(sizeof(int) * n);
-	//prec = malloc(sizeof(int) * n);
-	//dist = malloc(sizeof(int) * n);
-	if(liste == NULL || prec == NULL || dist == NULL) {
+	prec = malloc(sizeof(noeud_t) * n);
+	if(prec == NULL || tas.array == NULL) {
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
