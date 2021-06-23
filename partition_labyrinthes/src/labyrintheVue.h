@@ -14,4 +14,4 @@ typedef enum
     OUEST = 8
 }directions;
 
-void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m, SDL_Texture * wallTexture, SDL_Texture * groundTexture);
+void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m, SDL_Texture * texture);
