@@ -64,25 +64,17 @@ int main(int argc, char const *argv[])
     }
 
     // // TRAITEMENT
-    int i, j;
-    int n = 3, m = 4;
-    int tab[3][4] = {{1, 2, 8, 9},
-                     {8, 4, 1, 2},
-                     {2, 6, 15, 15}};
-    int **grille;
 
-    grille = (int **)malloc(sizeof(int *) * n);
-    for (i = 0; i < n; i++)
-        grille[i] = (int *)malloc(sizeof(int) * m);
-
-    for (i = 0; i < n; i++)
-    {
-        for (j = 0; j < m; j++)
-        {
-            grille[i][j] = tab[i][j];
-        }
-    }
     SDL_Rect dest = {0};
+    int n = 5, tailleLabyrintheCouvrant, m;
+    couples_graphe_t graph;
+    arete_t* labyrintheCouvrant;
+    int** grille;
+
+    m=n;
+    genererGrapheLabyrinthe(&graph, n);
+    labyrintheCouvrant = arbreCouvrantPoidsMin(graph, &tailleLabyrintheCouvrant);
+    grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionTile(&tile, positionLab, n, m);
