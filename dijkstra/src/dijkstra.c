@@ -53,7 +53,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, int *chemin, int
 					 * si on met tous les voisins au debut, pas besoin de verifier
 					 */
 					//si le voisin est dans le tas
-					if(getFromHeap(graphe.aretes[i].noeudFin, &voisin)) {
+					if(isInHeap(tas, graphe.aretes[i].noeudFin, &voisin)) {
 					
 						//on calcule la distance de la source au voisin en passant par le noeud courant
 						newdist = graphe.aretes[i].poids + cour.dist;
@@ -81,7 +81,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, int *chemin, int
 		}
 		else {
 			//cible trouvee
-			found == true;
+			found = true;
 		}
 	}
 
