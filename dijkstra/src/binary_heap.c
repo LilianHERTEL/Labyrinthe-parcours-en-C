@@ -198,7 +198,7 @@ void permute(node_t array[], int i, int j)
  * @return bool_t 
  */
 bool_t isInHeap(binary_heap_t heap, int key, int* pos) {
-    int curr = 1;
+    int curr = 0;
     bool_t trouve = false;
     *pos = -1;
     while (curr < heap.heapSize && heap.array[curr].num != key)
