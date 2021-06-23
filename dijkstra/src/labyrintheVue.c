@@ -66,7 +66,7 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect dest = {0};
-    int n = 25, tailleLabyrintheCouvrant, m;
+    int n = 15, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     arete_t* labyrintheCouvrant;
     int** grille;
