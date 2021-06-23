@@ -2,11 +2,16 @@
 #include <stdio.h>
 #include "bool.h"
 
+typedef struct {
+	int num;
+	float dist;
+} node_t;
+
 typedef struct binary_heap 
 {
     int   length;
     int   heapSize;
-    int * array;
+    node_t * array;
 } binary_heap_t;
 
 /**
