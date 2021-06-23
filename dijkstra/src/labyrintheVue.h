@@ -24,3 +24,4 @@ void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest);
 
 void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture);
 
+void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture);

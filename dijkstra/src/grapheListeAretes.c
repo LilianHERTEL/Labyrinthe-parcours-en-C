@@ -172,3 +172,15 @@ int **arbreCouvrantToMatrice(arete_t *arbre, int nbAretes, int taille)
     }
     return matrice;
 }
+
+int randomNoeud(couples_graphe_t graph, int noeudDeb)
+{
+    int random;
+    srand(time(NULL));
+    random = rand() % (graph.nbNoeuds + 1);
+    while(random == noeudDeb)
+    {
+        random = rand() % (graph.nbNoeuds + 1);
+    }
+    return random;
+}
