@@ -6,7 +6,8 @@
  * @param argc 
  * @param argv 
  * @return int
- *//*
+ */
+/*
 int main(int argc, char const *argv[])
 {
     SDL_Window *window = NULL;
@@ -18,7 +19,7 @@ int main(int argc, char const *argv[])
     (void)argc;
     (void)argv;
 
-                /*****INITIALISATION*****//*
+    // // INITIALISATION
     if (!initializeSDL())
     {
         quitSDL(false, "Error : SDL initialization", window, renderer);
@@ -59,8 +60,7 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-                /*****TRAITEMENT*****/
-
+    // // TRAITEMENT
     int i, j;
     int n = 3, m =4;
     int tab[3][4] = {{1, 2, 8, 9},
@@ -89,7 +89,8 @@ int main(int argc, char const *argv[])
     quitSDL(true, "SDL END", window, renderer);
 
     return 0;
-}*/
+}
+*/
 
 void drawLab(SDL_Window * window, SDL_Renderer * renderer, int ** grille, int n, int m, SDL_Texture * wallTexture, SDL_Texture * groundTexture)
 {
