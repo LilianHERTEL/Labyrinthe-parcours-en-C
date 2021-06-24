@@ -66,17 +66,17 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect dest = {0};
-    int n = 35, tailleLabyrintheCouvrant, m;
+    int n = 5, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
-    arete_t* labyrintheCouvrant;
     int** grille;
     liste_t chemin;
     maillon_t *cour;
 
     m=n;
     genererGrapheLabyrinthe(&graph, n);
-    labyrintheCouvrant = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
-    grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
+    graph.aretes = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
+    graph.nbAretes = tailleLabyrintheCouvrant;
+    grille = arbreCouvrantToMatrice(graph.aretes, tailleLabyrintheCouvrant, n);
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionTile(&tile, positionLab, n, m);
@@ -103,11 +103,11 @@ int main(int argc, char const *argv[])
     }
     else {
         fprintf(stderr, "erreur dijkstra\n");
+	printAretes(graph);
     }
 
     SDL_RenderPresent(renderer);
-
-    SDL_Delay(2000);
+    SDL_Delay(5000);
 
     quitSDL(true, "SDL END", window, renderer);
 
