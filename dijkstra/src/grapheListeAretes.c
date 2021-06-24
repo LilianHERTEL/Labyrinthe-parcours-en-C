@@ -184,3 +184,24 @@ int randomNoeud(couples_graphe_t graph, int noeudDeb)
     }
     return random;
 }
+
+int* trouverVoisins(couples_graphe_t graphe, int noeud, int* nbVoisins) {
+    int i;
+    int voisins[4];
+    *nbVoisins = 0;
+    while (i < graphe.nbAretes && *nbVoisins < 4)
+    {
+        if (graphe.aretes[i].noeudDeb == noeud)
+        {
+            voisins[*nbVoisins] = graphe.aretes[i].noeudFin;
+            (*nbVoisins)++;
+        }
+        else if (graphe.aretes[i].noeudFin == noeud)
+        {
+            voisins[*nbVoisins] = graphe.aretes[i].noeudDeb;
+            (*nbVoisins)++;
+        }
+        i++;
+    }
+    return voisins;
+}

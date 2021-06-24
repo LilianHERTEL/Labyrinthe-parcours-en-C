@@ -77,6 +77,8 @@ int main(int argc, char const *argv[])
     genererGrapheLabyrinthe(&graph, n);
     labyrintheCouvrant = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
     grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
+    displayGrid(grille, n, m);
+    
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionTile(&tile, positionLab, n, m);
