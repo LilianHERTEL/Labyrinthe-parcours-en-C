@@ -313,6 +313,33 @@ void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_
                         else if(mouse.x >= a_etoile.x && mouse.x <= a_etoile.x + a_etoile.w && mouse.y >= a_etoile.y && mouse.y <= a_etoile.y + a_etoile.h)
                         {
                             paused = SDL_TRUE;
+                            deb = randomNoeud(graph, -1);
+                            fin = randomNoeud(graph, deb);
+                            drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                            drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                            drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                            SDL_RenderPresent(renderer);
+                            if(astar(graph, deb, fin, &chemin, n, m)) 
+                            {
+                                SDL_Delay(1000);
+                                drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                                drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                                drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                                while(chemin != NULL) {
+                                    drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
+                                    chemin = chemin->suiv;
+                                    SDL_RenderPresent(renderer);
+                                    SDL_Delay(200);
+                                }
+                                //SDL_RenderPresent(renderer);
+                                libererListe(chemin);
+                                SDL_RenderClear(renderer);
+                                SDL_Delay(1000);
+                                paused = SDL_FALSE;
+                            }
+                            else {
+                                fprintf(stderr, "erreur dijkstra\n");
+                            }
                         }
                         else if(mouse.x >= profondeur.x && mouse.x <= profondeur.x + profondeur.w && mouse.y >= profondeur.y && mouse.y <= profondeur.y + profondeur.h)
                         {
@@ -322,7 +349,7 @@ void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_
                             drawStone(renderer, deb, n, m, tile, positionLab, texture);
                             SDL_RenderPresent(renderer);
                             SDL_Delay(1000);
-                            parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 50);
+                            parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 150);
                             SDL_RenderClear(renderer);
                             SDL_Delay(1000);
                             paused = SDL_FALSE;
