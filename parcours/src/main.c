@@ -130,7 +130,7 @@ int main(int argc, char const *argv[])
     //SDL_RenderPresent(renderer);
     //SDL_Delay(1000);
 
-    menuLoop(renderer, font, texture, perso);
+    menuLoop(window, renderer, font, texture, perso);
 
     free(graph.aretes);
     for (int i = 0; i < m; ++i)

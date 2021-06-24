@@ -201,16 +201,14 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
     titre.w = positionLab.w * 0.5;
     titre.h = positionLab.h * 0.2;
     titre.x = (positionLab.w - titre.w) / 2; 
-    
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // fond
 
-    SDL_SetRenderDrawColor(renderer, 140, 120, 120, 255);
+    /*SDL_SetRenderDrawColor(renderer, 140, 120, 120, 255);
     SDL_RenderFillRect(renderer, &dijkstra);
     SDL_RenderFillRect(renderer, &a_etoile);
     SDL_RenderFillRect(renderer, &profondeur);
 
     SDL_SetRenderDrawColor(renderer, 185, 25, 10, 255);
-    SDL_RenderFillRect(renderer, &quit);
+    SDL_RenderFillRect(renderer, &quit);*/
 
     drawText("Parcours !", titre, font, renderer);
     drawText("Dijkstra", dijkstra, font, renderer);
@@ -219,7 +217,7 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
     drawText("Quitter", quit, font, renderer);
 }
 
-void menuLoop(SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso)
+void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso)
 {
     SDL_Rect positionLab = {0},
              tile = {0},
@@ -230,6 +228,7 @@ void menuLoop(SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL
              mouse = {0};
     SDL_bool program_on = SDL_TRUE;
 
+    SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionButtons(&dijkstra, &a_etoile, &profondeur, &quit, positionLab);
 
     while(program_on)
@@ -268,13 +267,29 @@ void menuLoop(SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL
                     
                     if (SDL_BUTTON(SDL_BUTTON_LEFT) ) 
                     {                       
+                        if(mouse.x >= dijkstra.x && mouse.x <= dijkstra.x + dijkstra.w && mouse.y >= dijkstra.y && mouse.y <= dijkstra.y + dijkstra.h)
+                        {
 
+                        }
+                        else if(mouse.x >= a_etoile.x && mouse.x <= a_etoile.x + a_etoile.w && mouse.y >= a_etoile.y && mouse.y <= a_etoile.y + a_etoile.h)
+                        {
+
+                        }
+                        else if(mouse.x >= profondeur.x && mouse.x <= profondeur.x + profondeur.w && mouse.y >= profondeur.y && mouse.y <= profondeur.y + profondeur.h)
+                        {
+
+                        }
+                        else if(mouse.x >= quit.x && mouse.x <= quit.x + quit.w && mouse.y >= quit.y && mouse.y <= quit.y + quit.h)
+                        {
+                            program_on = SDL_FALSE;
+                        }
                     } 
                     break;
                 default:                                            
                     break;
             }
         } 
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
         drawMenu(renderer, font, positionLab, dijkstra, a_etoile, profondeur, quit);
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);

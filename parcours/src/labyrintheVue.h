@@ -35,4 +35,4 @@ void dimensionButtons(SDL_Rect *dijkstra, SDL_Rect *a_etoile, SDL_Rect *profonde
 
 void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_Rect dijkstra, SDL_Rect a_etoile, SDL_Rect profondeur, SDL_Rect quit);
 
-void menuLoop(SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso);
+void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso);
