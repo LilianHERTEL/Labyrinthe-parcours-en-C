@@ -67,7 +67,7 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect destPerso = {0};
-    int n = 8, tailleLabyrintheCouvrant, m;
+    int n = 20, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     int** grille;
     liste_t chemin;
