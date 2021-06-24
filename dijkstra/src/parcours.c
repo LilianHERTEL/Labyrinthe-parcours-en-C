@@ -217,8 +217,7 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 
 	//affichage
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-	drawLab(renderer, grille, n, m, tile, positionLab, texture);
-	drawChemin(renderer, n, m, tile, positionLab, texture, marques, graph.nbNoeuds);
+	drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
 	destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
 	destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
 	drawperso(renderer, perso, destPerso);
@@ -233,8 +232,7 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 		{
 			explorer(graph, voisins[i], marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-			drawLab(renderer, grille, n, m, tile, positionLab, texture);
-			drawChemin(renderer, n, m, tile, positionLab, texture, marques, graph.nbNoeuds);
+			drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
 			destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
 			destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
 			drawperso(renderer, perso, destPerso);

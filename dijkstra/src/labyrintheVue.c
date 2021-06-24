@@ -29,14 +29,16 @@ void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
     SDL_RenderCopy(renderer, perso, &source, &dest);
 }
 
-void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture)
+void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, bool_t *marques)
 {
     SDL_Rect wallNS = {0},              // Nord et Sud destination
         wallEO = {0},                   // Est et Ouest destination
         wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
         wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
-        groundSource = {96, 126, 64, 64};
-    int i = 0,
+        groundSource = {96, 126, 64, 64},
+        rockSource = {35, 0, 35, 30};
+    int pos,
+        i = 0,
         j = 0;
 
     wallEO.w = tile.w * 0.1;
@@ -56,6 +58,15 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         {
             tile.x = positionLab.x + tile.w * j;
             SDL_RenderCopy(renderer, texture, &groundSource, &tile);
+            if(marques)
+            {
+                pos = i*n + j;
+                if(marques[pos])
+                {
+                    SDL_RenderFillRect(renderer, &tile);
+                    SDL_RenderCopy(renderer, texture, &rockSource, &tile);
+                }
+            }
         }
     }
 
@@ -121,17 +132,4 @@ void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Re
 
     SDL_RenderFillRect(renderer, &tile);
     SDL_RenderCopy(renderer, texture, &source, &tile);
-}
-
-void drawChemin(SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture * texture, bool_t * chemin, int tailleChemin)
-{
-    int i;
-
-    for(i = 0; i<tailleChemin; i++)
-    {   
-        if(chemin[i])
-        {
-            drawOtherTile(renderer, i, n, m, tile, positionLab, texture);
-        }
-    }
 }
