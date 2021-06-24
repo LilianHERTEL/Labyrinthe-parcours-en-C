@@ -36,7 +36,7 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
         wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
         groundSource = {96, 126, 64, 64},
-        rockSource = {35, 0, 35, 30};
+        stoneSource = {35, 0, 35, 30};
     int pos,
         i = 0,
         j = 0;
@@ -64,7 +64,7 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
                 if(marques[pos])
                 {
                     SDL_RenderFillRect(renderer, &tile);
-                    SDL_RenderCopy(renderer, texture, &rockSource, &tile);
+                    SDL_RenderCopy(renderer, texture, &stoneSource, &tile);
                 }
             }
         }
@@ -118,13 +118,13 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
     }
 }
 
-void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture * texture)
+void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture * texture)
 {
     int i, j;
     SDL_Rect source = {35, 0, 35, 30};
 
     i = indiceNoeud/n;
-    j = indiceNoeud - i * n;
+    j = indiceNoeud - i * m;
 
     tile.y = positionLab.y + tile.h * i + tile.h * 0.1;
     tile.x = positionLab.x + tile.w * j + tile.w * 0.1;

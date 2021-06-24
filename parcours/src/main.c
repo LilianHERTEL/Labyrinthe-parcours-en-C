@@ -96,7 +96,7 @@ int main(int argc, char const *argv[])
     if(dijkstra(graph, deb, fin, &chemin, n * m)) {
         cour = chemin;
         while(cour != NULL) {
-            drawOtherTile(renderer, cour->v, n, m, tile, positionLab, texture);
+            drawStone(renderer, cour->v, n, m, tile, positionLab, texture);
             cour = cour->suiv;
         }
         libererListe(chemin);
@@ -105,9 +105,9 @@ int main(int argc, char const *argv[])
         fprintf(stderr, "erreur dijkstra\n");
 	    printAretes(graph);
     }
+    SDL_RenderPresent(renderer);
     */
 
-    SDL_RenderPresent(renderer);
     SDL_Delay(2000);
 
     free(graph.aretes);
