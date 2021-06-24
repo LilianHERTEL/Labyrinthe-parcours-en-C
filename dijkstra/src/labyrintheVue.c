@@ -121,3 +121,16 @@ void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Re
     SDL_RenderFillRect(renderer, &tile);
     SDL_RenderCopy(renderer, texture, &source, &tile);
 }
+
+void drawChemin(SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture * texture, bool_t * chemin, int tailleChemin)
+{
+    int i;
+
+    for(i = 0; i<tailleChemin; i++)
+    {   
+        if(chemin[i])
+        {
+            drawOtherTile(renderer, i, n, m, tile, positionLab, texture);
+        }
+    }
+}

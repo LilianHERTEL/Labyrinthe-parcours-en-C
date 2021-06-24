@@ -145,3 +145,47 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	free(tas.array);
 	return found;
 }
+
+void parcoursEnProfondeur(couples_graphe_t graph, int debut)
+{
+	bool_t * marques;
+
+	marques = (bool_t *)malloc(sizeof(bool_t) * graph.nbNoeuds);
+	if(marques)
+	{
+		initialiserMarque(marques, graph.nbNoeuds);
+		explorer(graph, debut, marques);
+	}
+	else
+	{
+		fprintf(stderr, "Erreur malloc\n");
+	}
+}
+
+void initialiserMarque(bool_t * marques, int n)
+{
+	int i;
+
+	for(i = 0; i<n; i++)
+	{
+		marques[i] = false;
+	}
+}
+
+void explorer(couples_graphe_t graph, int s, bool_t * marques)
+{
+	int * voisins,
+		  nbVoisins,
+		  i;
+
+	marques[s] = true;
+	//affichage
+	voisins = NULL;//trouverVoisins(graph, s, &nbVoisins);
+	for(i = 0; i < nbVoisins; i++)
+	{
+		if(!marques[voisins[i]])
+		{
+			explorer(graph, voisins[i], marques);
+		}
+	} 
+}
