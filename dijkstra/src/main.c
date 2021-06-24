@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 /**
  * @brief Programme principal - Affiche un labyrinthe
  * 
@@ -66,17 +67,27 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect dest = {0};
-    int n = 20, tailleLabyrintheCouvrant, m;
+    int n = 5, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
-    arete_t* labyrintheCouvrant;
     int** grille;
     liste_t chemin;
     maillon_t *cour;
 
     m=n;
     genererGrapheLabyrinthe(&graph, n);
-    labyrintheCouvrant = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
-    grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
+    graph.aretes = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
+    graph.nbAretes = tailleLabyrintheCouvrant;
+    grille = arbreCouvrantToMatrice(graph.aretes, tailleLabyrintheCouvrant, n);
+
+    displayGrid(grille, n, m);
+    int nbVois;
+    int* voisins = trouverVoisins(graph, 7, &nbVois);
+    printf("%d voisins\n", nbVois);
+    for (int i = 0; i < nbVois; i++)
+    {
+        printf("VOISIN : %d\n", voisins[i]);
+    }
+    
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionTile(&tile, positionLab, n, m);
@@ -93,7 +104,7 @@ int main(int argc, char const *argv[])
     drawOtherTile(renderer, fin, n, m, tile, positionLab, texture);
 
     drawperso(renderer, perso, dest);
-
+/*
     if(dijkstra(graph, deb, fin, &chemin, n * m)) {
         cour = chemin;
         while(cour != NULL) {
@@ -103,10 +114,10 @@ int main(int argc, char const *argv[])
     }
     else {
         fprintf(stderr, "erreur dijkstra\n");
-    }
+	printAretes(graph);
+    }*/
 
     SDL_RenderPresent(renderer);
-
     SDL_Delay(2000);
 
     quitSDL(true, "SDL END", window, renderer);
