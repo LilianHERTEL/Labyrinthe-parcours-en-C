@@ -186,7 +186,7 @@ int randomNoeud(couples_graphe_t graph, int noeudDeb)
 }
 
 int* trouverVoisins(couples_graphe_t graphe, int noeud, int* nbVoisins) {
-    int i;
+    int i = 0;
     *nbVoisins = 0;
     int* voisins = (int*) malloc(4*sizeof(int));
     if (voisins != NULL)
@@ -198,7 +198,7 @@ int* trouverVoisins(couples_graphe_t graphe, int noeud, int* nbVoisins) {
                 voisins[*nbVoisins] = graphe.aretes[i].noeudFin;
                 (*nbVoisins)++;
             }
-            else if (graphe.aretes[i].noeudFin == noeud)
+            if (graphe.aretes[i].noeudFin == noeud)
             {
                 voisins[*nbVoisins] = graphe.aretes[i].noeudDeb;
                 (*nbVoisins)++;

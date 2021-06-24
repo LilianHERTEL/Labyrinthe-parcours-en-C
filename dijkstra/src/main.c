@@ -79,16 +79,6 @@ int main(int argc, char const *argv[])
     graph.nbAretes = tailleLabyrintheCouvrant;
     grille = arbreCouvrantToMatrice(graph.aretes, tailleLabyrintheCouvrant, n);
 
-    displayGrid(grille, n, m);
-    int nbVois;
-    int* voisins = trouverVoisins(graph, 7, &nbVois);
-    printf("%d voisins\n", nbVois);
-    for (int i = 0; i < nbVois; i++)
-    {
-        printf("VOISIN : %d\n", voisins[i]);
-    }
-    
-
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionTile(&tile, positionLab, n, m);
     dimensionPerso(&dest, tile);
