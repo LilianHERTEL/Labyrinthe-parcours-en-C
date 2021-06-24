@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 /**
  * @brief Programme principal - Affiche un labyrinthe
  * 
@@ -15,8 +14,7 @@ int main(int argc, char const *argv[])
     SDL_DisplayMode screen;
     SDL_Texture *texture,
         *perso;
-    SDL_Rect positionLab = {0},
-             tile = {0};
+    TTF_Font *font;
 
     (void)argc;
     (void)argv;
@@ -50,6 +48,19 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
+    if (TTF_Init() != 0)
+    {
+        quitSDL(false, "ERROR TTF INIT", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
+    font = TTF_OpenFont("../fonts/font.ttf", 500);
+    if (font == NULL)
+    {
+        quitSDL(false, " error font\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
     texture = loadTextureFromImage("../images/texture.png", renderer);
     if (texture == NULL)
     {
@@ -69,63 +80,19 @@ int main(int argc, char const *argv[])
     SDL_Rect destPerso = {0};
     int n = 10, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
-    int** grille;
-    liste_t chemin;
-    maillon_t *cour;
+    int **grille;
 
-    m=n;
+    m = n;
     genererGrapheLabyrinthe(&graph, n);
     graph.aretes = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
     graph.nbAretes = tailleLabyrintheCouvrant;
     grille = arbreCouvrantToMatrice(graph.aretes, tailleLabyrintheCouvrant, n);
 
-    SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
-    dimensionTile(&tile, positionLab, n, m);
-    dimensionsLab(&positionLab, tile, n, m);
-    dimensionPerso(&destPerso, tile);
-
-    int deb, fin;
-    deb = randomNoeud(graph, -1);
-    fin = randomNoeud(graph, deb);
-
-    //parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
-
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-    /*
-    if(dijkstra(graph, deb, fin, &chemin, n * m)) {
-        cour = chemin;
-        while(cour != NULL) {
-            drawOtherTile(renderer, cour->v, n, m, tile, positionLab, texture);
-            cour = cour->suiv;
-        }
-        libererListe(chemin);
-    }
-    else {
-        fprintf(stderr, "erreur dijkstra\n");
-	    printAretes(graph);
-    }
-    */
-    if(astar(graph, deb, fin, &chemin, n, m)) {
-        cour = chemin;
-        while(cour != NULL) {
-            drawOtherTile(renderer, cour->v, n, m, tile, positionLab, texture);
-            cour = cour->suiv;
-        }
-        libererListe(chemin);
-    }
-    else {
-        fprintf(stderr, "erreur dijkstra\n");
-	    printAretes(graph);
-    }
-    
-
-
-    SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
+    menuLoop(window, renderer, font, texture, perso, graph, n, m, grille);
 
     free(graph.aretes);
-    for(int i = 0; i < m; ++i) {
+    for (int i = 0; i < m; ++i)
+    {
         free(grille[i]);
     }
     free(grille);

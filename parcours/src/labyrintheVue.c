@@ -1,6 +1,6 @@
 #include "labyrintheVue.h"
 
-void dimensionsLab(SDL_Rect * positionLab, SDL_Rect tile, int n, int m)
+void dimensionsLab(SDL_Rect *positionLab, SDL_Rect tile, int n, int m)
 {
     positionLab->x = (positionLab->w - tile.w * m) / 2;
     positionLab->y = (positionLab->h - tile.h * n) / 2;
@@ -16,7 +16,7 @@ void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
     tile->w = tile->h = a <= b ? a : b;
 }
 
-void dimensionPerso(SDL_Rect * dest, SDL_Rect tile)
+void dimensionPerso(SDL_Rect *dest, SDL_Rect tile)
 {
     dest->w = tile.w * 0.8;
     dest->h = tile.h * 0.8;
@@ -36,7 +36,7 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
         wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
         groundSource = {96, 126, 64, 64},
-        rockSource = {35, 0, 35, 30};
+             stoneSource = {35, 0, 35, 30};
     int pos,
         i = 0,
         j = 0;
@@ -58,13 +58,13 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         {
             tile.x = positionLab.x + tile.w * j;
             SDL_RenderCopy(renderer, texture, &groundSource, &tile);
-            if(marques)
+            if (marques)
             {
-                pos = i*n + j;
-                if(marques[pos])
+                pos = i * n + j;
+                if (marques[pos])
                 {
                     SDL_RenderFillRect(renderer, &tile);
-                    SDL_RenderCopy(renderer, texture, &rockSource, &tile);
+                    SDL_RenderCopy(renderer, texture, &stoneSource, &tile);
                 }
             }
         }
@@ -118,13 +118,13 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
     }
 }
 
-void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture * texture)
+void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture)
 {
     int i, j;
     SDL_Rect source = {35, 0, 35, 30};
 
-    i = indiceNoeud/n;
-    j = indiceNoeud - i * n;
+    i = indiceNoeud / n;
+    j = indiceNoeud - i * m;
 
     tile.y = positionLab.y + tile.h * i + tile.h * 0.1;
     tile.x = positionLab.x + tile.w * j + tile.w * 0.1;
@@ -133,3 +133,295 @@ void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Re
     SDL_RenderFillRect(renderer, &tile);
     SDL_RenderCopy(renderer, texture, &source, &tile);
 }
+
+void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
+{
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+    drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
+    if (perso)
+    {
+        drawperso(renderer, perso, destPerso);
+    }
+}
+
+bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer)
+{
+    SDL_Color color = {0};
+    SDL_Rect source = {0};
+    SDL_Texture *texture;
+    SDL_Surface *surface;
+
+    color.a = 255;
+
+    surface = TTF_RenderText_Solid(font, text, color);
+    if (surface == NULL)
+    {
+        fputs("erreur ouverture de la police\n", stderr);
+        return false;
+    }
+
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture == NULL)
+    {
+        fputs("erreur transformation de la surface de la police en texture\n", stderr);
+        SDL_FreeSurface(surface);
+        return false;
+    }
+    SDL_FreeSurface(surface);
+    SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
+    SDL_RenderCopy(renderer, texture, &source, &dest);
+    SDL_DestroyTexture(texture);
+    return true;
+}
+
+void dimensionButtons(SDL_Rect *dijkstra, SDL_Rect *a_etoile, SDL_Rect *profondeur, SDL_Rect *quit, SDL_Rect positionLab)
+{
+    dijkstra->w = positionLab.w * 0.3;
+    dijkstra->h = positionLab.h * 0.1;
+    dijkstra->x = (positionLab.w - dijkstra->w) / 2; 
+    dijkstra->y = positionLab.h * 0.2 + dijkstra->h / 2;
+    a_etoile->w = positionLab.w * 0.1;
+    a_etoile->h = positionLab.h * 0.1;
+    a_etoile->x = (positionLab.w - a_etoile->w) / 2; 
+    a_etoile->y = dijkstra->y + dijkstra->h + a_etoile->h / 2;
+    profondeur->w = positionLab.w * 0.3;
+    profondeur->h = positionLab.h * 0.1;
+    profondeur->x = (positionLab.w - profondeur->w) / 2; 
+    profondeur->y = a_etoile->y + a_etoile->h + profondeur->h / 2;
+    quit->w = positionLab.w * 0.3;
+    quit->h = positionLab.h * 0.1;
+    quit->x = (positionLab.w - quit->w) / 2; 
+    quit->y = positionLab.h - quit->h * 1.5;
+}
+
+void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_Rect dijkstra, SDL_Rect a_etoile, SDL_Rect profondeur, SDL_Rect quit)
+{
+    SDL_Rect titre = {0};
+
+    titre.w = positionLab.w * 0.5;
+    titre.h = positionLab.h * 0.2;
+    titre.x = (positionLab.w - titre.w) / 2; 
+
+    SDL_SetRenderDrawColor(renderer, 140, 120, 120, 255);
+    SDL_RenderFillRect(renderer, &dijkstra);
+    SDL_RenderFillRect(renderer, &a_etoile);
+    SDL_RenderFillRect(renderer, &profondeur);
+
+    SDL_SetRenderDrawColor(renderer, 185, 25, 10, 255);
+    SDL_RenderFillRect(renderer, &quit);
+
+    drawText("Parcours !", titre, font, renderer);
+    drawText("Dijkstra", dijkstra, font, renderer);
+    drawText("A*", a_etoile, font, renderer);
+    drawText("Profondeur", profondeur, font, renderer);
+    drawText("Quitter", quit, font, renderer);
+}
+
+void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso, couples_graphe_t graph, int n, int m, int **grille)
+{
+    SDL_Rect positionLab = {0},
+             tile = {0},
+             destPerso = {0},
+             dijkstraR = {0},
+             a_etoile = {0},
+             profondeur = {0},
+             quit = {0},
+             mouse = {0};
+    SDL_bool program_on = SDL_TRUE,
+             paused = SDL_FALSE;
+    int      deb,
+             fin;
+    liste_t  chemin;
+
+    SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
+    dimensionTile(&tile, positionLab, n, m);
+    dimensionsLab(&positionLab, tile, n, m);
+    dimensionPerso(&destPerso, tile);
+    dimensionButtons(&dijkstraR, &a_etoile, &profondeur, &quit, positionLab);
+
+    while(program_on)
+    {
+        SDL_Event event;                // Evènement à traiter
+
+        while (program_on && SDL_PollEvent(&event)) 
+        {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
+                                        // terminé le programme Défiler l'élément en tête de file dans 'event'
+            switch (event.type) 
+            {
+                case SDL_WINDOWEVENT:
+                    if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+                    {
+                        // Calcul des dimensions quand la fenetre change de taille
+                        SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
+                        dimensionTile(&tile, positionLab, n, m);
+                        dimensionsLab(&positionLab, tile, n, m);
+                        dimensionPerso(&destPerso, tile);
+                        dimensionButtons(&dijkstraR, &a_etoile, &profondeur, &quit, positionLab);
+                    }
+                    break;
+                case SDL_QUIT:                         
+                    program_on = SDL_FALSE;                   
+                    break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) 
+                    {         
+                        case SDLK_ESCAPE:                           // 'ESCAPE'  
+                        case SDLK_q:                                // 'q'
+                            program_on = SDL_FALSE;
+                            break;
+                        default:                      
+                            break;
+                    }
+                    break;
+                case SDL_MOUSEBUTTONDOWN:     
+                    SDL_GetMouseState(&mouse.x, &mouse.y);
+                    //Calcul des coordonnees par rapport a l'emplacement du labyrinthe
+                    
+                    if (SDL_BUTTON(SDL_BUTTON_LEFT) ) 
+                    {                       
+                        if(mouse.x >= dijkstraR.x && mouse.x <= dijkstraR.x + dijkstraR.w && mouse.y >= dijkstraR.y && mouse.y <= dijkstraR.y + dijkstraR.h)
+                        {
+                            paused = SDL_TRUE;
+                            deb = randomNoeud(graph, -1);
+                            fin = randomNoeud(graph, deb);
+                            drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                            drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                            drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                            SDL_RenderPresent(renderer);
+                            if(dijkstra(graph, deb, fin, &chemin, n * m)) 
+                            {
+                                SDL_Delay(1000);
+                                drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                                drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                                drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                                while(chemin != NULL) {
+                                    drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
+                                    chemin = chemin->suiv;
+                                    SDL_RenderPresent(renderer);
+                                    SDL_Delay(200);
+                                }
+                                //SDL_RenderPresent(renderer);
+                                libererListe(chemin);
+                                SDL_RenderClear(renderer);
+                                SDL_Delay(1000);
+                                paused = SDL_FALSE;
+                            }
+                            else {
+                                fprintf(stderr, "erreur dijkstra\n");
+                            }
+                        }
+                        else if(mouse.x >= a_etoile.x && mouse.x <= a_etoile.x + a_etoile.w && mouse.y >= a_etoile.y && mouse.y <= a_etoile.y + a_etoile.h)
+                        {
+                            paused = SDL_TRUE;
+                        }
+                        else if(mouse.x >= profondeur.x && mouse.x <= profondeur.x + profondeur.w && mouse.y >= profondeur.y && mouse.y <= profondeur.y + profondeur.h)
+                        {
+                            paused = SDL_TRUE;
+                            deb = randomNoeud(graph, -1);
+                            drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                            drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                            SDL_RenderPresent(renderer);
+                            SDL_Delay(1000);
+                            parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 50);
+                            SDL_RenderClear(renderer);
+                            SDL_Delay(1000);
+                            paused = SDL_FALSE;
+                        }
+                        else if(mouse.x >= quit.x && mouse.x <= quit.x + quit.w && mouse.y >= quit.y && mouse.y <= quit.y + quit.h)
+                        {
+                            program_on = SDL_FALSE;
+                        }
+                    } 
+                    break;
+                default:                                            
+                    break;
+            }
+        } 
+        if(! paused)
+        {
+            drawMenu(renderer, font, positionLab, dijkstraR, a_etoile, profondeur, quit);
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+            SDL_RenderPresent(renderer);
+            SDL_RenderClear(renderer);
+        }
+        SDL_Delay(50);
+    }
+}
+
+/*void gameloop()
+{
+    SDL_bool  program_on = SDL_TRUE,                          // Booleen pour dire que le programme doit continuer
+              paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
+    
+
+    // Initialisation des coordonnees
+
+    while (program_on) 
+    {                                   // La boucle des évènements
+        SDL_Event event;                // Evènement à traiter
+
+        while (program_on && SDL_PollEvent(&event)) 
+        {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
+                                        // terminé le programme Défiler l'élément en tête de file dans 'event'
+            switch (event.type) 
+            {
+                case SDL_WINDOWEVENT:
+                    if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+                    {
+                        // Calcul des dimensions quand la fenetre change de taille
+                        
+                    }
+                    break;
+                case SDL_QUIT:                         
+                    program_on = 0;                   
+                    break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_LEFT:
+                            paddleSpeed = -2;
+                        	break;
+                        case SDLK_RIGHT:
+                            paddleSpeed = 2;
+                        	break;
+                        case SDLK_SPACE:                            // 'SPC'
+                            paused = !paused;                       // basculement pause/unpause
+                            break;
+                        case SDLK_ESCAPE:                           // 'ESCAPE'  
+                        case SDLK_q:                                // 'q'
+                            program_on = 0;
+                            break;
+                        default:                      
+                            break;
+                    }
+                    break;
+                case SDL_KEYUP:
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_LEFT:         
+                            paddleSpeed = 0;
+                        	break;
+                        case SDLK_RIGHT:
+                            paddleSpeed = 0;
+                        	break;
+                        default :
+                            break;
+                    }
+                default:                                            
+                    break;
+            }
+        } 
+
+        if(gameIsOver)
+        {
+
+        }
+
+        if (!paused) 
+        {      
+                                
+        }
+        SDL_Delay(50);                                  
+    }
+    SDL_DestroyTexture(texture);
+}*/
