@@ -101,36 +101,6 @@ int main(int argc, char const *argv[])
     deb = randomNoeud(graph, -1);
     fin = randomNoeud(graph, deb);
 
-    //drawOtherTile(renderer, deb, n, m, tile, positionLab, texture);
-    //drawOtherTile(renderer, fin, n, m, tile, positionLab, texture);
-
-    //drawperso(renderer, perso, destPerso);
-
-    /*bool_t * marques;
-    int s= deb;
-    marques = (bool_t *)malloc(sizeof(bool_t) * 5);
-    for(int z = 0; z<5; z++)
-    {
-        marques[z] = true;
-    }
-
-    SDL_Delay(500);
-    for(int z = 0; z < 5; z++)
-    {
-        deb = randomNoeud(graph, deb);
-        s = deb;
-        drawLab(renderer, grille, n, m, tile, positionLab, texture);
-        drawChemin(renderer, n, m, tile, positionLab, texture, marques, graph.nbNoeuds);
-        int l = s/n;
-        int c = s - l*n;
-        destPerso.x = positionLab.x + tile.w * c + tile.w * 0.1;
-        destPerso.y = positionLab.y + tile.h * l + tile.h * 0.1;
-        drawperso(renderer, perso, destPerso);
-        SDL_RenderPresent(renderer);
-        SDL_RenderClear(renderer);
-        SDL_Delay(1000);
-    }*/
-
     parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 
 /*
