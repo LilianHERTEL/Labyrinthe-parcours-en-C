@@ -202,7 +202,7 @@ int manhattan(int courx, int coury, int ciblex, int cibley) {
 	return abs(courx - ciblex) + abs(coury - cibley);
 }
 
-bool_t astar(int source, int cible, liste_t *chemin, int n, int m) {
+bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m) {
 	binary_heap_t tas;
 	bool_t found = false, *traite;
 	node_t cour;
@@ -252,16 +252,16 @@ bool_t astar(int source, int cible, liste_t *chemin, int n, int m) {
 			puts("cible non atteinte\n");
 
 			//pour tous les voisins du noeud courant
-			if(cour.num - 1 > -1) {
+			if(cour.num - 1 > -1 && graphe[ cour.num % n][cour.num / n] & OUEST) {
 				checkVoisinAstar(cour.num - 1, cour, prec, traite, &tas, cible, n * m);
 			}
-			if(cour.num - n > -1) {
+			if(cour.num - n > -1 && graphe[ cour.num % n][cour.num / n] & NORD) {
 				checkVoisinAstar(cour.num - n, cour, prec, traite, &tas, cible, n * m);
 			}
-			if(cour.num + 1 < n * m) {
+			if(cour.num + 1 < n * m && graphe[ cour.num % n][cour.num / n] & EST) {
 				checkVoisinAstar(cour.num + 1, cour, prec, traite, &tas, cible, n * m);
 			}
-			if(cour.num + n < n * m) {
+			if(cour.num + n < n * m && graphe[ cour.num % n][cour.num / n] & SUD) {
 				checkVoisinAstar(cour.num + n, cour, prec, traite, &tas, cible, n * m);
 			}
 
