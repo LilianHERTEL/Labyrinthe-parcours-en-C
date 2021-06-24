@@ -90,9 +90,9 @@ int main(int argc, char const *argv[])
 
     parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 
-/*
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
     drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+    /*
     if(dijkstra(graph, deb, fin, &chemin, n * m)) {
         cour = chemin;
         while(cour != NULL) {
@@ -105,8 +105,9 @@ int main(int argc, char const *argv[])
         fprintf(stderr, "erreur dijkstra\n");
 	    printAretes(graph);
     }
+    */
 
-    SDL_RenderPresent(renderer);*/
+    SDL_RenderPresent(renderer);
     SDL_Delay(2000);
 
     free(graph.aretes);
