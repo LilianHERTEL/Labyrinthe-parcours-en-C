@@ -138,6 +138,7 @@ int main(int argc, char const *argv[])
         cour = chemin;
         while(cour != NULL) {
             drawOtherTile(renderer, cour->v, n, m, tile, positionLab, texture);
+            cour = cour->suiv;
         }
         libererListe(chemin);
     }
