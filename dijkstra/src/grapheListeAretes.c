@@ -177,10 +177,10 @@ int randomNoeud(couples_graphe_t graph, int noeudDeb)
 {
     int random;
     srand(time(NULL));
-    random = rand() % (graph.nbNoeuds + 1);
+    random = rand() % (graph.nbNoeuds);
     while(random == noeudDeb)
     {
-        random = rand() % (graph.nbNoeuds + 1);
+        random = rand() % (graph.nbNoeuds);
     }
     return random;
 }
