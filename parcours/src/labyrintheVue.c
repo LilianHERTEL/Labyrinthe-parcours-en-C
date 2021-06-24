@@ -202,13 +202,13 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
     titre.h = positionLab.h * 0.2;
     titre.x = (positionLab.w - titre.w) / 2; 
 
-    /*SDL_SetRenderDrawColor(renderer, 140, 120, 120, 255);
+    SDL_SetRenderDrawColor(renderer, 140, 120, 120, 255);
     SDL_RenderFillRect(renderer, &dijkstra);
     SDL_RenderFillRect(renderer, &a_etoile);
     SDL_RenderFillRect(renderer, &profondeur);
 
     SDL_SetRenderDrawColor(renderer, 185, 25, 10, 255);
-    SDL_RenderFillRect(renderer, &quit);*/
+    SDL_RenderFillRect(renderer, &quit);
 
     drawText("Parcours !", titre, font, renderer);
     drawText("Dijkstra", dijkstra, font, renderer);
@@ -217,19 +217,27 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
     drawText("Quitter", quit, font, renderer);
 }
 
-void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso)
+void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso, couples_graphe_t graph, int n, int m, int **grille)
 {
     SDL_Rect positionLab = {0},
              tile = {0},
-             dijkstra = {0},
+             destPerso = {0},
+             dijkstraR = {0},
              a_etoile = {0},
              profondeur = {0},
              quit = {0},
              mouse = {0};
-    SDL_bool program_on = SDL_TRUE;
+    SDL_bool program_on = SDL_TRUE,
+             paused = SDL_FALSE;
+    int      deb,
+             fin;
+    liste_t  chemin;
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
-    dimensionButtons(&dijkstra, &a_etoile, &profondeur, &quit, positionLab);
+    dimensionTile(&tile, positionLab, n, m);
+    dimensionsLab(&positionLab, tile, n, m);
+    dimensionPerso(&destPerso, tile);
+    dimensionButtons(&dijkstraR, &a_etoile, &profondeur, &quit, positionLab);
 
     while(program_on)
     {
@@ -244,7 +252,11 @@ void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED)
                     {
                         // Calcul des dimensions quand la fenetre change de taille
-                        dimensionButtons(&dijkstra, &a_etoile, &profondeur, &quit, positionLab);
+                        SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
+                        dimensionTile(&tile, positionLab, n, m);
+                        dimensionsLab(&positionLab, tile, n, m);
+                        dimensionPerso(&destPerso, tile);
+                        dimensionButtons(&dijkstraR, &a_etoile, &profondeur, &quit, positionLab);
                     }
                     break;
                 case SDL_QUIT:                         
@@ -252,7 +264,7 @@ void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_
                     break;
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym) 
-                    {             
+                    {         
                         case SDLK_ESCAPE:                           // 'ESCAPE'  
                         case SDLK_q:                                // 'q'
                             program_on = SDL_FALSE;
@@ -267,17 +279,53 @@ void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_
                     
                     if (SDL_BUTTON(SDL_BUTTON_LEFT) ) 
                     {                       
-                        if(mouse.x >= dijkstra.x && mouse.x <= dijkstra.x + dijkstra.w && mouse.y >= dijkstra.y && mouse.y <= dijkstra.y + dijkstra.h)
+                        if(mouse.x >= dijkstraR.x && mouse.x <= dijkstraR.x + dijkstraR.w && mouse.y >= dijkstraR.y && mouse.y <= dijkstraR.y + dijkstraR.h)
                         {
-
+                            paused = SDL_TRUE;
+                            deb = randomNoeud(graph, -1);
+                            fin = randomNoeud(graph, deb);
+                            drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                            drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                            drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                            SDL_RenderPresent(renderer);
+                            if(dijkstra(graph, deb, fin, &chemin, n * m)) 
+                            {
+                                SDL_Delay(1000);
+                                drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                                drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                                drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                                while(chemin != NULL) {
+                                    drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
+                                    chemin = chemin->suiv;
+                                    SDL_RenderPresent(renderer);
+                                    SDL_Delay(200);
+                                }
+                                //SDL_RenderPresent(renderer);
+                                libererListe(chemin);
+                                SDL_RenderClear(renderer);
+                                SDL_Delay(1000);
+                                paused = SDL_FALSE;
+                            }
+                            else {
+                                fprintf(stderr, "erreur dijkstra\n");
+                            }
                         }
                         else if(mouse.x >= a_etoile.x && mouse.x <= a_etoile.x + a_etoile.w && mouse.y >= a_etoile.y && mouse.y <= a_etoile.y + a_etoile.h)
                         {
-
+                            paused = SDL_TRUE;
                         }
                         else if(mouse.x >= profondeur.x && mouse.x <= profondeur.x + profondeur.w && mouse.y >= profondeur.y && mouse.y <= profondeur.y + profondeur.h)
                         {
-
+                            paused = SDL_TRUE;
+                            deb = randomNoeud(graph, -1);
+                            drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                            drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                            SDL_RenderPresent(renderer);
+                            SDL_Delay(1000);
+                            parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 50);
+                            SDL_RenderClear(renderer);
+                            SDL_Delay(1000);
+                            paused = SDL_FALSE;
                         }
                         else if(mouse.x >= quit.x && mouse.x <= quit.x + quit.w && mouse.y >= quit.y && mouse.y <= quit.y + quit.h)
                         {
@@ -289,10 +337,13 @@ void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_
                     break;
             }
         } 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-        drawMenu(renderer, font, positionLab, dijkstra, a_etoile, profondeur, quit);
-        SDL_RenderPresent(renderer);
-        SDL_RenderClear(renderer);
+        if(! paused)
+        {
+            drawMenu(renderer, font, positionLab, dijkstraR, a_etoile, profondeur, quit);
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+            SDL_RenderPresent(renderer);
+            SDL_RenderClear(renderer);
+        }
         SDL_Delay(50);
     }
 }

@@ -6,6 +6,9 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "mySDL.h"
+#include "grapheListeAretes.h"
+#include "parcours.h"
+#include "liste_chainee.h"
 
 typedef enum
 {
@@ -35,4 +38,4 @@ void dimensionButtons(SDL_Rect *dijkstra, SDL_Rect *a_etoile, SDL_Rect *profonde
 
 void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_Rect dijkstra, SDL_Rect a_etoile, SDL_Rect profondeur, SDL_Rect quit);
 
-void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso);
+void menuLoop(SDL_Window * window ,SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso, couples_graphe_t graph, int n, int m, int ** grille);

@@ -14,12 +14,6 @@ int main(int argc, char const *argv[])
     SDL_DisplayMode screen;
     SDL_Texture *texture,
         *perso;
-    SDL_Rect positionLab = {0},
-             tile = {0},
-             dijkstra = {0},
-             a_etoile = {0},
-             profondeur = {0},
-             quit = {0};
     TTF_Font *font;
 
     (void)argc;
@@ -83,12 +77,9 @@ int main(int argc, char const *argv[])
 
     // // TRAITEMENT
 
-    SDL_Rect destPerso = {0};
     int n = 8, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     int **grille;
-    liste_t chemin;
-    maillon_t *cour;
 
     m = n;
     genererGrapheLabyrinthe(&graph, n);
@@ -96,41 +87,7 @@ int main(int argc, char const *argv[])
     graph.nbAretes = tailleLabyrintheCouvrant;
     grille = arbreCouvrantToMatrice(graph.aretes, tailleLabyrintheCouvrant, n);
 
-    SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
-    dimensionTile(&tile, positionLab, n, m);
-    dimensionsLab(&positionLab, tile, n, m);
-    dimensionPerso(&destPerso, tile);
-    dimensionButtons(&dijkstra, &a_etoile, &profondeur, &quit, positionLab);
-    
-    int deb, fin;
-    deb = randomNoeud(graph, -1);
-    fin = randomNoeud(graph, deb);
-
-    parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 50);
-
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-    /*
-    if(dijkstra(graph, deb, fin, &chemin, n * m)) {
-        cour = chemin;
-        while(cour != NULL) {
-            drawStone(renderer, cour->v, n, m, tile, positionLab, texture);
-            cour = cour->suiv;
-        }
-        libererListe(chemin);
-    }
-    else {
-        fprintf(stderr, "erreur dijkstra\n");
-	    printAretes(graph);
-    }
-    SDL_RenderPresent(renderer);
-    */
-    //SDL_RenderClear(renderer);
-    //drawMenu(renderer, font, positionLab, dijkstra, a_etoile, profondeur, quit);
-    //SDL_RenderPresent(renderer);
-    //SDL_Delay(1000);
-
-    menuLoop(window, renderer, font, texture, perso);
+    menuLoop(window, renderer, font, texture, perso, graph, n, m, grille);
 
     free(graph.aretes);
     for (int i = 0; i < m; ++i)
