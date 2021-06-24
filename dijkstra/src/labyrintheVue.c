@@ -1,5 +1,11 @@
 #include "labyrintheVue.h"
 
+void dimensionsLab(SDL_Rect * positionLab, SDL_Rect tile, int n, int m)
+{
+    positionLab->x = (positionLab->w - tile.w * m) / 2;
+    positionLab->y = (positionLab->h - tile.h * n) / 2;
+}
+
 void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
 {
     int a,
@@ -12,27 +18,27 @@ void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
 
 void dimensionPerso(SDL_Rect * dest, SDL_Rect tile)
 {
-    dest->w = tile.w * 0.5;
-    dest->h = tile.h * 0.5;
+    dest->w = tile.w * 0.8;
+    dest->h = tile.h * 0.8;
 }
 
 void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
 {
-    SDL_Rect source = {0};
+    SDL_Rect source = {423, 44, 35, 43};
 
-    source.w = 57;
-    source.h = 43;
     SDL_RenderCopy(renderer, perso, &source, &dest);
 }
 
-void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture)
+void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, bool_t *marques)
 {
     SDL_Rect wallNS = {0},              // Nord et Sud destination
         wallEO = {0},                   // Est et Ouest destination
         wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
         wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
-        groundSource = {96, 126, 64, 64};
-    int i = 0,
+        groundSource = {96, 126, 64, 64},
+        rockSource = {35, 0, 35, 30};
+    int pos,
+        i = 0,
         j = 0;
 
     wallEO.w = tile.w * 0.1;
@@ -52,6 +58,15 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         {
             tile.x = positionLab.x + tile.w * j;
             SDL_RenderCopy(renderer, texture, &groundSource, &tile);
+            if(marques)
+            {
+                pos = i*n + j;
+                if(marques[pos])
+                {
+                    SDL_RenderFillRect(renderer, &tile);
+                    SDL_RenderCopy(renderer, texture, &rockSource, &tile);
+                }
+            }
         }
     }
 
@@ -110,9 +125,6 @@ void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Re
 
     i = indiceNoeud/n;
     j = indiceNoeud - i * n;
-
-    positionLab.x = (positionLab.w - tile.w * m) / 2;
-    positionLab.y = (positionLab.h - tile.h * n) / 2;
 
     tile.y = positionLab.y + tile.h * i + tile.h * 0.1;
     tile.x = positionLab.x + tile.w * j + tile.w * 0.1;

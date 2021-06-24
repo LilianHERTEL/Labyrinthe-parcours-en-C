@@ -1,6 +1,7 @@
 #include "parcours.h"
 
-bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n) {
+bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n)
+{
 	binary_heap_t tas;
 	bool_t found = false, *traite;
 	node_t cour;
@@ -73,13 +74,14 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 			}
 			puts("***");
 		}
-		else {
-            puts("cible trouvee");
+		else
+		{
+			puts("cible trouvee");
 			//cible trouvee
 			found = true;
 			//prec[cible] = cour.num;
 		}
-        puts("\n");
+		puts("\n");
 	}
 
 	//on remonte le tableau des precedents en partant de la cible
@@ -153,14 +155,64 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 	puts("");
 }
 
-void profondeur(arete_t* graphe, int source, int nbNoeuds) {
-	pile_t* pile;
-	pile = initPile(nbNoeuds);
-	int noeudCurr;
-	bool_t trouveVoisin;
+void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
+{
+	bool_t *marques;
 
-	while (!trouveVoisin)
+	marques = (bool_t *)malloc(sizeof(bool_t) * graph.nbNoeuds);
+	if (marques)
 	{
-		
+		initialiserMarque(marques, graph.nbNoeuds);
+		explorer(graph, debut, marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+	}
+	else
+	{
+		fprintf(stderr, "Erreur malloc\n");
+	}
+}
+
+void initialiserMarque(bool_t *marques, int n)
+{
+	int i;
+
+	for (i = 0; i < n; i++)
+	{
+		marques[i] = false;
+	}
+}
+
+void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
+{
+	int *voisins,
+		nbVoisins,
+		i;
+
+	marques[s] = true;
+
+	//affichage
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+	drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
+	destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
+	destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
+	drawperso(renderer, perso, destPerso);
+	SDL_RenderPresent(renderer);
+	SDL_RenderClear(renderer);
+	SDL_Delay(100);
+
+	voisins = trouverVoisins(graph, s, &nbVoisins);
+	for (i = 0; i < nbVoisins; i++)
+	{
+		if (marques[voisins[i]] == false)
+		{
+			explorer(graph, voisins[i], marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+			drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
+			destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
+			destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
+			drawperso(renderer, perso, destPerso);
+			SDL_RenderPresent(renderer);
+			SDL_RenderClear(renderer);
+			SDL_Delay(100);
+		}
 	}
 }
