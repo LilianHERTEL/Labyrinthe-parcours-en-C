@@ -67,7 +67,7 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect dest = {0};
-    int n = 5, tailleLabyrintheCouvrant, m;
+    int n = 35, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     int** grille;
     liste_t chemin;
@@ -99,6 +99,7 @@ int main(int argc, char const *argv[])
         cour = chemin;
         while(cour != NULL) {
             drawOtherTile(renderer, cour->v, n, m, tile, positionLab, texture);
+            cour = cour->suiv;
         }
         libererListe(chemin);
     }
@@ -108,7 +109,7 @@ int main(int argc, char const *argv[])
     }
 
     SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
+    SDL_Delay(10000);
 
     quitSDL(true, "SDL END", window, renderer);
 
