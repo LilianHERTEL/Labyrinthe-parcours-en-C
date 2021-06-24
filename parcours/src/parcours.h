@@ -12,6 +12,12 @@
 
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n);
 
+bool_t astar(int source, int cible, liste_t *chemin, int n, int m);
+
+void checkVoisinAstar(int numvoisin, node_t cour, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n);
+
+int manhattan(int courx, int coury, int ciblex, int cibley);
+
 void checkVoisin(int voisinCourant, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas);
 
 void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso);
