@@ -177,31 +177,38 @@ int randomNoeud(couples_graphe_t graph, int noeudDeb)
 {
     int random;
     srand(time(NULL));
-    random = rand() % (graph.nbNoeuds + 1);
+    random = rand() % (graph.nbNoeuds);
     while(random == noeudDeb)
     {
-        random = rand() % (graph.nbNoeuds + 1);
+        random = rand() % (graph.nbNoeuds);
     }
     return random;
 }
 
 int* trouverVoisins(couples_graphe_t graphe, int noeud, int* nbVoisins) {
     int i;
-    int voisins[4];
     *nbVoisins = 0;
-    while (i < graphe.nbAretes && *nbVoisins < 4)
+    int* voisins = (int*) malloc(4*sizeof(int));
+    if (voisins != NULL)
     {
-        if (graphe.aretes[i].noeudDeb == noeud)
+        while (i < graphe.nbAretes && *nbVoisins < 4)
         {
-            voisins[*nbVoisins] = graphe.aretes[i].noeudFin;
-            (*nbVoisins)++;
+            if (graphe.aretes[i].noeudDeb == noeud)
+            {
+                voisins[*nbVoisins] = graphe.aretes[i].noeudFin;
+                (*nbVoisins)++;
+            }
+            else if (graphe.aretes[i].noeudFin == noeud)
+            {
+                voisins[*nbVoisins] = graphe.aretes[i].noeudDeb;
+                (*nbVoisins)++;
+            }
+            i++;
         }
-        else if (graphe.aretes[i].noeudFin == noeud)
-        {
-            voisins[*nbVoisins] = graphe.aretes[i].noeudDeb;
-            (*nbVoisins)++;
-        }
-        i++;
+    }
+    else
+    {
+        printf("Error: malloc failed\n");
     }
     return voisins;
 }
