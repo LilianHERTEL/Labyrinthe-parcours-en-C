@@ -8,6 +8,8 @@ typedef struct
 {
     float dist;
     int num;
+    float distcible;
+    float distsource;
 } node_t;
 
 
