@@ -5,10 +5,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "mySDL.h"
-#include "grapheListeAretes.h"
-#include "kruskal_non_arbo.h"
-#include "dijkstra.h"
-#include "liste_chainee.h"
 
 typedef enum
 {
