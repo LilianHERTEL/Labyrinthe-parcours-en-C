@@ -60,6 +60,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 			for(i = 0; i < graphe.nbAretes; ++i) {
 				fprintf(stderr, "on check si %d est dans %d -> %d\n", cour.num, graphe.aretes[i].noeudDeb, graphe.aretes[i].noeudFin);
 				if(graphe.aretes[i].noeudDeb == cour.num) {
+					puts("c'est OK");
 					/*
 					* si on met tous les voisins au debut, pas besoin de verifier
 					*/
@@ -93,7 +94,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 				}
 				else {
 					if(graphe.aretes[i].noeudFin == cour.num) {
-						fprintf(stderr, "on check %d <- %d\n", graphe.aretes[i].noeudDeb, graphe.aretes[i].noeudFin);
+						puts("c'est OK");
 						//si le voisin est dans le tas
 						if(isInHeap(tas, graphe.aretes[i].noeudDeb, &voisin)) {
 							puts("voisin dans le tas");
@@ -110,6 +111,15 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 								//on met a jour sa distance
 								tas.array[voisin].dist = newdist;
 							}
+						}
+						else {
+							//si le voisin n'est pas dans le tas
+							puts("voisin pas dans le tas");
+							//ajouter le voisin au tas
+							fprintf(stderr, "on ajoute %d au tas\n", graphe.aretes[i].noeudDeb);
+							noeudVoisin.num = graphe.aretes[i].noeudDeb;
+							noeudVoisin.dist = graphe.aretes[i].poids + cour.dist;
+							minHeapInsert(&tas, noeudVoisin);
 						}
 					}
 				}
