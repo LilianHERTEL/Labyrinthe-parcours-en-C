@@ -11,3 +11,4 @@
 #include "pile.h"
 
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n);
+void checkVoisin(int voisinCourant, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas);
