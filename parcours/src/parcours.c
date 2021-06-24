@@ -14,11 +14,13 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	prec = malloc(sizeof(int) * n);
 	*chemin = initialisation_liste();
 	traite = malloc(sizeof(int) * n);
-	if(tas.array == NULL || prec == NULL) {
+	if (tas.array == NULL || prec == NULL)
+	{
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
-	for(i = 0; i < n; ++i) {
+	for (i = 0; i < n; ++i)
+	{
 		prec[i] = -1;
 		traite[i] = false;
 	}
@@ -43,31 +45,37 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	minHeapInsert(&tas, cour);
 
 	//boucle principale tant qu'on a pas trouve et que le tas n'est pas vide
-	while(found == false && tas.heapSize > 0) {
-		
+	while (found == false && tas.heapSize > 0)
+	{
+
 		//on prend le premier de la file d'attente
-        cour = heapExtractMin(&tas);
-        fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
-        //printHeap(tas);
-        if(cour.num == -1) {
-            puts("erreur");
-            free(prec);
-            free(tas.array);
-            return false;
-        }
+		cour = heapExtractMin(&tas);
+		fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
+		//printHeap(tas);
+		if (cour.num == -1)
+		{
+			puts("erreur");
+			free(prec);
+			free(tas.array);
+			return false;
+		}
 		traite[cour.num] = true;
 		//on n'a pas atteint la cible
-		if(cour.num != cible) {
+		if (cour.num != cible)
+		{
 			puts("cible non atteinte\n");
 
 			//pour tous les voisins du noeud courant
-			for(i = 0; i < graphe.nbAretes; ++i) {
+			for (i = 0; i < graphe.nbAretes; ++i)
+			{
 				//fprintf(stderr, "on check si %d est dans %d -> %d\n", cour.num, graphe.aretes[i].noeudDeb, graphe.aretes[i].noeudFin);
-				if(graphe.aretes[i].noeudDeb == cour.num) {
+				if (graphe.aretes[i].noeudDeb == cour.num)
+				{
 					puts("debut");
 					checkVoisin(graphe.aretes[i].noeudFin, cour, graphe.aretes[i], prec, traite, &tas);
 				}
-				else if(graphe.aretes[i].noeudFin == cour.num) {
+				else if (graphe.aretes[i].noeudFin == cour.num)
+				{
 					puts("fin");
 					checkVoisin(graphe.aretes[i].noeudDeb, cour, graphe.aretes[i], prec, traite, &tas);
 				}
@@ -87,11 +95,14 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	//on remonte le tableau des precedents en partant de la cible
 	u = cible;
 	printf("prec[u] = %d\n", prec[u]);
-	for(i = 0; i < n; ++i) {
+	for (i = 0; i < n; ++i)
+	{
 		printf("prec[%d] = %d\n", i, prec[i]);
 	}
-	if((prec[u] != -1 || u == source)) {
-		while(prec[u] != -1) {
+	if ((prec[u] != -1 || u == source))
+	{
+		while (prec[u] != -1)
+		{
 			//on ajoute le numero courant
 			//chemin[k] = prec[u];
 			printf("u : %d, prec[u] = %d\n", u, prec[u]);
@@ -101,9 +112,10 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 			//++k;
 		}
 	}
-    else {
-        fputs("cible pas trouvee\n", stderr);
-    }
+	else
+	{
+		fputs("cible pas trouvee\n", stderr);
+	}
 
 	free(prec);
 	free(tas.array);
@@ -113,7 +125,8 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 /*
 
 */
-void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas) {
+void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas)
+{
 	int voisin;
 	float newdist;
 	node_t noeudVoisin;
@@ -121,15 +134,17 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 	* si on met tous les voisins au debut, pas besoin de verifier
 	*/
 	//si le voisin est dans le tas
-	if(isInHeap(*tas, debfin, &voisin)) {
+	if (isInHeap(*tas, debfin, &voisin))
+	{
 		puts("voisin dans le tas");
 		printf("voisin %d\n", voisin);
-	
+
 		//on calcule la distance de la source au voisin en passant par le noeud courant
 		newdist = areteVoisin.poids + cour.dist;
 
 		//si elle est plus courte que la distance precedente, alors on la remplace
-		if(tas->array[voisin].dist > newdist) {
+		if (tas->array[voisin].dist > newdist)
+		{
 			puts("changement de voisin");
 			//on definit le noeud courant en tant que precedent du voisin
 			prec[debfin] = cour.num;
@@ -139,11 +154,13 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 		}
 	}
 	//si le voisin n'est pas dans le tas
-	else {
+	else
+	{
 		puts("voisin pas dans le tas");
 		fprintf(stderr, "on ajoute %d au tas\n", debfin);
-		
-		if(traite[debfin] == false) {
+
+		if (traite[debfin] == false)
+		{
 			noeudVoisin.num = debfin;
 			noeudVoisin.dist = areteVoisin.poids + cour.dist;
 			//ajouter le voisin au tas
@@ -190,8 +207,8 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 	marques[s] = true;
 
 	//affichage
-	destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
-	destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
+	destPerso.x = positionLab.x + tile.w * (s - (s / n) * m) + tile.w * 0.1;
+	destPerso.y = positionLab.y + tile.h * (s / n) + tile.h * 0.1;
 	drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 	SDL_RenderPresent(renderer);
 	SDL_RenderClear(renderer);
@@ -203,9 +220,9 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 		if (marques[voisins[i]] == false)
 		{
 			explorer(graph, voisins[i], marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, delai);
-			
-			destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
-			destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
+
+			destPerso.x = positionLab.x + tile.w * (s - (s / n) * m) + tile.w * 0.1;
+			destPerso.y = positionLab.y + tile.h * (s / n) + tile.h * 0.1;
 			drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 			SDL_RenderPresent(renderer);
 			SDL_RenderClear(renderer);

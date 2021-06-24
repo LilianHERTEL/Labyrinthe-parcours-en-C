@@ -12,13 +12,13 @@ typedef enum
     SUD = 2,
     EST = 4,
     OUEST = 8
-}directions;
+} directions;
 
-void dimensionsLab(SDL_Rect * positionLab, SDL_Rect tile, int n, int m);
+void dimensionsLab(SDL_Rect *positionLab, SDL_Rect tile, int n, int m);
 
 void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m);
 
-void dimensionPerso(SDL_Rect * perso, SDL_Rect tile);
+void dimensionPerso(SDL_Rect *perso, SDL_Rect tile);
 
 void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest);
 

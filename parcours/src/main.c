@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 /**
  * @brief Programme principal - Affiche un labyrinthe
  * 
@@ -69,11 +68,11 @@ int main(int argc, char const *argv[])
     SDL_Rect destPerso = {0};
     int n = 8, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
-    int** grille;
+    int **grille;
     liste_t chemin;
     maillon_t *cour;
 
-    m=n;
+    m = n;
     genererGrapheLabyrinthe(&graph, n);
     graph.aretes = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
     graph.nbAretes = tailleLabyrintheCouvrant;
@@ -111,7 +110,8 @@ int main(int argc, char const *argv[])
     SDL_Delay(2000);
 
     free(graph.aretes);
-    for(int i = 0; i < m; ++i) {
+    for (int i = 0; i < m; ++i)
+    {
         free(grille[i]);
     }
     free(grille);

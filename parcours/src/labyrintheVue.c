@@ -1,6 +1,6 @@
 #include "labyrintheVue.h"
 
-void dimensionsLab(SDL_Rect * positionLab, SDL_Rect tile, int n, int m)
+void dimensionsLab(SDL_Rect *positionLab, SDL_Rect tile, int n, int m)
 {
     positionLab->x = (positionLab->w - tile.w * m) / 2;
     positionLab->y = (positionLab->h - tile.h * n) / 2;
@@ -16,7 +16,7 @@ void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
     tile->w = tile->h = a <= b ? a : b;
 }
 
-void dimensionPerso(SDL_Rect * dest, SDL_Rect tile)
+void dimensionPerso(SDL_Rect *dest, SDL_Rect tile)
 {
     dest->w = tile.w * 0.8;
     dest->h = tile.h * 0.8;
@@ -36,7 +36,7 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         wallSourceNS = {0, 64, 64, 12}, // Nord et Sud source
         wallSourceEO = {0, 0, 12, 64},  // Est et Ouest source
         groundSource = {96, 126, 64, 64},
-        stoneSource = {35, 0, 35, 30};
+             stoneSource = {35, 0, 35, 30};
     int pos,
         i = 0,
         j = 0;
@@ -58,10 +58,10 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
         {
             tile.x = positionLab.x + tile.w * j;
             SDL_RenderCopy(renderer, texture, &groundSource, &tile);
-            if(marques)
+            if (marques)
             {
-                pos = i*n + j;
-                if(marques[pos])
+                pos = i * n + j;
+                if (marques[pos])
                 {
                     SDL_RenderFillRect(renderer, &tile);
                     SDL_RenderCopy(renderer, texture, &stoneSource, &tile);
@@ -118,12 +118,12 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
     }
 }
 
-void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture * texture)
+void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture)
 {
     int i, j;
     SDL_Rect source = {35, 0, 35, 30};
 
-    i = indiceNoeud/n;
+    i = indiceNoeud / n;
     j = indiceNoeud - i * m;
 
     tile.y = positionLab.y + tile.h * i + tile.h * 0.1;
@@ -137,6 +137,9 @@ void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect t
 void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
 {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-	drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
-	drawperso(renderer, perso, destPerso);
+    drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
+    if (perso)
+    {
+        drawperso(renderer, perso, destPerso);
+    }
 }
