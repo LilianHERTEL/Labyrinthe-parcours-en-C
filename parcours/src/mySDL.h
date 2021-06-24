@@ -21,7 +21,7 @@ bool_t initializeSDL(void);
  * @param window fenêtre à fermer
  * @param renderer rendu à fermer
  */
-void quitSDL(bool_t status, char const* msg, SDL_Window* window, SDL_Renderer* renderer);
+void quitSDL(bool_t status, char const *msg, SDL_Window *window, SDL_Renderer *renderer);
 
 /**
  * @brief Permet de charger une texture SDL a partir de son chemin et d'un renderer SDL

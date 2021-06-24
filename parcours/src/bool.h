@@ -1,4 +1,12 @@
 #pragma once
 #include <stdio.h>
 
-typedef enum {false, true} bool_t;
+/**
+ * @brief Type booleen
+ * 
+ */
+typedef enum
+{
+    false,
+    true
+} bool_t;

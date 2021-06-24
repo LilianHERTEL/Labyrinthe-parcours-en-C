@@ -1,5 +1,15 @@
 #include "parcours.h"
 
+/**
+ * @brief Applique l'algorithme de dijkstra sur un graphe
+ * 
+ * @param graphe Le graphe 
+ * @param source Le point (noeud) de depart
+ * @param cible Le point (noeud) d'arrivee
+ * @param chemin Le chemin trouve a la fin de dijkstra
+ * @param n La taille totale de la matrice du labyrinthe
+ * @return bool_t True si reussi, false sinon
+ */
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n)
 {
 	binary_heap_t tas;
@@ -14,7 +24,8 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	prec = malloc(sizeof(int) * n);
 	*chemin = initialisation_liste();
 	traite = malloc(sizeof(int) * n);
-	if(tas.array == NULL || prec == NULL || traite == NULL) {
+	if (tas.array == NULL || prec == NULL || traite == NULL)
+	{
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
@@ -48,16 +59,17 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	{
 
 		//on prend le premier de la file d'attente
-        cour = heapExtractMin(&tas);
-        fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
-        //printHeap(tas);
-        if(cour.num == -1) {
-            puts("erreur");
+		cour = heapExtractMin(&tas);
+		fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
+		//printHeap(tas);
+		if (cour.num == -1)
+		{
+			puts("erreur");
 			free(traite);
-            free(prec);
-            free(tas.array);
-            return false;
-        }
+			free(prec);
+			free(tas.array);
+			return false;
+		}
 		traite[cour.num] = true;
 		//on n'a pas atteint la cible
 		if (cour.num != cible)
@@ -122,9 +134,16 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	return found;
 }
 
-/*
-
-*/
+/**
+ * @brief 
+ * 
+ * @param debfin 
+ * @param cour 
+ * @param areteVoisin 
+ * @param prec 
+ * @param traite 
+ * @param tas 
+ */
 void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas)
 {
 	int voisin;
@@ -172,24 +191,39 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 	puts("");
 }
 
-void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n) {
+/**
+ * @brief 
+ * 
+ * @param numvoisin 
+ * @param cour 
+ * @param areteVoisin 
+ * @param prec 
+ * @param traite 
+ * @param tas 
+ * @param cible 
+ * @param n 
+ */
+void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n)
+{
 	int voisinTas;
 	node_t noeudVoisin;
-	
+
 	//on calcule la distance de la source au voisin en passant par le noeud courant
 	noeudVoisin.num = numvoisin;
 	noeudVoisin.distcible = manhattan(numvoisin % n, numvoisin / n, cible % n, cible / n);
 	noeudVoisin.distsource = cour.distsource + areteVoisin.poids;
 	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]) / 2.0);
 	noeudVoisin.dist = noeudVoisin.distcible + noeudVoisin.distsource;
-	
+
 	//si le voisin est dans le tas
-	if(isInHeap(*tas, numvoisin, &voisinTas)) {
+	if (isInHeap(*tas, numvoisin, &voisinTas))
+	{
 		puts("voisin dans le tas");
 		printf("voisin %d\n", voisinTas);
 
 		//si elle est plus courte que la distance precedente, alors on la remplace
-		if(tas->array[voisinTas].dist > noeudVoisin.dist) {
+		if (tas->array[voisinTas].dist > noeudVoisin.dist)
+		{
 			puts("changement de voisin");
 			//on definit le noeud courant en tant que precedent du voisin
 			prec[numvoisin] = cour.num;
@@ -199,11 +233,13 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
 		}
 	}
 	//si le voisin n'est pas dans le tas
-	else {
+	else
+	{
 		puts("voisin pas dans le tas");
 		fprintf(stderr, "on ajoute %d au tas\n", numvoisin);
-		
-		if(traite[numvoisin] == false) {
+
+		if (traite[numvoisin] == false)
+		{
 			//ajouter le voisin au tas
 			minHeapInsert(tas, noeudVoisin);
 			//on definit le noeud courant en tant que precedent du voisin
@@ -213,11 +249,33 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
 	puts("");
 }
 
-int manhattan(int courx, int coury, int ciblex, int cibley) {
+/**
+ * @brief Calcule la distance de manhattan
+ * 
+ * @param courx 
+ * @param coury 
+ * @param ciblex 
+ * @param cibley 
+ * @return int 
+ */
+int manhattan(int courx, int coury, int ciblex, int cibley)
+{
 	return abs(courx - ciblex) + abs(coury - cibley);
 }
 
-bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n, int m) {
+/**
+ * @brief Applique l'algorithme A* sur un graphe
+ * 
+ * @param graphe Le graphe 
+ * @param source Le point (noeud) de depart
+ * @param cible Le point (noeud) d'arrivee
+ * @param chemin Le chemin trouve a la fin de A*
+ * @param n Nombre de lignes de la matrice du labyrinthe
+ * @param m Nombre de colonnes de la matrice du labyrinthe
+ * @return bool_t True si reussi, false sinon
+ */
+bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n, int m)
+{
 	binary_heap_t tas;
 	bool_t found = false, *traite;
 	node_t cour;
@@ -230,11 +288,13 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
 	traite = malloc(sizeof(int) * n * m);
-	if(tas.array == NULL || prec == NULL || traite == NULL) {
+	if (tas.array == NULL || prec == NULL || traite == NULL)
+	{
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
-	for(i = 0; i < n * m; ++i) {
+	for (i = 0; i < n * m; ++i)
+	{
 		prec[i] = -1;
 		traite[i] = false;
 	}
@@ -248,32 +308,38 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	cour.distsource = 0;
 	minHeapInsert(&tas, cour);
 
-	while(found == false && tas.heapSize > 0) {
-		
+	while (found == false && tas.heapSize > 0)
+	{
+
 		//on prend le premier de la file d'attente
-        cour = heapExtractMin(&tas);
-        fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
-        //printHeap(tas);
-        if(cour.num == -1) {
-            puts("erreur");
+		cour = heapExtractMin(&tas);
+		fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
+		//printHeap(tas);
+		if (cour.num == -1)
+		{
+			puts("erreur");
 			free(traite);
-            free(prec);
-            free(tas.array);
-            return false;
-        }
+			free(prec);
+			free(tas.array);
+			return false;
+		}
 		traite[cour.num] = true;
 		//on n'a pas atteint la cible
-		if(cour.num != cible) {
+		if (cour.num != cible)
+		{
 			puts("cible non atteinte\n");
 
 			//pour tous les voisins du noeud courant
-			for(i = 0; i < graphe.nbAretes; ++i) {
+			for (i = 0; i < graphe.nbAretes; ++i)
+			{
 				//fprintf(stderr, "on check si %d est dans %d -> %d\n", cour.num, graphe.aretes[i].noeudDeb, graphe.aretes[i].noeudFin);
-				if(graphe.aretes[i].noeudDeb == cour.num) {
+				if (graphe.aretes[i].noeudDeb == cour.num)
+				{
 					puts("debut");
 					checkVoisinAstar(graphe.aretes[i].noeudFin, cour, graphe.aretes[i], prec, traite, &tas, cible, n);
 				}
-				else if(graphe.aretes[i].noeudFin == cour.num) {
+				else if (graphe.aretes[i].noeudFin == cour.num)
+				{
 					puts("fin");
 					checkVoisinAstar(graphe.aretes[i].noeudDeb, cour, graphe.aretes[i], prec, traite, &tas, cible, n);
 				}
@@ -293,11 +359,14 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	//on remonte le tableau des precedents en partant de la cible
 	u = cible;
 	printf("prec[u] = %d\n", prec[u]);
-	for(i = 0; i < n * m; ++i) {
+	for (i = 0; i < n * m; ++i)
+	{
 		printf("prec[%d] = %d\n", i, prec[i]);
 	}
-	if((prec[u] != -1 || u == source)) {
-		while(prec[u] != -1) {
+	if ((prec[u] != -1 || u == source))
+	{
+		while (prec[u] != -1)
+		{
 			//on ajoute le numero courant
 			//chemin[k] = prec[u];
 			printf("u : %d, prec[u] = %d\n", u, prec[u]);
@@ -307,9 +376,10 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 			//++k;
 		}
 	}
-    else {
-        fputs("cible pas trouvee\n", stderr);
-    }
+	else
+	{
+		fputs("cible pas trouvee\n", stderr);
+	}
 
 	free(traite);
 	free(prec);
@@ -317,6 +387,22 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	return found;
 }
 
+/**
+ * @brief Effectue un parcours en profondeur sur un graphe (avec affichage au fur et a mesure)
+ * 
+ * @param graph Le graphe
+ * @param debut Point de depart du parcours
+ * @param renderer Le rendu
+ * @param n Nombre de lignes de la matrice du labyrinthe
+ * @param m Nombre de colonnes de la matrice du labyrinthe
+ * @param tile Rectangle representant une case du labyrinthe
+ * @param positionLab Rectangle delimitant le labyrinthe
+ * @param texture La texture pour les sols et les murs
+ * @param grille La grille representant le labyrinthe
+ * @param destPerso Le rectangle pour le personnage
+ * @param perso La texture a appliquer au personnage
+ * @param delai Le delai pour afficher chaque etape du parcours
+ */
 void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso, int delai)
 {
 	bool_t *marques;
@@ -333,6 +419,12 @@ void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *rende
 	}
 }
 
+/**
+ * @brief Initialise un tableau de marque a false
+ * 
+ * @param marques Tableau de booleens
+ * @param n Taille du tableau
+ */
 void initialiserMarque(bool_t *marques, int n)
 {
 	int i;
@@ -343,6 +435,23 @@ void initialiserMarque(bool_t *marques, int n)
 	}
 }
 
+/**
+ * @brief Permet d'explorer les fils d'un noeud pour le parcours en profondeur
+ * 
+ * @param graph Le graphe
+ * @param s Noeud de depart
+ * @param marques Tableau de booleens
+ * @param renderer Le rendu
+ * @param n Nombre de lignes de la matrice du labyrinthe
+ * @param m Nombre de colonnes de la matrice du labyrinthe
+ * @param tile Rectangle representant une case du labyrinthe
+ * @param positionLab Rectangle delimitant le labyrinthe
+ * @param texture La texture pour les sols et les murs
+ * @param grille La grille representant le labyrinthe
+ * @param destPerso Le rectangle pour le personnage
+ * @param perso La texture a appliquer au personnage
+ * @param delai Le delai pour afficher chaque etape du parcours
+ */
 void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso, int delai)
 {
 	int *voisins,

@@ -245,7 +245,7 @@ int randomNoeud(couples_graphe_t graph, int noeudDeb)
     int random;
     srand(time(NULL));
     random = rand() % (graph.nbNoeuds);
-    while(random == noeudDeb)
+    while (random == noeudDeb)
     {
         random = rand() % (graph.nbNoeuds);
     }
@@ -260,10 +260,11 @@ int randomNoeud(couples_graphe_t graph, int noeudDeb)
  * @param nbVoisins le nombre de voisins trouvés
  * @return int* la liste des voisins trouvés
  */
-int* trouverVoisins(couples_graphe_t graphe, int noeud, int* nbVoisins) {
+int *trouverVoisins(couples_graphe_t graphe, int noeud, int *nbVoisins)
+{
     int i = 0;
     *nbVoisins = 0;
-    int* voisins = (int*) malloc(4*sizeof(int));
+    int *voisins = (int *)malloc(4 * sizeof(int));
     if (voisins != NULL)
     {
         while (i < graphe.nbAretes && *nbVoisins < 4)

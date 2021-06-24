@@ -71,9 +71,9 @@ node_t heap_minimum(binary_heap_t heap)
  */
 node_t heapExtractMin(binary_heap_t *heap)
 {
-    node_t min; 
+    node_t min;
 
-    if(heap->heapSize < 1)
+    if (heap->heapSize < 1)
     {
         fprintf(stderr, "heap underflow");
         min.num = -1;
@@ -97,14 +97,14 @@ node_t heapExtractMin(binary_heap_t *heap)
  */
 void heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
 {
-    if(key.dist > heap->array[i].dist)
+    if (key.dist > heap->array[i].dist)
     {
         fprintf(stderr, "new key is greater than current key\n");
     }
     else
     {
         heap->array[i] = key;
-        while(i > 1 && heap->array[getParent(i)].dist > heap->array[i].dist)
+        while (i > 1 && heap->array[getParent(i)].dist > heap->array[i].dist)
         {
             permute(heap->array, i, getParent(i));
             i = getParent(i);
@@ -118,7 +118,7 @@ void heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
  * @param heap Le tas
  * @param key La valeur de l'element
  */
-void minHeapInsert(binary_heap_t * heap, node_t key)
+void minHeapInsert(binary_heap_t *heap, node_t key)
 {
     heap->heapSize = heap->heapSize + 1;
     heap->array[heap->heapSize] = key;
@@ -197,7 +197,8 @@ void permute(node_t array[], int i, int j)
  * @param pos la position de l'élément trouvé (-1 si non trouvé)
  * @return bool_t 
  */
-bool_t isInHeap(binary_heap_t heap, int key, int* pos) {
+bool_t isInHeap(binary_heap_t heap, int key, int *pos)
+{
     int curr = 0;
     bool_t trouve = false;
     *pos = -1;

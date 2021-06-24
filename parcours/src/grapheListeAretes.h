@@ -17,7 +17,7 @@ typedef struct
 {
     int nbNoeuds;
     int nbAretes;
-    arete_t* aretes;
+    arete_t *aretes;
 } couples_graphe_t;
 
 /**
@@ -53,7 +53,7 @@ int **arbreCouvrantToMatrice(arete_t *arbre, int nbAretes, int taille);
  * 
  * @param graph Le graphe contenant les aretes a trier
  */
-void ordonnerAretesCroissant(couples_graphe_t * graph);
+void ordonnerAretesCroissant(couples_graphe_t *graph);
 
 /**
  * @brief Ordonner les aretes d'un rgaphe de façon aléatoire
@@ -69,7 +69,7 @@ void fisherYate(couples_graphe_t *graph);
  * @param arete_2 La deuxieme arete
  * @return int Le résultat : 1 si arete_1 > arete_2 ; 0 si égaux ; -1 sinon
  */
-int comparArete(const void * arete_1, const void * arete_2);
+int comparArete(const void *arete_1, const void *arete_2);
 
 /**
  * @brief   Lors de la génération du grapheLabyrinthe, vérifie si une arête générée aléatoirement est est valide et peut être ajoutée
@@ -80,7 +80,7 @@ int comparArete(const void * arete_1, const void * arete_2);
  * @param fin le noeud de fin de l'arete
  * @return bool_t true si pas valide ; false si valide
  */
-bool_t aretePasValide(couples_graphe_t* graphe, int deb, int fin);
+bool_t aretePasValide(couples_graphe_t *graphe, int deb, int fin);
 
 /**
  * @brief Affiche toutes les aretes d'un graphe sur la sortie standard
@@ -115,4 +115,4 @@ int randomNoeud(couples_graphe_t graph, int noeudDeb);
  * @param nbVoisins le nombre de voisins trouvés
  * @return int* la liste des voisins trouvés
  */
-int* trouverVoisins(couples_graphe_t graphe, int noeud, int* nbVoisins);
+int *trouverVoisins(couples_graphe_t graphe, int noeud, int *nbVoisins);

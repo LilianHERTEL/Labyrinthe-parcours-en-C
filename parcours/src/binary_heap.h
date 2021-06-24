@@ -12,12 +12,11 @@ typedef struct
     float distsource;
 } node_t;
 
-
-typedef struct binary_heap 
+typedef struct binary_heap
 {
-    int   length;
-    int   heapSize;
-    node_t * array;
+    int length;
+    int heapSize;
+    node_t *array;
 } binary_heap_t;
 
 /**
@@ -82,7 +81,7 @@ void heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
  * @param heap Le tas
  * @param key La valeur de l'element
  */
-void minHeapInsert(binary_heap_t * heap, node_t key);
+void minHeapInsert(binary_heap_t *heap, node_t key);
 
 /**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array
@@ -99,14 +98,14 @@ void permute(node_t array[], int i, int j);
  * @param heap Le tas binaire
  * @param val Indice de la valeur a deplacer
  */
-void minHeapify(binary_heap_t * heap, int val);
+void minHeapify(binary_heap_t *heap, int val);
 
 /**
  * @brief Construit un tas binaire minimum a partir d'un tas binaire quelconque
  * 
  * @param heap Tas binaire quelconque
  */
-void buildMinHeap(binary_heap_t * heap);
+void buildMinHeap(binary_heap_t *heap);
 
 /**
  * @brief Cherche si une valeur est présente dans le tas
@@ -116,11 +115,11 @@ void buildMinHeap(binary_heap_t * heap);
  * @param pos la position de l'élément trouvé (-1 si non trouvé)
  * @return bool_t 
  */
-bool_t isInHeap(binary_heap_t heap, int key, int* pos);
+bool_t isInHeap(binary_heap_t heap, int key, int *pos);
 
 /**
  * @brief Tri par tas du tableau
  * 
  * @param heap Le tas binaire à trier
  */
-void heapSort(binary_heap_t* heap);
+void heapSort(binary_heap_t *heap);

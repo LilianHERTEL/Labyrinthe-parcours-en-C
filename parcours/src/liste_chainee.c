@@ -1,10 +1,10 @@
-             /**********************************************************/
-             /*Chandeze Marius & Meunier Killian                  2021 */
-             /*--------------------------------------------------------*/
-             /*                     liste_chainee.c                    */
-             /*              Traitement d'une liste chainee            */
-             /*               Module avec fonctions de base            */
-             /**********************************************************/
+/**********************************************************/
+/*Chandeze Marius & Meunier Killian                  2021 */
+/*--------------------------------------------------------*/
+/*                     liste_chainee.c                    */
+/*              Traitement d'une liste chainee            */
+/*               Module avec fonctions de base            */
+/**********************************************************/
 
 #include "liste_chainee.h"
 
@@ -36,12 +36,12 @@ liste_t initialisation_liste()
 /* val : valeur que contiendra le maillon                                 */
 /* u : numero de l'usine                                                  */
 /**************************************************************************/
-maillon_t * creerMaillon(int val)
+maillon_t *creerMaillon(int val)
 {
-    maillon_t   * elt;
+    maillon_t *elt;
 
     elt = (maillon_t *)malloc(sizeof(maillon_t));
-    if(elt)
+    if (elt)
     {
         elt->v = val;
         elt->suiv = NULL;
@@ -71,19 +71,19 @@ maillon_t * creerMaillon(int val)
 /**************************************************************************/
 booleen_t creerListe_kPremierElem_matrice(int k, int **matrice, liste_t *l, int n, int m, int *i, int *j)
 {
-    booleen_t       trouve, 
-                    ok = true;
-    liste_t       * pos;
+    booleen_t trouve,
+        ok = true;
+    liste_t *pos;
 
-    while(*i<n && k>0 && ok)
-    { 
-        while(*j<m && k>0 && ok)
+    while (*i < n && k > 0 && ok)
+    {
+        while (*j < m && k > 0 && ok)
         {
-            maillon_t *elt; 
+            maillon_t *elt;
             elt = creerMaillon(matrice[*i][*j]);
-            if(elt)
+            if (elt)
             {
-                pos = recherche_prec(l, matrice[*i][*j], &trouve); 
+                pos = recherche_prec(l, matrice[*i][*j], &trouve);
                 ajout_lch(pos, elt);
                 *j = *j + 1;
                 k--;
@@ -93,7 +93,7 @@ booleen_t creerListe_kPremierElem_matrice(int k, int **matrice, liste_t *l, int 
                 ok = false;
             }
         }
-        if( *j == m)
+        if (*j == m)
         {
             *j = 0;
             *i = *i + 1;
@@ -124,24 +124,24 @@ booleen_t creerListe_kPremierElem_matrice(int k, int **matrice, liste_t *l, int 
 /**************************************************************************/
 booleen_t creerListe_kppv_matrice(int k, int **matrice, liste_t *l, int n, int m)
 {
-    int             i = 0, 
-                    j = 0;
-    booleen_t       trouve, 
-                    ok;
-    liste_t       * pos;
-    maillon_t     * elt;
+    int i = 0,
+        j = 0;
+    booleen_t trouve,
+        ok;
+    liste_t *pos;
+    maillon_t *elt;
 
     ok = creerListe_kPremierElem_matrice(k, matrice, l, n, m, &i, &j);
-    if(ok)
+    if (ok)
     {
-        while(i<n && ok)
-        {         
-            while(j<m && ok)
+        while (i < n && ok)
+        {
+            while (j < m && ok)
             {
-                if(matrice[i][j] < (*l)->v)
+                if (matrice[i][j] < (*l)->v)
                 {
-                    elt = creerMaillon(matrice[i][j]); 
-                    if(elt)
+                    elt = creerMaillon(matrice[i][j]);
+                    if (elt)
                     {
                         supp_lch(l);
                         pos = recherche_prec(l, elt->v, &trouve);
@@ -154,7 +154,7 @@ booleen_t creerListe_kppv_matrice(int k, int **matrice, liste_t *l, int n, int m
                 }
                 j++;
             }
-            j=0;
+            j = 0;
             i++;
         }
     }
@@ -177,27 +177,27 @@ booleen_t creerListe_kppv_matrice(int k, int **matrice, liste_t *l, int n, int m
 /* val : valeur contenu dans le maillon dont on veut le precedent         */
 /* trouve : booleen qui permet de dire si on a trouve cette valeur        */
 /**************************************************************************/
-liste_t * recherche_prec(liste_t * l, int val, booleen_t * trouve)
+liste_t *recherche_prec(liste_t *l, int val, booleen_t *trouve)
 {
-    maillon_t    * tmp;
-    liste_t      * prec;
+    maillon_t *tmp;
+    liste_t *prec;
 
     tmp = *l;
     prec = l;
 
-    while(tmp && tmp->v > val)
+    while (tmp && tmp->v > val)
     {
         prec = &(tmp->suiv);
         tmp = tmp->suiv;
     }
 
-    if(tmp && tmp->v == val)
+    if (tmp && tmp->v == val)
     {
         *trouve = true;
     }
-    else    
+    else
     {
-        *trouve = false; 
+        *trouve = false;
     }
 
     return prec;
@@ -215,7 +215,7 @@ liste_t * recherche_prec(liste_t * l, int val, booleen_t * trouve)
 /* b : pointeur sur le maillon qui va etre la position du nouveau maillon */
 /* elt : nouveau maillon a inserer                                        */
 /**************************************************************************/
-void ajout_lch(liste_t * b, maillon_t * elt)
+void ajout_lch(liste_t *b, maillon_t *elt)
 {
     elt->suiv = *b;
     *b = elt;
@@ -232,9 +232,9 @@ void ajout_lch(liste_t * b, maillon_t * elt)
 /* Lexique :                                                              */
 /* b : pointeur sur le maillon qui va etre supprime                       */
 /**************************************************************************/
-void supp_lch(liste_t * b)
+void supp_lch(liste_t *b)
 {
-    maillon_t   * tmp;
+    maillon_t *tmp;
 
     tmp = *b;
     *b = (*b)->suiv;
@@ -253,12 +253,12 @@ void supp_lch(liste_t * b)
 /**************************************************************************/
 void affichageListe(liste_t l)
 {
-    maillon_t   * tmp;
+    maillon_t *tmp;
 
     tmp = l;
-    while(tmp != NULL)
+    while (tmp != NULL)
     {
-        printf("-> %d ",tmp->v);
+        printf("-> %d ", tmp->v);
         tmp = tmp->suiv;
     }
     printf("\n");
@@ -276,9 +276,9 @@ void affichageListe(liste_t l)
 /**************************************************************************/
 void libererListe(liste_t l)
 {
-    maillon_t   * tmp;
+    maillon_t *tmp;
 
-    while(l != NULL)
+    while (l != NULL)
     {
         tmp = l->suiv;
         free(l);
@@ -304,9 +304,9 @@ void supprimer_occurrence(int u, liste_t *l)
                    /*********************/
     prec = l;
     m = *l;
-    while(m != NULL)
+    while (m != NULL)
     {
-        if(m->v == u)
+        if (m->v == u)
         {
             m = m->suiv;
             supp_lch(prec);
