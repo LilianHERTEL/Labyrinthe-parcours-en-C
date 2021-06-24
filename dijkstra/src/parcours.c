@@ -1,4 +1,4 @@
-#include "dijkstra.h"
+#include "parcours.h"
 
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n) {
 	binary_heap_t tas;
