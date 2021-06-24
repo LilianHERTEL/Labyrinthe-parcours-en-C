@@ -4,6 +4,7 @@
 #include "bool.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 /**
  * @brief Initialise la SDL et indique si l'initialisation s'ets bien passée

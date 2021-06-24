@@ -41,6 +41,9 @@ void quitSDL(bool_t status, char const *msg, SDL_Window *window, SDL_Renderer *r
         SDL_DestroyRenderer(renderer);
     if (window != NULL)
         SDL_DestroyWindow(window);
+    
+    IMG_Quit();
+    TTF_Quit();
 
     SDL_Quit();
 }

@@ -16,6 +16,7 @@ int main(int argc, char const *argv[])
         *perso;
     SDL_Rect positionLab = {0},
              tile = {0};
+    TTF_Font *font;
 
     (void)argc;
     (void)argv;
@@ -49,6 +50,19 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
+    if (TTF_Init() != 0)
+    {
+        quitSDL(false, "ERROR TTF INIT", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
+    font = TTF_OpenFont("../fonts/font.ttf", 500);
+    if (font == NULL)
+    {
+        quitSDL(false, " error font\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
+
     texture = loadTextureFromImage("../images/texture.png", renderer);
     if (texture == NULL)
     {
@@ -65,7 +79,7 @@ int main(int argc, char const *argv[])
 
     // // TRAITEMENT
 
-    SDL_Rect destPerso = {0};
+    /*SDL_Rect destPerso = {0};
     int n = 8, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     int **grille;
@@ -90,7 +104,7 @@ int main(int argc, char const *argv[])
     parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 300);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+    drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);*/
     /*
     if(dijkstra(graph, deb, fin, &chemin, n * m)) {
         cour = chemin;
@@ -106,15 +120,16 @@ int main(int argc, char const *argv[])
     }
     SDL_RenderPresent(renderer);
     */
+    drawMenu(renderer, font, positionLab);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(1000);
 
-    SDL_Delay(2000);
-
-    free(graph.aretes);
+    /*free(graph.aretes);
     for (int i = 0; i < m; ++i)
     {
         free(grille[i]);
     }
-    free(grille);
+    free(grille);*/
     quitSDL(true, "SDL END", window, renderer);
 
     return 0;

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "mySDL.h"
 
 typedef enum
@@ -27,3 +28,8 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
 void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture);
 
 void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso);
+
+bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer);
+
+void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab);
+

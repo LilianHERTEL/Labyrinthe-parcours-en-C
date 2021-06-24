@@ -143,3 +143,53 @@ void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect til
         drawperso(renderer, perso, destPerso);
     }
 }
+
+bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer)
+{
+    SDL_Color color = {0};
+    SDL_Rect source = {0};
+    SDL_Texture *texture;
+    SDL_Surface *surface;
+
+    color.a = 255;
+
+    surface = TTF_RenderText_Solid(font, text, color);
+    if (surface == NULL)
+    {
+        fputs("erreur ouverture de la police\n", stderr);
+        return false;
+    }
+
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture == NULL)
+    {
+        fputs("erreur transformation de la surface de la police en texture\n", stderr);
+        SDL_FreeSurface(surface);
+        return false;
+    }
+    SDL_FreeSurface(surface);
+    SDL_QueryTexture(texture, NULL, NULL, &source.w, &source.h);
+    SDL_RenderCopy(renderer, texture, &source, &dest);
+    SDL_DestroyTexture(texture);
+    return true;
+}
+
+void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab)
+{
+    SDL_Rect titre = {0},
+             dijkstra = {0},
+             a_etoile = {0},
+             profondeur = {0},
+             quit = {0};
+
+    titre.w = positionLab.w * 0.5;
+    titre.h = positionLab.h * 0.2;
+    titre.x = (positionLab.w - titre.w) / 2; 
+    
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+    drawText("Parcours !", titre, font, renderer);
+}
+
+void gameloop()
+{
+}
