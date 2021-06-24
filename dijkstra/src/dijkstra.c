@@ -145,3 +145,15 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	free(tas.array);
 	return found;
 }
+
+void profondeur(arete_t* graphe, int source, int nbNoeuds) {
+	pile_t* pile;
+	pile = initPile(nbNoeuds);
+	int noeudCurr;
+	bool_t trouveVoisin;
+
+	while (!trouveVoisin)
+	{
+		
+	}
+}

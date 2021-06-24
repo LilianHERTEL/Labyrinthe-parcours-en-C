@@ -8,5 +8,6 @@
 #include "grapheListeAretes.h"
 #include "bool.h"
 #include "liste_chainee.h"
+#include "pile.h"
 
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n);
