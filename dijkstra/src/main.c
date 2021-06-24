@@ -105,12 +105,17 @@ int main(int argc, char const *argv[])
     }
     else {
         fprintf(stderr, "erreur dijkstra\n");
-	printAretes(graph);
+	    printAretes(graph);
     }
 
     SDL_RenderPresent(renderer);
     SDL_Delay(10000);
 
+    free(graph.aretes);
+    for(int i = 0; i < m; ++i) {
+        free(grille[i]);
+    }
+    free(grille);
     quitSDL(true, "SDL END", window, renderer);
 
     return 0;
