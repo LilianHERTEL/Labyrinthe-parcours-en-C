@@ -203,6 +203,15 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab)
     quit.y = positionLab.h - quit.h * 1.5;
     
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // fond
+
+    SDL_SetRenderDrawColor(renderer, 140, 120, 120, 255);
+    SDL_RenderFillRect(renderer, &dijkstra);
+    SDL_RenderFillRect(renderer, &a_etoile);
+    SDL_RenderFillRect(renderer, &profondeur);
+
+    SDL_SetRenderDrawColor(renderer, 185, 25, 10, 255);
+    SDL_RenderFillRect(renderer, &quit);
+
     drawText("Parcours !", titre, font, renderer);
     drawText("Dijkstra", dijkstra, font, renderer);
     drawText("A*", a_etoile, font, renderer);
