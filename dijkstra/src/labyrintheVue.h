@@ -14,6 +14,8 @@ typedef enum
     OUEST = 8
 }directions;
 
+void dimensionsLab(SDL_Rect * positionLab, SDL_Rect tile, int n, int m);
+
 void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m);
 
 void dimensionPerso(SDL_Rect * perso, SDL_Rect tile);

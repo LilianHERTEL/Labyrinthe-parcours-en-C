@@ -202,19 +202,20 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 	marques[s] = true;
 
 	//affichage
-	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
 	drawLab(renderer, grille, n, m, tile, positionLab, texture);
 	drawChemin(renderer, n, m, tile, positionLab, texture, marques, graph.nbNoeuds);
-	destPerso.x = positionLab.x + tile.w * (s - s / n * n) + tile.w * 0.1;
-	destPerso.y = positionLab.y + tile.h * (s / n) + tile.h * 0.1;
+	destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
+	destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
 	drawperso(renderer, perso, destPerso);
 	SDL_RenderPresent(renderer);
+	SDL_RenderClear(renderer);
 	SDL_Delay(100);
 
-	voisins = NULL; //trouverVoisins(graph, s, &nbVoisins);
+	voisins = trouverVoisins(graph, s, &nbVoisins);
 	for (i = 0; i < nbVoisins; i++)
 	{
-		if (!marques[voisins[i]])
+		if (marques[voisins[i]] == false)
 		{
 			explorer(graph, voisins[i], marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 		}

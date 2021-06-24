@@ -1,5 +1,11 @@
 #include "labyrintheVue.h"
 
+void dimensionsLab(SDL_Rect * positionLab, SDL_Rect tile, int n, int m)
+{
+    positionLab->x = (positionLab->w - tile.w * m) / 2;
+    positionLab->y = (positionLab->h - tile.h * n) / 2;
+}
+
 void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
 {
     int a,
@@ -110,9 +116,6 @@ void drawOtherTile(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Re
 
     i = indiceNoeud/n;
     j = indiceNoeud - i * n;
-
-    positionLab.x = (positionLab.w - tile.w * m) / 2;
-    positionLab.y = (positionLab.h - tile.h * n) / 2;
 
     tile.y = positionLab.y + tile.h * i + tile.h * 0.1;
     tile.x = positionLab.x + tile.w * j + tile.w * 0.1;

@@ -66,8 +66,8 @@ int main(int argc, char const *argv[])
 
     // // TRAITEMENT
 
-    SDL_Rect dest = {0};
-    int n = 5, tailleLabyrintheCouvrant, m;
+    SDL_Rect destPerso = {0};
+    int n = 15, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     int** grille;
     liste_t chemin;
@@ -79,31 +79,60 @@ int main(int argc, char const *argv[])
     graph.nbAretes = tailleLabyrintheCouvrant;
     grille = arbreCouvrantToMatrice(graph.aretes, tailleLabyrintheCouvrant, n);
 
-    displayGrid(grille, n, m);
+    /*displayGrid(grille, n, m);
     int nbVois;
     int* voisins = trouverVoisins(graph, 7, &nbVois);
     printf("%d voisins\n", nbVois);
     for (int i = 0; i < nbVois; i++)
     {
         printf("VOISIN : %d\n", voisins[i]);
-    }
+    }*/
     
 
     SDL_GetWindowSize(window, &positionLab.w, &positionLab.h);
     dimensionTile(&tile, positionLab, n, m);
-    dimensionPerso(&dest, tile);
+    dimensionsLab(&positionLab, tile, n, m);
+    dimensionPerso(&destPerso, tile);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-    drawLab(renderer, grille, n, m, tile, positionLab, texture);
+    //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+    //drawLab(renderer, grille, n, m, tile, positionLab, texture);
 
     int deb, fin;
     deb = randomNoeud(graph, -1);
     fin = randomNoeud(graph, deb);
 
-    drawOtherTile(renderer, deb, n, m, tile, positionLab, texture);
-    drawOtherTile(renderer, fin, n, m, tile, positionLab, texture);
+    //drawOtherTile(renderer, deb, n, m, tile, positionLab, texture);
+    //drawOtherTile(renderer, fin, n, m, tile, positionLab, texture);
 
-    drawperso(renderer, perso, dest);
+    //drawperso(renderer, perso, destPerso);
+
+    /*bool_t * marques;
+    int s= deb;
+    marques = (bool_t *)malloc(sizeof(bool_t) * 5);
+    for(int z = 0; z<5; z++)
+    {
+        marques[z] = true;
+    }
+
+    SDL_Delay(500);
+    for(int z = 0; z < 5; z++)
+    {
+        deb = randomNoeud(graph, deb);
+        s = deb;
+        drawLab(renderer, grille, n, m, tile, positionLab, texture);
+        drawChemin(renderer, n, m, tile, positionLab, texture, marques, graph.nbNoeuds);
+        int l = s/n;
+        int c = s - l*n;
+        destPerso.x = positionLab.x + tile.w * c + tile.w * 0.1;
+        destPerso.y = positionLab.y + tile.h * l + tile.h * 0.1;
+        drawperso(renderer, perso, destPerso);
+        SDL_RenderPresent(renderer);
+        SDL_RenderClear(renderer);
+        SDL_Delay(1000);
+    }*/
+
+    parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+
 /*
     if(dijkstra(graph, deb, fin, &chemin, n * m)) {
         cour = chemin;
@@ -117,7 +146,7 @@ int main(int argc, char const *argv[])
 	printAretes(graph);
     }*/
 
-    SDL_RenderPresent(renderer);
+    //SDL_RenderPresent(renderer);
     SDL_Delay(2000);
 
     quitSDL(true, "SDL END", window, renderer);
