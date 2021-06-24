@@ -155,7 +155,7 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 	puts("");
 }
 
-void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
+void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso, int delai)
 {
 	bool_t *marques;
 
@@ -163,7 +163,7 @@ void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *rende
 	if (marques)
 	{
 		initialiserMarque(marques, graph.nbNoeuds);
-		explorer(graph, debut, marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+		explorer(graph, debut, marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, delai);
 	}
 	else
 	{
@@ -181,7 +181,7 @@ void initialiserMarque(bool_t *marques, int n)
 	}
 }
 
-void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
+void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso, int delai)
 {
 	int *voisins,
 		nbVoisins,
@@ -190,29 +190,26 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 	marques[s] = true;
 
 	//affichage
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-	drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
 	destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
 	destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
-	drawperso(renderer, perso, destPerso);
+	drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 	SDL_RenderPresent(renderer);
 	SDL_RenderClear(renderer);
-	SDL_Delay(100);
+	SDL_Delay(delai);
 
 	voisins = trouverVoisins(graph, s, &nbVoisins);
 	for (i = 0; i < nbVoisins; i++)
 	{
 		if (marques[voisins[i]] == false)
 		{
-			explorer(graph, voisins[i], marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
-			drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
+			explorer(graph, voisins[i], marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, delai);
+			
 			destPerso.x = positionLab.x + tile.w * (s - (s/n) * m) + tile.w * 0.1;
 			destPerso.y = positionLab.y + tile.h * (s/n) + tile.h * 0.1;
-			drawperso(renderer, perso, destPerso);
+			drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 			SDL_RenderPresent(renderer);
 			SDL_RenderClear(renderer);
-			SDL_Delay(100);
+			SDL_Delay(delai);
 		}
 	}
 }

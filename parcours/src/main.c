@@ -88,7 +88,7 @@ int main(int argc, char const *argv[])
     deb = randomNoeud(graph, -1);
     fin = randomNoeud(graph, deb);
 
-    parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+    parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 300);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
     drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);

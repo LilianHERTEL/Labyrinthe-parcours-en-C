@@ -133,3 +133,10 @@ void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect t
     SDL_RenderFillRect(renderer, &tile);
     SDL_RenderCopy(renderer, texture, &source, &tile);
 }
+
+void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
+{
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+	drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
+	drawperso(renderer, perso, destPerso);
+}
