@@ -174,33 +174,33 @@ bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *rendere
     return true;
 }
 
-void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab)
+void dimensionButtons(SDL_Rect *dijkstra, SDL_Rect *a_etoile, SDL_Rect *profondeur, SDL_Rect *quit, SDL_Rect positionLab)
 {
-    SDL_Rect titre = {0},
-             dijkstra = {0},
-             a_etoile = {0},
-             profondeur = {0},
-             quit = {0};
+    dijkstra->w = positionLab.w * 0.3;
+    dijkstra->h = positionLab.h * 0.1;
+    dijkstra->x = (positionLab.w - dijkstra->w) / 2; 
+    dijkstra->y = positionLab.h * 0.2 + dijkstra->h / 2;
+    a_etoile->w = positionLab.w * 0.1;
+    a_etoile->h = positionLab.h * 0.1;
+    a_etoile->x = (positionLab.w - a_etoile->w) / 2; 
+    a_etoile->y = dijkstra->y + dijkstra->h + a_etoile->h / 2;
+    profondeur->w = positionLab.w * 0.3;
+    profondeur->h = positionLab.h * 0.1;
+    profondeur->x = (positionLab.w - profondeur->w) / 2; 
+    profondeur->y = a_etoile->y + a_etoile->h + profondeur->h / 2;
+    quit->w = positionLab.w * 0.3;
+    quit->h = positionLab.h * 0.1;
+    quit->x = (positionLab.w - quit->w) / 2; 
+    quit->y = positionLab.h - quit->h * 1.5;
+}
+
+void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_Rect dijkstra, SDL_Rect a_etoile, SDL_Rect profondeur, SDL_Rect quit)
+{
+    SDL_Rect titre = {0};
 
     titre.w = positionLab.w * 0.5;
     titre.h = positionLab.h * 0.2;
     titre.x = (positionLab.w - titre.w) / 2; 
-    dijkstra.w = positionLab.w * 0.3;
-    dijkstra.h = positionLab.h * 0.1;
-    dijkstra.x = (positionLab.w - dijkstra.w) / 2; 
-    dijkstra.y = titre.y + titre.h + dijkstra.h / 2;
-    a_etoile.w = positionLab.w * 0.1;
-    a_etoile.h = positionLab.h * 0.1;
-    a_etoile.x = (positionLab.w - a_etoile.w) / 2; 
-    a_etoile.y = dijkstra.y + dijkstra.h + a_etoile.h / 2;
-    profondeur.w = positionLab.w * 0.3;
-    profondeur.h = positionLab.h * 0.1;
-    profondeur.x = (positionLab.w - profondeur.w) / 2; 
-    profondeur.y = a_etoile.y + a_etoile.h + profondeur.h / 2;
-    quit.w = positionLab.w * 0.3;
-    quit.h = positionLab.h * 0.1;
-    quit.x = (positionLab.w - quit.w) / 2; 
-    quit.y = positionLab.h - quit.h * 1.5;
     
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // fond
 

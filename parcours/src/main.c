@@ -15,7 +15,11 @@ int main(int argc, char const *argv[])
     SDL_Texture *texture,
         *perso;
     SDL_Rect positionLab = {0},
-             tile = {0};
+             tile = {0},
+             dijkstra = {0},
+             a_etoile = {0},
+             profondeur = {0},
+             quit = {0};
     TTF_Font *font;
 
     (void)argc;
@@ -96,6 +100,7 @@ int main(int argc, char const *argv[])
     dimensionTile(&tile, positionLab, n, m);
     dimensionsLab(&positionLab, tile, n, m);
     dimensionPerso(&destPerso, tile);
+    dimensionButtons(&dijkstra, &a_etoile, &profondeur, &quit, positionLab);
     
     int deb, fin;
     deb = randomNoeud(graph, -1);
@@ -121,7 +126,7 @@ int main(int argc, char const *argv[])
     SDL_RenderPresent(renderer);
     */
     SDL_RenderClear(renderer);
-    drawMenu(renderer, font, positionLab);
+    drawMenu(renderer, font, positionLab, dijkstra, a_etoile, profondeur, quit);
     SDL_RenderPresent(renderer);
     SDL_Delay(1000);
 

@@ -31,5 +31,7 @@ void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect til
 
 bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer);
 
-void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab);
+void dimensionButtons(SDL_Rect *dijkstra, SDL_Rect *a_etoile, SDL_Rect *profondeur, SDL_Rect *quit, SDL_Rect positionLab);
+
+void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_Rect dijkstra, SDL_Rect a_etoile, SDL_Rect profondeur, SDL_Rect quit);
 
