@@ -108,7 +108,7 @@ int main(int argc, char const *argv[])
     }
 
     SDL_RenderPresent(renderer);
-    SDL_Delay(5000);
+    SDL_Delay(2000);
 
     quitSDL(true, "SDL END", window, renderer);
 
