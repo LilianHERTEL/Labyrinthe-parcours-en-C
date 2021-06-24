@@ -12,9 +12,9 @@
 
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n);
 
-bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m);
+bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n, int m);
 
-void checkVoisinAstar(int numvoisin, node_t cour, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n);
+void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n);
 
 int manhattan(int courx, int coury, int ciblex, int cibley);
 

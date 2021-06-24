@@ -67,7 +67,7 @@ int main(int argc, char const *argv[])
     // // TRAITEMENT
 
     SDL_Rect destPerso = {0};
-    int n = 8, tailleLabyrintheCouvrant, m;
+    int n = 5, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
     int** grille;
     liste_t chemin;
@@ -88,7 +88,7 @@ int main(int argc, char const *argv[])
     deb = randomNoeud(graph, -1);
     fin = randomNoeud(graph, deb);
 
-    parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+    //parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
     drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
@@ -106,6 +106,20 @@ int main(int argc, char const *argv[])
 	    printAretes(graph);
     }
     */
+    if(astar(graph, deb, fin, &chemin, n, m)) {
+        cour = chemin;
+        while(cour != NULL) {
+            drawOtherTile(renderer, cour->v, n, m, tile, positionLab, texture);
+            cour = cour->suiv;
+        }
+        libererListe(chemin);
+    }
+    else {
+        fprintf(stderr, "erreur dijkstra\n");
+	    printAretes(graph);
+    }
+    
+
 
     SDL_RenderPresent(renderer);
     SDL_Delay(2000);

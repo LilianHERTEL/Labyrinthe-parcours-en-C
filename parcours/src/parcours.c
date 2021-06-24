@@ -157,14 +157,14 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 	puts("");
 }
 
-void checkVoisinAstar(int numvoisin, node_t cour, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n) {
+void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n) {
 	int voisinTas;
 	node_t noeudVoisin;
 	
 	//on calcule la distance de la source au voisin en passant par le noeud courant
 	noeudVoisin.num = numvoisin;
 	noeudVoisin.distcible = manhattan(numvoisin % n, numvoisin / n, cible % n, cible / n);
-	noeudVoisin.distsource = cour.distsource + manhattan(cour.num % n, cour.num / n, numvoisin % n, numvoisin / n);
+	noeudVoisin.distsource = cour.distsource + areteVoisin.poids;
 	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]) / 2.0);
 	noeudVoisin.dist = noeudVoisin.distcible + noeudVoisin.distsource;
 	
@@ -202,7 +202,7 @@ int manhattan(int courx, int coury, int ciblex, int cibley) {
 	return abs(courx - ciblex) + abs(coury - cibley);
 }
 
-bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m) {
+bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n, int m) {
 	binary_heap_t tas;
 	bool_t found = false, *traite;
 	node_t cour;
@@ -219,11 +219,11 @@ bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m)
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
 	}
-	for(i = 0; i < n; ++i) {
+	for(i = 0; i < n * m; ++i) {
 		prec[i] = -1;
 		traite[i] = false;
 	}
-	tas.length = n;
+	tas.length = n * m;
 	tas.heapSize = 0;
 
 	//on insert d'abord la source
@@ -233,7 +233,7 @@ bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m)
 	cour.distsource = 0;
 	minHeapInsert(&tas, cour);
 
-	while(!found && tas.heapSize > 0) {
+	while(found == false && tas.heapSize > 0) {
 		
 		//on prend le premier de la file d'attente
         cour = heapExtractMin(&tas);
@@ -241,9 +241,9 @@ bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m)
         //printHeap(tas);
         if(cour.num == -1) {
             puts("erreur");
+			free(traite);
             free(prec);
             free(tas.array);
-			free(traite);
             return false;
         }
 		traite[cour.num] = true;
@@ -252,19 +252,17 @@ bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m)
 			puts("cible non atteinte\n");
 
 			//pour tous les voisins du noeud courant
-			if(cour.num - 1 > -1 && graphe[ cour.num % n][cour.num / n] & OUEST) {
-				checkVoisinAstar(cour.num - 1, cour, prec, traite, &tas, cible, n * m);
+			for(i = 0; i < graphe.nbAretes; ++i) {
+				//fprintf(stderr, "on check si %d est dans %d -> %d\n", cour.num, graphe.aretes[i].noeudDeb, graphe.aretes[i].noeudFin);
+				if(graphe.aretes[i].noeudDeb == cour.num) {
+					puts("debut");
+					checkVoisinAstar(graphe.aretes[i].noeudFin, cour, graphe.aretes[i], prec, traite, &tas, cible, n);
+				}
+				else if(graphe.aretes[i].noeudFin == cour.num) {
+					puts("fin");
+					checkVoisinAstar(graphe.aretes[i].noeudDeb, cour, graphe.aretes[i], prec, traite, &tas, cible, n);
+				}
 			}
-			if(cour.num - n > -1 && graphe[ cour.num % n][cour.num / n] & NORD) {
-				checkVoisinAstar(cour.num - n, cour, prec, traite, &tas, cible, n * m);
-			}
-			if(cour.num + 1 < n * m && graphe[ cour.num % n][cour.num / n] & EST) {
-				checkVoisinAstar(cour.num + 1, cour, prec, traite, &tas, cible, n * m);
-			}
-			if(cour.num + n < n * m && graphe[ cour.num % n][cour.num / n] & SUD) {
-				checkVoisinAstar(cour.num + n, cour, prec, traite, &tas, cible, n * m);
-			}
-
 			puts("***");
 		}
 		else
@@ -280,7 +278,7 @@ bool_t astar(int **graphe, int source, int cible, liste_t *chemin, int n, int m)
 	//on remonte le tableau des precedents en partant de la cible
 	u = cible;
 	printf("prec[u] = %d\n", prec[u]);
-	for(i = 0; i < n; ++i) {
+	for(i = 0; i < n * m; ++i) {
 		printf("prec[%d] = %d\n", i, prec[i]);
 	}
 	if((prec[u] != -1 || u == source)) {
