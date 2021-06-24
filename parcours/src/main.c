@@ -125,10 +125,12 @@ int main(int argc, char const *argv[])
     }
     SDL_RenderPresent(renderer);
     */
-    SDL_RenderClear(renderer);
-    drawMenu(renderer, font, positionLab, dijkstra, a_etoile, profondeur, quit);
-    SDL_RenderPresent(renderer);
-    SDL_Delay(1000);
+    //SDL_RenderClear(renderer);
+    //drawMenu(renderer, font, positionLab, dijkstra, a_etoile, profondeur, quit);
+    //SDL_RenderPresent(renderer);
+    //SDL_Delay(1000);
+
+    menuLoop(renderer, font, texture, perso);
 
     free(graph.aretes);
     for (int i = 0; i < m; ++i)

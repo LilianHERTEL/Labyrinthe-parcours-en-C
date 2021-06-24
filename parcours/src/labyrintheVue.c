@@ -219,6 +219,143 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
     drawText("Quitter", quit, font, renderer);
 }
 
-void gameloop()
+void menuLoop(SDL_Renderer * renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso)
 {
+    SDL_Rect positionLab = {0},
+             tile = {0},
+             dijkstra = {0},
+             a_etoile = {0},
+             profondeur = {0},
+             quit = {0},
+             mouse = {0};
+    SDL_bool program_on = SDL_TRUE;
+
+    dimensionButtons(&dijkstra, &a_etoile, &profondeur, &quit, positionLab);
+
+    while(program_on)
+    {
+        SDL_Event event;                // Evènement à traiter
+
+        while (program_on && SDL_PollEvent(&event)) 
+        {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
+                                        // terminé le programme Défiler l'élément en tête de file dans 'event'
+            switch (event.type) 
+            {
+                case SDL_WINDOWEVENT:
+                    if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+                    {
+                        // Calcul des dimensions quand la fenetre change de taille
+                        dimensionButtons(&dijkstra, &a_etoile, &profondeur, &quit, positionLab);
+                    }
+                    break;
+                case SDL_QUIT:                         
+                    program_on = SDL_FALSE;                   
+                    break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_ESCAPE:                           // 'ESCAPE'  
+                        case SDLK_q:                                // 'q'
+                            program_on = SDL_FALSE;
+                            break;
+                        default:                      
+                            break;
+                    }
+                    break;
+                case SDL_MOUSEBUTTONDOWN:     
+                    SDL_GetMouseState(&mouse.x, &mouse.y);
+                    //Calcul des coordonnees par rapport a l'emplacement du labyrinthe
+                    
+                    if (SDL_BUTTON(SDL_BUTTON_LEFT) ) 
+                    {                       
+
+                    } 
+                    break;
+                default:                                            
+                    break;
+            }
+        } 
+        drawMenu(renderer, font, positionLab, dijkstra, a_etoile, profondeur, quit);
+        SDL_RenderPresent(renderer);
+        SDL_RenderClear(renderer);
+        SDL_Delay(50);
+    }
 }
+
+/*void gameloop()
+{
+    SDL_bool  program_on = SDL_TRUE,                          // Booleen pour dire que le programme doit continuer
+              paused = SDL_FALSE;                             // Booleen pour dire que le programme est en pause
+    
+
+    // Initialisation des coordonnees
+
+    while (program_on) 
+    {                                   // La boucle des évènements
+        SDL_Event event;                // Evènement à traiter
+
+        while (program_on && SDL_PollEvent(&event)) 
+        {                               // Tant que la file des évènements stockés n'est pas vide et qu'on n'a pas
+                                        // terminé le programme Défiler l'élément en tête de file dans 'event'
+            switch (event.type) 
+            {
+                case SDL_WINDOWEVENT:
+                    if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+                    {
+                        // Calcul des dimensions quand la fenetre change de taille
+                        
+                    }
+                    break;
+                case SDL_QUIT:                         
+                    program_on = 0;                   
+                    break;
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_LEFT:
+                            paddleSpeed = -2;
+                        	break;
+                        case SDLK_RIGHT:
+                            paddleSpeed = 2;
+                        	break;
+                        case SDLK_SPACE:                            // 'SPC'
+                            paused = !paused;                       // basculement pause/unpause
+                            break;
+                        case SDLK_ESCAPE:                           // 'ESCAPE'  
+                        case SDLK_q:                                // 'q'
+                            program_on = 0;
+                            break;
+                        default:                      
+                            break;
+                    }
+                    break;
+                case SDL_KEYUP:
+                    switch (event.key.keysym.sym) 
+                    {             
+                        case SDLK_LEFT:         
+                            paddleSpeed = 0;
+                        	break;
+                        case SDLK_RIGHT:
+                            paddleSpeed = 0;
+                        	break;
+                        default :
+                            break;
+                    }
+                default:                                            
+                    break;
+            }
+        } 
+
+        if(gameIsOver)
+        {
+
+        }
+
+        if (!paused) 
+        {      
+                                
+        }
+        SDL_Delay(50);                                  
+    }
+    SDL_DestroyTexture(texture);
+}*/
