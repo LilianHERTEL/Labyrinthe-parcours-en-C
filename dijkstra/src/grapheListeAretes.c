@@ -198,7 +198,7 @@ int* trouverVoisins(couples_graphe_t graphe, int noeud, int* nbVoisins) {
                 voisins[*nbVoisins] = graphe.aretes[i].noeudFin;
                 (*nbVoisins)++;
             }
-            else if (graphe.aretes[i].noeudFin == noeud)
+            if (graphe.aretes[i].noeudFin == noeud)
             {
                 voisins[*nbVoisins] = graphe.aretes[i].noeudDeb;
                 (*nbVoisins)++;
