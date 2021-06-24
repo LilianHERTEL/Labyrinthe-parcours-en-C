@@ -185,9 +185,29 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab)
     titre.w = positionLab.w * 0.5;
     titre.h = positionLab.h * 0.2;
     titre.x = (positionLab.w - titre.w) / 2; 
+    dijkstra.w = positionLab.w * 0.3;
+    dijkstra.h = positionLab.h * 0.1;
+    dijkstra.x = (positionLab.w - dijkstra.w) / 2; 
+    dijkstra.y = titre.y + titre.h + dijkstra.h / 2;
+    a_etoile.w = positionLab.w * 0.1;
+    a_etoile.h = positionLab.h * 0.1;
+    a_etoile.x = (positionLab.w - a_etoile.w) / 2; 
+    a_etoile.y = dijkstra.y + dijkstra.h + a_etoile.h / 2;
+    profondeur.w = positionLab.w * 0.3;
+    profondeur.h = positionLab.h * 0.1;
+    profondeur.x = (positionLab.w - profondeur.w) / 2; 
+    profondeur.y = a_etoile.y + a_etoile.h + profondeur.h / 2;
+    quit.w = positionLab.w * 0.3;
+    quit.h = positionLab.h * 0.1;
+    quit.x = (positionLab.w - quit.w) / 2; 
+    quit.y = positionLab.h - quit.h * 1.5;
     
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // fond
     drawText("Parcours !", titre, font, renderer);
+    drawText("Dijkstra", dijkstra, font, renderer);
+    drawText("A*", a_etoile, font, renderer);
+    drawText("Profondeur", profondeur, font, renderer);
+    drawText("Quitter", quit, font, renderer);
 }
 
 void gameloop()
