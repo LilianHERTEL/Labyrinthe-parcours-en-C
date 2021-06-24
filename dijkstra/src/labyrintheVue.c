@@ -18,16 +18,14 @@ void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
 
 void dimensionPerso(SDL_Rect * dest, SDL_Rect tile)
 {
-    dest->w = tile.w * 0.5;
-    dest->h = tile.h * 0.5;
+    dest->w = tile.w * 0.8;
+    dest->h = tile.h * 0.8;
 }
 
 void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
 {
-    SDL_Rect source = {0};
+    SDL_Rect source = {423, 44, 35, 43};
 
-    source.w = 57;
-    source.h = 43;
     SDL_RenderCopy(renderer, perso, &source, &dest);
 }
 
