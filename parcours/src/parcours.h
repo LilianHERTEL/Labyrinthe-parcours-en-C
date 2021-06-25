@@ -23,10 +23,41 @@
  */
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n);
 
+/**
+ * @brief traitement effectue sur chaque voisin du noeud courant
+ *
+ * @param debfin le voisin du noeud courant (debut ou fin de l'arrete dans le graphe)
+ * @param cour noeud courant
+ * @param areteVoisin l'arete entre le neoud courant et le voisin traite
+ * @param prec tableau des precedents de chaque noeud
+ * @param traite tableau de traitement des neouds
+ * @param tas file de priorite sous forme de tas binaire
+ */
 void checkVoisin(int voisinCourant, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas);
 
+/**
+ * @brief effectue le traitement pour astar sur un voisin du noeud courant
+ *
+ * @param numvoisin numero du voisin traite
+ * @param cour noeud courant
+ * @param areteVoisin arete du graphe entre le neoud courant et le voisin traite
+ * @param prec tableau des precedents des noeuds
+ * @param traite tableau des noeuds traites
+ * @param tas file de priorite implemente avec un tas binaire
+ * @param cible noeud a atteindre
+ * @param n hauteur de la matrice du graphe
+ */
 void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n);
 
+/**
+ * @brief Calcule la distance de manhattan
+ * 
+ * @param courx abscisse du noeud courant
+ * @param coury ordonnee du noeud courant
+ * @param ciblex abscisse du noeud cible
+ * @param cibley ordonnee du noeud cible
+ * @return float distance de manhattan
+ */
 float manhattan(int courx, int coury, int ciblex, int cibley);
 
 /**
