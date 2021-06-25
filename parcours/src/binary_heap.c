@@ -119,11 +119,11 @@ int heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
  * @param heap Le tas
  * @param key La valeur de l'element
  */
-void minHeapInsert(binary_heap_t *heap, node_t key, int* indexage)
+void minHeapInsert(binary_heap_t *heap, node_t key)
 {
     heap->heapSize = heap->heapSize + 1;
     heap->array[heap->heapSize] = key;
-    indexage[key.num] = heapDecreaseKey(heap, heap->heapSize, key);
+    heap->indexage[key.num] = heapDecreaseKey(heap, heap->heapSize, key);
 }
 
 /**

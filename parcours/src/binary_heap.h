@@ -17,6 +17,7 @@ typedef struct binary_heap
     int length;
     int heapSize;
     node_t *array;
+    int* indexage;
 } binary_heap_t;
 
 /**
@@ -81,7 +82,7 @@ int heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
  * @param heap Le tas
  * @param key La valeur de l'element
  */
-void minHeapInsert(binary_heap_t *heap, node_t key, int* indexage);
+void minHeapInsert(binary_heap_t *heap, node_t key);
 
 /**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array
