@@ -23,7 +23,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	tas.array = malloc(sizeof(int) * n);
 	prec = malloc(sizeof(int) * n);
 	*chemin = initialisation_liste();
-	traite = malloc(sizeof(int) * n);
+	traite = malloc(sizeof(bool_t) * n);
 	if (tas.array == NULL || prec == NULL || traite == NULL)
 	{
 		fputs("erreur malloc dijkstra\n", stderr);
@@ -323,7 +323,7 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	tas.array = malloc(sizeof(int) * n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
-	traite = malloc(sizeof(int) * n * m);
+	traite = malloc(sizeof(bool_t) * n * m);
 	if (tas.array == NULL || prec == NULL || traite == NULL)
 	{
 		fputs("erreur malloc dijkstra\n", stderr);
@@ -514,10 +514,10 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 	tas.array = malloc(sizeof(int) * n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
-	traite = malloc(sizeof(int) * n * m);
+	traite = malloc(sizeof(bool_t) * n * m);
 	if (tas.array == NULL || prec == NULL || traite == NULL)
 	{
-		fputs("erreur malloc dijkstra\n", stderr);
+		fputs("erreur malloc astargrille\n", stderr);
 		return false;
 	}
 	for (i = 0; i < n * m; ++i)
@@ -558,18 +558,22 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 
 			//pour tous les voisins du noeud courant
 			if(!(graphe[cour.num % n][cour.num / n] & OUEST)) {
+				puts("gauche OK");
 				checkVoisinAstarGrille(cour.num - 1, cour, prec, traite, &tas, cible, n);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & EST)) {
+				puts("droite OK");
 				checkVoisinAstarGrille(cour.num + 1, cour, prec, traite, &tas, cible, n);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & NORD)) {
+				puts("haut OK");
 				checkVoisinAstarGrille(cour.num - n, cour, prec, traite, &tas, cible, n);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & SUD)) {
+				puts("bas OK");
 				checkVoisinAstarGrille(cour.num + n, cour, prec, traite, &tas, cible, n);
 			}
 			puts("***");
@@ -591,7 +595,7 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 	{
 		printf("prec[%d] = %d\n", i, prec[i]);
 	}
-	if ((prec[u] != -1 || u == source))
+	if ((prec[u] != -1 || u == source) && found == true)
 	{
 		while (prec[u] != -1)
 		{
@@ -609,8 +613,16 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 		fputs("cible pas trouvee\n", stderr);
 	}
 
-	free(traite);
+	puts("1");
+	puts("1.1");
+	printf("%p\n", traite);
+	puts("1.2");
+	if(traite != NULL) {
+		free(traite);
+	}
+	puts("2");
 	free(prec);
+	puts("3");
 	free(tas.array);
 	return found;
 }
