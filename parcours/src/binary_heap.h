@@ -73,7 +73,7 @@ node_t heapExtractMin(binary_heap_t *heap);
  * @param i Indice du nouvel element
  * @param key La valeur de l'element
  */
-void heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
+int heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
 
 /**
  * @brief Insere un element dans le tas 
@@ -81,7 +81,7 @@ void heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
  * @param heap Le tas
  * @param key La valeur de l'element
  */
-void minHeapInsert(binary_heap_t *heap, node_t key);
+void minHeapInsert(binary_heap_t *heap, node_t key, int* indexage);
 
 /**
  * @brief Permute 2 valeurs d'indices i et j dans la tableau array
