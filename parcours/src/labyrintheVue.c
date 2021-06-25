@@ -430,7 +430,7 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                                 while (chemin != NULL)
                                 {
                                     drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
-                                    chemin = chemin->suiv;
+                                    supp_lch(&chemin);
                                     SDL_RenderPresent(renderer);
                                     SDL_Delay(200);
                                 }
@@ -468,19 +468,21 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                             while (chemin != NULL)
                             {
                                 drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
-                                chemin = chemin->suiv;
+                                supp_lch(&chemin);
                                 SDL_RenderPresent(renderer);
                                 SDL_Delay(200);
                             }
                             //SDL_RenderPresent(renderer);
                             libererListe(chemin);
                             SDL_RenderClear(renderer);
-                            SDL_Delay(1000);
+                            SDL_Delay(2000);
                             paused = SDL_FALSE;
                         }
                         else
                         {
-                            fprintf(stderr, "erreur dijkstra\n");
+                            paused = SDL_FALSE;
+                            SDL_RenderClear(renderer);
+                            fprintf(stderr, "erreur astar\n");
                         }
                     }
                     else if (mouse.x >= profondeur.x && mouse.x <= profondeur.x + profondeur.w && mouse.y >= profondeur.y && mouse.y <= profondeur.y + profondeur.h)

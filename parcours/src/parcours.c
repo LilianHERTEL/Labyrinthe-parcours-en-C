@@ -23,7 +23,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	tas.array = malloc(sizeof(int) * n);
 	prec = malloc(sizeof(int) * n);
 	*chemin = initialisation_liste();
-	traite = malloc(sizeof(int) * n);
+	traite = malloc(sizeof(bool_t) * n);
 	if (tas.array == NULL || prec == NULL || traite == NULL)
 	{
 		fputs("erreur malloc dijkstra\n", stderr);
@@ -323,7 +323,7 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	tas.array = malloc(sizeof(int) * n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
-	traite = malloc(sizeof(int) * n * m);
+	traite = malloc(sizeof(bool_t) * n * m);
 	if (tas.array == NULL || prec == NULL || traite == NULL)
 	{
 		fputs("erreur malloc dijkstra\n", stderr);
@@ -424,6 +424,210 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 }
 
 /**
+ * @brief effectue le traitement pour astarGrille sur un voisin du noeud courant
+ * 
+ * @param numvoisin numero du voisin traite
+ * @param cour noeud courant
+ * @param prec tableau des precedents des noeuds
+ * @param traite tableau des noeuds traites
+ * @param tas file de priorite implemente avec un tas binaire
+ * @param cible noeud a atteindre
+ * @param n hauteur de la matrice du graphe
+ */
+void checkVoisinAstarGrille(int numvoisin, node_t cour, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n)
+{
+	int voisinTas;
+	node_t noeudVoisin;
+
+	//on calcule la distance de la source au voisin en passant par le noeud courant
+	noeudVoisin.num = numvoisin;
+	noeudVoisin.distcible = manhattan(numvoisin % n, numvoisin / n, cible % n, cible / n);
+	//noeudVoisin.distcible = tchebychev(numvoisin % n, numvoisin / n, cible % n, cible / n);
+	//noeudVoisin.distcible = euclide(numvoisin % n, numvoisin / n, cible % n, cible / n);
+
+	//toutes les cases ajoutent 1
+	noeudVoisin.distsource = cour.distsource + 1; 
+	
+	//moyenne des valeurs des cases
+	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]) / 2.0);
+
+	//somme des valeurs des cases
+	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]));
+
+	noeudVoisin.dist = noeudVoisin.distcible + noeudVoisin.distsource;
+
+	//si le voisin est dans le tas
+	if (isInHeap(*tas, numvoisin, &voisinTas))
+	{
+		puts("voisin dans le tas");
+		printf("voisin %d\n", voisinTas);
+
+		//si elle est plus courte que la distance precedente, alors on la remplace
+		if (tas->array[voisinTas].dist > noeudVoisin.dist)
+		{
+			puts("changement de voisin");
+			//on definit le noeud courant en tant que precedent du voisin
+			prec[numvoisin] = cour.num;
+
+			//on met a jour sa distance
+			tas->array[voisinTas] = noeudVoisin;
+		}
+	}
+	//si le voisin n'est pas dans le tas
+	else
+	{
+		puts("voisin pas dans le tas");
+		fprintf(stderr, "on ajoute %d au tas\n", numvoisin);
+
+		if (traite[numvoisin] == false)
+		{
+			//ajouter le voisin au tas
+			minHeapInsert(tas, noeudVoisin);
+			//on definit le noeud courant en tant que precedent du voisin
+			prec[numvoisin] = cour.num;
+		}
+	}
+	puts("");
+}
+
+/**
+ * @brief Applique l'algorithme A* sur un graphe sous forme de grille
+ * 
+ * @param graphe Le graphe 
+ * @param source Le point (noeud) de depart
+ * @param cible Le point (noeud) d'arrivee
+ * @param chemin Le chemin trouve a la fin de A*
+ * @param n Nombre de lignes de la matrice du labyrinthe
+ * @param m Nombre de colonnes de la matrice du labyrinthe
+ * @return bool_t True si reussi, false sinon
+ */
+bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, int m)
+{
+	binary_heap_t tas;
+	bool_t found = false, *traite;
+	node_t cour;
+	maillon_t *maillon;
+	int *prec, i, u;
+
+	printf("cible %d\n", cible);
+	//initialisation
+	tas.array = malloc(sizeof(int) * n * m);
+	prec = malloc(sizeof(int) * n * m);
+	*chemin = initialisation_liste();
+	traite = malloc(sizeof(bool_t) * n * m);
+	if (tas.array == NULL || prec == NULL || traite == NULL)
+	{
+		fputs("erreur malloc astargrille\n", stderr);
+		return false;
+	}
+	for (i = 0; i < n * m; ++i)
+	{
+		prec[i] = -1;
+		traite[i] = false;
+	}
+	tas.length = n * m;
+	tas.heapSize = 0;
+
+	//on insert d'abord la source
+	cour.num = source;
+	cour.dist = 0;
+	cour.distcible = manhattan(source % n, source / n, cible % n, cible / n);
+	cour.distsource = 0;
+	minHeapInsert(&tas, cour);
+
+	while (found == false && tas.heapSize > 0)
+	{
+
+		//on prend le premier de la file d'attente
+		cour = heapExtractMin(&tas);
+		fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
+		//printHeap(tas);
+		if (cour.num == -1)
+		{
+			puts("erreur");
+			free(traite);
+			free(prec);
+			free(tas.array);
+			return false;
+		}
+		traite[cour.num] = true;
+		//on n'a pas atteint la cible
+		if (cour.num != cible)
+		{
+			puts("cible non atteinte\n");
+
+			//pour tous les voisins du noeud courant
+			if(!(graphe[cour.num % n][cour.num / n] & OUEST)) {
+				puts("gauche OK");
+				checkVoisinAstarGrille(cour.num - 1, cour, prec, traite, &tas, cible, n);
+			}
+
+			if(!(graphe[cour.num % n][cour.num / n] & EST)) {
+				puts("droite OK");
+				checkVoisinAstarGrille(cour.num + 1, cour, prec, traite, &tas, cible, n);
+			}
+
+			if(!(graphe[cour.num % n][cour.num / n] & NORD)) {
+				puts("haut OK");
+				checkVoisinAstarGrille(cour.num - n, cour, prec, traite, &tas, cible, n);
+			}
+
+			if(!(graphe[cour.num % n][cour.num / n] & SUD)) {
+				puts("bas OK");
+				checkVoisinAstarGrille(cour.num + n, cour, prec, traite, &tas, cible, n);
+			}
+			puts("***");
+		}
+		else
+		{
+			puts("cible trouvee");
+			//cible trouvee
+			found = true;
+			//prec[cible] = cour.num;
+		}
+		puts("\n");
+	}
+
+	//on remonte le tableau des precedents en partant de la cible
+	u = cible;
+	printf("prec[u] = %d\n", prec[u]);
+	for (i = 0; i < n * m; ++i)
+	{
+		printf("prec[%d] = %d\n", i, prec[i]);
+	}
+	if ((prec[u] != -1 || u == source) && found == true)
+	{
+		while (prec[u] != -1)
+		{
+			//on ajoute le numero courant
+			//chemin[k] = prec[u];
+			printf("u : %d, prec[u] = %d\n", u, prec[u]);
+			maillon = creerMaillon(prec[u]);
+			ajout_lch(chemin, maillon);
+			u = prec[u];
+			//++k;
+		}
+	}
+	else
+	{
+		fputs("cible pas trouvee\n", stderr);
+	}
+
+	puts("1");
+	puts("1.1");
+	printf("%p\n", traite);
+	puts("1.2");
+	if(traite != NULL) {
+		free(traite);
+	}
+	puts("2");
+	free(prec);
+	puts("3");
+	free(tas.array);
+	return found;
+}
+
+/**
  * @brief Effectue un parcours en profondeur sur un graphe (avec affichage au fur et a mesure)
  * 
  * @param graph Le graphe
@@ -453,6 +657,7 @@ void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *rende
 	{
 		fprintf(stderr, "Erreur malloc\n");
 	}
+	free(marques);
 }
 
 /**
