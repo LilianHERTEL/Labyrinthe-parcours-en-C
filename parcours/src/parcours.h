@@ -1,5 +1,6 @@
 #pragma once
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,16 +27,29 @@ void checkVoisin(int voisinCourant, node_t cour, arete_t areteVoisin, int *prec,
 
 void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n);
 
+float manhattan(int courx, int coury, int ciblex, int cibley);
+
 /**
- * @brief Calcule la distance de manhattan
+ * @brief Calcule la distance de Tchebytchev
  * 
- * @param courx 
- * @param coury 
- * @param ciblex 
- * @param cibley 
- * @return int 
+ * @param courx abscisse du noeud courant
+ * @param coury ordonnee du noeud courant
+ * @param ciblex abscisse du noeud cible
+ * @param cibley ordonnee du noeud cible
+ * @return float distance
  */
-int manhattan(int courx, int coury, int ciblex, int cibley);
+float tchebychev(int courx, int coury, int ciblex, int cibley);
+
+/**
+ * @brief Calcule la distance euclidienne
+ * 
+ * @param courx abscisse du noeud courant
+ * @param coury ordonnee du noeud courant
+ * @param ciblex abscisse du noeud cible
+ * @param cibley ordonnee du noeud cible
+ * @return float distance
+ */
+float euclide(int courx, int coury, int ciblex, int cibley);
 
 /**
  * @brief Applique l'algorithme A* sur un graphe

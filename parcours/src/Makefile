@@ -2,7 +2,7 @@ FIC = $(shell ls *.c)
 EXEC = ../bin/
 BIN = labyrinthe
 DEBUG = -DDEBUG 
-LFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
+LFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 OPTIONS = -Wall -Wextra -g 
 CC = gcc 
 OBJ = $(FIC:.c=.o) 
