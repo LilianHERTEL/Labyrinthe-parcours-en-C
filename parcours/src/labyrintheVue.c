@@ -408,7 +408,7 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                                 while (chemin != NULL)
                                 {
                                     drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
-                                    chemin = chemin->suiv;
+                                    supp_lch(&chemin);
                                     SDL_RenderPresent(renderer);
                                     SDL_Delay(200);
                                 }
@@ -446,7 +446,7 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                             while (chemin != NULL)
                             {
                                 drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
-                                chemin = chemin->suiv;
+                                supp_lch(&chemin);
                                 SDL_RenderPresent(renderer);
                                 SDL_Delay(200);
                             }
