@@ -135,14 +135,14 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 }
 
 /**
- * @brief 
+ * @brief traitement effectue sur chaque voisin du noeud courant
  * 
- * @param debfin 
- * @param cour 
- * @param areteVoisin 
- * @param prec 
- * @param traite 
- * @param tas 
+ * @param debfin le voisin du noeud courant (debut ou fin de l'arrete dans le graphe)
+ * @param cour noeud courant
+ * @param areteVoisin l'arete entre le neoud courant et le voisin traite
+ * @param prec tableau des precedents de chaque noeud
+ * @param traite tableau de traitement des neouds
+ * @param tas file de priorite sous forme de tas binaire
  */
 void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas)
 {
