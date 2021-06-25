@@ -18,7 +18,6 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	maillon_t *maillon;
 	int u, *prec, i;
 
-	printf("cible %d\n", cible);
 	//initialisation
 	tas.array = malloc(sizeof(int) * n);
 	prec = malloc(sizeof(int) * n);
