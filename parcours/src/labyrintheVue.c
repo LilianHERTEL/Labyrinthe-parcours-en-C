@@ -477,7 +477,7 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                         drawStone(renderer, deb, n, m, tile, positionLab, texture);
                         drawStone(renderer, fin, n, m, tile, positionLab, texture);
                         SDL_RenderPresent(renderer);
-                        if (astar(graph, deb, fin, &chemin, n, m))
+                        if (astarGrille(grille, deb, fin, &chemin, n, m))
                         {
                             SDL_Delay(1000);
                             drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);

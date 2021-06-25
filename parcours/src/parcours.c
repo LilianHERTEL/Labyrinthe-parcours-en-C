@@ -320,10 +320,11 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	bool_t found = false, *traite;
 	node_t cour;
 	maillon_t *maillon;
-	int *prec, i, u;
+	int *prec, i, u, *indexage;
 
 	//printf("cible %d\n", cible);
 	//initialisation
+	tas.indexage = malloc(sizeof(int) * n * m);
 	tas.array = malloc(sizeof(int) * n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
@@ -519,6 +520,7 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 
 	//printf("cible %d\n", cible);
 	//initialisation
+	indexage = malloc(sizeof(int) * n * m);
 	tas.array = malloc(sizeof(int) * n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
@@ -541,7 +543,7 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 	cour.dist = 0;
 	cour.distcible = manhattan(source % n, source / n, cible % n, cible / n);
 	cour.distsource = 0;
-	minHeapInsert(&tas, cour);
+	minHeapInsert(&tas, cour, indexage);
 
 	while (found == false && tas.heapSize > 0)
 	{
@@ -567,22 +569,22 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 			//pour tous les voisins du noeud courant
 			if(!(graphe[cour.num % n][cour.num / n] & OUEST)) {
 				//puts("gauche OK");
-				checkVoisinAstarGrille(cour.num - 1, cour, prec, traite, &tas, cible, n);
+				checkVoisinAstarGrille(cour.num - 1, cour, prec, traite, &tas, cible, n, indexage);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & EST)) {
 				//puts("droite OK");
-				checkVoisinAstarGrille(cour.num + 1, cour, prec, traite, &tas, cible, n);
+				checkVoisinAstarGrille(cour.num + 1, cour, prec, traite, &tas, cible, n, indexage);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & NORD)) {
 				//puts("haut OK");
-				checkVoisinAstarGrille(cour.num - n, cour, prec, traite, &tas, cible, n);
+				checkVoisinAstarGrille(cour.num - n, cour, prec, traite, &tas, cible, n, indexage);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & SUD)) {
 				//puts("bas OK");
-				checkVoisinAstarGrille(cour.num + n, cour, prec, traite, &tas, cible, n);
+				checkVoisinAstarGrille(cour.num + n, cour, prec, traite, &tas, cible, indexage);
 			}
 			//puts("***");
 		}
