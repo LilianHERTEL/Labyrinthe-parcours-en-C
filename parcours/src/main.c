@@ -95,6 +95,9 @@ int main(int argc, char const *argv[])
         free(grille[i]);
     }
     free(grille);
+    TTF_CloseFont(font);
+    SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(perso);
     quitSDL(true, "SDL END", window, renderer);
 
     return 0;
