@@ -19,12 +19,11 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	int u, *prec, i;
 
 	//initialisation
-	tas.array = malloc(sizeof(int) * n);
-	tas.indexage = malloc(sizeof(int) * n);
+	tas = createTas(n);
 	prec = malloc(sizeof(int) * n);
 	*chemin = initialisation_liste();
 	traite = malloc(sizeof(bool_t) * n);
-	if (tas.array == NULL || prec == NULL || traite == NULL)
+	if (tas.array == NULL || tas.indexage == NULL || prec == NULL || traite == NULL)
 	{
 		fputs("erreur malloc dijkstra\n", stderr);
 		return false;
@@ -95,6 +94,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	free(traite);
 	free(prec);
 	free(tas.array);
+	free(tas.indexage);
 	return found;
 }
 
@@ -264,12 +264,11 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	int *prec, i, u;
 
 	//initialisation
-	tas.indexage = malloc(sizeof(int) * n * m);
-	tas.array = malloc(sizeof(int) * n * m);
+	tas = createTas(n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
 	traite = malloc(sizeof(bool_t) * n * m);
-	if (tas.array == NULL || prec == NULL || traite == NULL)
+	if (tas.array == NULL ||tas.indexage == NULL || prec == NULL || traite == NULL)
 	{
 		fputs("erreur malloc a*\n", stderr);
 		return false;
@@ -340,6 +339,7 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	free(traite);
 	free(prec);
 	free(tas.array);
+	free(tas.indexage);
 	return found;
 }
 
