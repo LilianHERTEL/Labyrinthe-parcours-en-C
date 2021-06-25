@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     (testCreer() && testRecupererClasse() && testFusion() && testListerClasse() && testListerPartition()) ? puts("tests ok") : puts("erreur tests");
 
     partition_t part;
-    int         n;
+    int n;
 
     n = 10;
     part = creer(n);

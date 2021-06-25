@@ -7,22 +7,22 @@
  * @param n Le nombre d'elements dans la partition
  * @param name Nom pour les fichiers generes
  */
-void drawPartitionGraph(partition_t partition, int n, char * name)
+void drawPartitionGraph(partition_t partition, int n, char *name)
 {
-    Agraph_t    * graphe;
-    FILE        * fic;
-    GVC_t       * graph_context;
-    int           i = 0,
-                  j,
-                  sys;
-    char          indexClasse[3],
-                  indexElement[3],
-                  dotPath[50],
-                  pngPath[50],
-                  command[100],
-                * dir = "../graphviz/";
-    classe_t    * classes;
-    element_t   * elements;
+    Agraph_t *graphe;
+    FILE *fic;
+    GVC_t *graph_context;
+    int i = 0,
+        j,
+        sys;
+    char indexClasse[3],
+        indexElement[3],
+        dotPath[50],
+        pngPath[50],
+        command[100],
+        *dir = "../graphviz/";
+    classe_t *classes;
+    element_t *elements;
 
     strcpy(dotPath, dir);
     strcat(dotPath, name);
@@ -32,7 +32,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
     strcat(pngPath, ".png");
 
     fic = fopen(dotPath, "w");
-    if(fic)
+    if (fic)
     {
         graph_context = gvContext();
         if (graph_context)
@@ -42,7 +42,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
             classes = lister_partition(partition, n);
 
             // Dessine les noeuds
-            while(i < n && classes[i] != -1)
+            while (i < n && classes[i] != -1)
             {
                 sprintf(indexClasse, "%d", classes[i]);
                 agnode(graphe, indexClasse, 1);
@@ -51,18 +51,18 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
 
             //Dessine les arretes
             i = 0;
-            while(i < n && classes[i] != -1)
+            while (i < n && classes[i] != -1)
             {
                 elements = lister_classe(partition, classes[i], n);
                 sprintf(indexClasse, "%d", classes[i]);
-                while(j < n && elements[j] != -1)
+                while (j < n && elements[j] != -1)
                 {
                     sprintf(indexElement, "%d", elements[j]);
                     agedge(graphe, agnode(graphe, indexElement, 1), agnode(graphe, indexClasse, 1), NULL, 1);
                     j++;
                 }
                 i++;
-                j=0;
+                j = 0;
             }
 
             //  Ecriture sur la sortie standard en dot sans formatage
@@ -99,7 +99,7 @@ void drawPartitionGraph(partition_t partition, int n, char * name)
             fprintf(stderr, "Impossible de créer le contexte de graphe...");
         }
     }
-	else
+    else
     {
         fprintf(stderr, "Impossible d'ouvrir le fichier...\n");
     }

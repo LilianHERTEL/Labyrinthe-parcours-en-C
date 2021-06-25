@@ -12,4 +12,4 @@
  * @param n Le nombre d'elements dans la partition
  * @param name Nom pour les fichiers generes
  */
-void drawPartitionGraph(partition_t partition, int n, char * name);
+void drawPartitionGraph(partition_t partition, int n, char *name);
