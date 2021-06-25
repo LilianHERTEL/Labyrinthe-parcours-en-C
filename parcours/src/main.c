@@ -97,7 +97,7 @@ int main(int argc, char const *argv[])
     menuLoop(window, renderer, font, texture, perso, background, graph, n, m, grille);
 
     free(graph.aretes);
-    for (int i = 0; i < m; ++i)
+    for (int i = 0; i < n; ++i)
     {
         free(grille[i]);
     }
