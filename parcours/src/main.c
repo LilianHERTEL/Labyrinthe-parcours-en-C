@@ -13,7 +13,8 @@ int main(int argc, char const *argv[])
     SDL_Renderer *renderer = NULL;
     SDL_DisplayMode screen;
     SDL_Texture *texture,
-        *perso;
+        *perso,
+        *background;
     TTF_Font *font;
 
     (void)argc;
@@ -74,6 +75,12 @@ int main(int argc, char const *argv[])
         quitSDL(0, " error texture\n", window, renderer);
         exit(EXIT_FAILURE);
     }
+    background = loadTextureFromImage("../images/background.png", renderer);
+    if (background == NULL)
+    {
+        quitSDL(0, " error texture\n", window, renderer);
+        exit(EXIT_FAILURE);
+    }
 
     // // TRAITEMENT
 
@@ -87,7 +94,7 @@ int main(int argc, char const *argv[])
     graph.nbAretes = tailleLabyrintheCouvrant;
     grille = arbreCouvrantToMatrice(graph.aretes, tailleLabyrintheCouvrant, n);
 
-    menuLoop(window, renderer, font, texture, perso, graph, n, m, grille);
+    menuLoop(window, renderer, font, texture, perso, background, graph, n, m, grille);
 
     free(graph.aretes);
     for (int i = 0; i < m; ++i)
