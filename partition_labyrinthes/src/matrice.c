@@ -6,11 +6,11 @@
  * @param grid matrice d'entier
  * @param n nombre de lignes de la matrice
  */
-void freeGrid(int ** grid, int n)
+void freeGrid(int **grid, int n)
 {
-    int     i;
+    int i;
 
-    for(i=0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         free(grid[i]);
     }
@@ -24,26 +24,27 @@ void freeGrid(int ** grid, int n)
  * @param m nombre de colonnes
  * @return int** 
  */
-int ** allocGrid(int n, int m)
+int **allocGrid(int n, int m)
 {
-   int  ** grid,
-            i = 0;
+    int **grid,
+        i = 0;
 
     grid = malloc(n * sizeof(int *));
 
-    if(grid)
-    {	
-        do {
-            grid[i] = (int *)malloc(m * sizeof(int));
-	        i++;
-        } while(i < n && grid[i-1] != NULL);
-
-        if(grid[i-1] == NULL)
+    if (grid)
+    {
+        do
         {
-            freeGrid(grid, i-1);
+            grid[i] = (int *)malloc(m * sizeof(int));
+            i++;
+        } while (i < n && grid[i - 1] != NULL);
+
+        if (grid[i - 1] == NULL)
+        {
+            freeGrid(grid, i - 1);
             grid = NULL;
         }
-    } 
+    }
     setToZero(grid, n, m);
     return grid;
 }
@@ -55,14 +56,14 @@ int ** allocGrid(int n, int m)
  * @param n nombre de lignes
  * @param m nombre de colonnes
  */
-void displayGrid(int ** grid, int n, int m)
+void displayGrid(int **grid, int n, int m)
 {
     int i,
         j;
-    
-    for(i=0; i<n; i++)
+
+    for (i = 0; i < n; i++)
     {
-        for(j=0; j<m; j++)
+        for (j = 0; j < m; j++)
         {
             printf("%d ", grid[i][j]);
         }
@@ -70,13 +71,21 @@ void displayGrid(int ** grid, int n, int m)
     }
 }
 
-void setToZero(int ** grid, int n, int m) {
+/**
+ * @brief Initialize tous les éléments de la matrice à 0
+ * 
+ * @param grid matrice d'entiers
+ * @param n nombre de lignes
+ * @param m nombre de colonnes
+ */
+void setToZero(int **grid, int n, int m)
+{
     int i,
         j;
-    
-    for(i=0; i<n; i++)
+
+    for (i = 0; i < n; i++)
     {
-        for(j=0; j<m; j++)
+        for (j = 0; j < m; j++)
         {
             grid[i][j] = 15;
         }
