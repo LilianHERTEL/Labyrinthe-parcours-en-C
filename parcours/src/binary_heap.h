@@ -20,6 +20,16 @@ typedef struct binary_heap
     int* indexage;
 } binary_heap_t;
 
+binary_heap_t createTas(int size) {
+    binary_heap_t tas;
+
+    tas.array = malloc(sizeof(int) * size);
+    tas.heapSize = 0;
+    tas.indexage = malloc(sizeof(int) * size);
+    tas.length = size;
+    return tas;
+}
+
 /**
  * @brief Retourne l'indice du parent de l'indice index
  * 
