@@ -53,7 +53,7 @@ void dimensionPerso(SDL_Rect *perso, SDL_Rect tile);
  * @param perso La texture pour le personnage
  * @param dest Le rectangle pour le personnage
  */
-void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest);
+void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest, int ancienX, int ancienY);
 
 /**
  * @brief Dessine tout le labyrinthe sur le rendu
@@ -96,7 +96,7 @@ void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect t
  * @param destPerso Le rectangle pour le personnage
  * @param perso La texture a appliquer au personnage
  */
-void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso);
+void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso, int ancienX, int ancienY);
 
 /**
  * @brief Permet d'afficher du texte a l'ecran

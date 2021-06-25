@@ -24,6 +24,32 @@
 bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin, int n);
 
 /**
+ * @brief Applique l'algorithme A* sur un graphe sous forme de grille
+ * 
+ * @param graphe Le graphe 
+ * @param source Le point (noeud) de depart
+ * @param cible Le point (noeud) d'arrivee
+ * @param chemin Le chemin trouve a la fin de A*
+ * @param n Nombre de lignes de la matrice du labyrinthe
+ * @param m Nombre de colonnes de la matrice du labyrinthe
+ * @return bool_t True si reussi, false sinon
+ */
+bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, int m);
+
+/**
+ * @brief effectue le traitement pour astarGrille sur un voisin du noeud courant
+ * 
+ * @param numvoisin numero du voisin traite
+ * @param cour noeud courant
+ * @param prec tableau des precedents des noeuds
+ * @param traite tableau des noeuds traites
+ * @param tas file de priorite implemente avec un tas binaire
+ * @param cible noeud a atteindre
+ * @param n hauteur de la matrice du graphe
+ */
+void checkVoisinAstarGrille(int numvoisin, node_t cour, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n);
+
+/**
  * @brief traitement effectue sur chaque voisin du noeud courant
  *
  * @param debfin le voisin du noeud courant (debut ou fin de l'arrete dans le graphe)
