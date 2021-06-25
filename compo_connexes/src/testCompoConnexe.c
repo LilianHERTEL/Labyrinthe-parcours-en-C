@@ -5,23 +5,25 @@ int main(void)
 	arete_t *arbreCouvrant;
 	couples_graphe_t graph;
 	int tailleArbreCouvrant = 10;
-	//(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
-	/*
-	couples_graphe_t graph;
-	arete_t * arbreCouvrant;
-	int tailleArbreCouvrant;
+	(testCreateAdjencyMatrix() && testGrapheToPartition() && testNoeudsCompoConnexes()) ? puts("tests OK") : puts("echec tests");
 
-	genererGraphe(&graph, 10); 
-	ordonnerAretesCroissant(&graph);
-	supprimerGraphe(graph);
-	*/
+	genererGraphe(&graph, 10);
+
 	arbreCouvrant = arbreCouvrantPoidsMin(graph, &tailleArbreCouvrant);
 	drawCouplesGraph(graph, "testCouplesGrapheKruskal", arbreCouvrant, tailleArbreCouvrant);
-	
+
+	supprimerGraphe(graph);
+
 	return 0;
 }
 
-bool_t testNoeudsCompoConnexes() {
+/**
+ * @brief Teste la fontion noeudsCompoConnexe
+ * 
+ * @return bool_t 
+ */
+bool_t testNoeudsCompoConnexes()
+{
 	graphe_t matrix;
 	element_t **element;
 	int n = 5, nclasses, i;
@@ -29,27 +31,36 @@ bool_t testNoeudsCompoConnexes() {
 
 	matrix = createAdjencyMatrix(n);
 	element = noeudsCompoConnexes(matrix, n, &nclasses);
-    afficherNoeudsCompoConnexes(element, n, nclasses);
-	for(i = 0; i < nclasses; ++i) {
+	afficherNoeudsCompoConnexes(element, n, nclasses);
+	for (i = 0; i < nclasses; ++i)
+	{
 		free(element[i]);
 	}
 	free(element);
 	free(matrix);
 	puts("validation manuelle : y/n");
 	fscanf(stdin, "%c%*c", &c);
-	if(c == 'y' || c == 'Y') {
+	if (c == 'y' || c == 'Y')
+	{
 		return true;
 	}
 	fputs("erreur noeudcompoconnexe\n", stderr);
 	return false;
 }
 
-bool_t testCreateAdjencyMatrix() {
+/**
+ * @brief Teste la fonction createAdejencyMatrix
+ * 
+ * @return bool_t 
+ */
+bool_t testCreateAdjencyMatrix()
+{
 	graphe_t matrix = NULL;
-        int n = 10;
+	int n = 10;
 
 	matrix = createAdjencyMatrix(n);
-	if(matrix == NULL) {
+	if (matrix == NULL)
+	{
 		fputs("erreur creation matrice adjacente\n", stderr);
 		return false;
 	}
@@ -57,19 +68,27 @@ bool_t testCreateAdjencyMatrix() {
 	return true;
 }
 
-bool_t testGrapheToPartition() {
+/**
+ * @brief Teste la fonction grapheToPartition
+ * 
+ * @return bool_t 
+ */
+bool_t testGrapheToPartition()
+{
 	graphe_t matrix = NULL;
 	partition_t partition;
 	int n = 3;
 	char c = 0;
 
 	matrix = createAdjencyMatrix(n);
-	if(matrix == NULL) {
+	if (matrix == NULL)
+	{
 		fputs("erreur creation de la matrice avant test dans grapheToPartition\n", stderr);
 		return false;
 	}
 	partition = grapheToPartition(matrix, n);
-	if(partition.foret == NULL || partition.hauteur == NULL) {
+	if (partition.foret == NULL || partition.hauteur == NULL)
+	{
 		free(matrix);
 		return false;
 	}
@@ -79,7 +98,8 @@ bool_t testGrapheToPartition() {
 	fscanf(stdin, "%c%*c", &c);
 	free(matrix);
 	detruirePartition(partition);
-	if(c == 'y' || c == 'Y') {
+	if (c == 'y' || c == 'Y')
+	{
 		return true;
 	}
 	fputs("graphe non conforme\n", stderr);

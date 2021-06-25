@@ -6,6 +6,23 @@
 #include "graphviz.h"
 #include "kruskal.h"
 
-bool_t testCreateAdjencyMatrix();
-bool_t testGrapheToPartition();
+/**
+ * @brief Teste la fontion noeudsCompoConnexe
+ * 
+ * @return bool_t 
+ */
 bool_t testNoeudsCompoConnexes();
+
+/**
+ * @brief Teste la fonction createAdejencyMatrix
+ * 
+ * @return bool_t 
+ */
+bool_t testCreateAdjencyMatrix();
+
+/**
+ * @brief Teste la fonction grapheToPartition
+ * 
+ * @return bool_t 
+ */
+bool_t testGrapheToPartition();
