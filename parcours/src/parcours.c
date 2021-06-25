@@ -192,7 +192,7 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 }
 
 /**
- * @brief 
+ * @brief effectue le traitement pour astar sur un voisin du noeud courant
  * 
  * @param numvoisin numero du voisin traite
  * @param cour noeud courant
@@ -252,11 +252,11 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
 /**
  * @brief Calcule la distance de manhattan
  * 
- * @param courx 
- * @param coury 
- * @param ciblex 
- * @param cibley 
- * @return int 
+ * @param courx abscisse du noeud courant
+ * @param coury ordonnee du noeud courant
+ * @param ciblex abscisse du noeud cible
+ * @param cibley ordonnee du noeud cible
+ * @return int distance de manhattan
  */
 int manhattan(int courx, int coury, int ciblex, int cibley)
 {
