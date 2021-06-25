@@ -43,6 +43,7 @@ arete_t *kruskal_non_arbo(couples_graphe_t graph, int *tailleListe, float densit
         }
         *tailleListe = j;
     }
+    detruirePartition(partition);
 
     return listeAretes;
 }
