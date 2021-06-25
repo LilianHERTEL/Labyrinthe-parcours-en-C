@@ -51,11 +51,33 @@ void dimensionPerso(SDL_Rect *dest, SDL_Rect tile)
  * @param perso La texture pour le personnage
  * @param dest Le rectangle pour le personnage
  */
-void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
+void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest, int ancienX, int ancienY)
 {
-    SDL_Rect source = {423, 44, 35, 43};
+    SDL_Rect droite = {0, 0, 35, 43}, // Sens ou le personnage regarde
+             bas = {39, 0, 43, 35},
+             gauche = {87, 0, 35, 43},
+             haut = {124, 0, 43, 35};
 
-    SDL_RenderCopy(renderer, perso, &source, &dest);
+    if(ancienX > dest.x)
+    {
+        SDL_RenderCopy(renderer, perso, &gauche, &dest);
+    }
+    else if(ancienX < dest.x)
+    {
+        SDL_RenderCopy(renderer, perso, &droite, &dest);
+    }
+    else if(ancienY > dest.y)
+    {
+        SDL_RenderCopy(renderer, perso, &haut, &dest);
+    }
+    else if(ancienY < dest.y)
+    {
+        SDL_RenderCopy(renderer, perso, &bas, &dest);
+    }
+    else
+    {
+        SDL_RenderCopy(renderer, perso, &haut, &dest);
+    }
 }
 
 /**
@@ -200,13 +222,13 @@ void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect t
  * @param destPerso Le rectangle pour le personnage
  * @param perso La texture a appliquer au personnage
  */
-void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso)
+void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, int **grille, SDL_Rect destPerso, SDL_Texture *perso, int ancienX, int ancienY)
 {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
     drawLab(renderer, grille, n, m, tile, positionLab, texture, marques);
     if (perso)
     {
-        drawperso(renderer, perso, destPerso);
+        drawperso(renderer, perso, destPerso, ancienX, ancienY);
     }
 }
 

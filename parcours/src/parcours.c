@@ -709,14 +709,17 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 {
 	int *voisins,
 		nbVoisins,
-		i;
+		i,
+		ancienX, ancienY;
 
 	marques[s] = true;
 
 	//affichage
+	ancienY = destPerso.y;
+	ancienX = destPerso.x;
 	destPerso.x = positionLab.x + tile.w * (s - (s / n) * m) + tile.w * 0.1;
 	destPerso.y = positionLab.y + tile.h * (s / n) + tile.h * 0.1;
-	drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+	drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, ancienX, ancienY);
 	SDL_RenderPresent(renderer);
 	SDL_RenderClear(renderer);
 	SDL_Delay(delai);
@@ -727,10 +730,9 @@ void explorer(couples_graphe_t graph, int s, bool_t *marques, SDL_Renderer *rend
 		if (marques[voisins[i]] == false)
 		{
 			explorer(graph, voisins[i], marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, delai);
-
 			destPerso.x = positionLab.x + tile.w * (s - (s / n) * m) + tile.w * 0.1;
 			destPerso.y = positionLab.y + tile.h * (s / n) + tile.h * 0.1;
-			drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso);
+			drawAll(marques, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, ancienX, ancienY);
 			SDL_RenderPresent(renderer);
 			SDL_RenderClear(renderer);
 			SDL_Delay(delai);
