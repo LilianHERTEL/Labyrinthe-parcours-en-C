@@ -202,7 +202,20 @@ bool_t isInHeap(binary_heap_t heap, int key, int *pos)
 {
     int curr = 0;
     bool_t trouve = false;
-    *pos = -1;
+
+    if (heap.indexage[key] != -1)
+    {
+        trouve = true;
+        *pos = heap.indexage[key];
+    }
+    else
+    {
+        *pos = -1;
+        trouve = false;
+    }
+    
+    
+    /*
     while (curr < heap.heapSize && heap.array[curr].num != key)
     {
         curr++;
@@ -211,7 +224,7 @@ bool_t isInHeap(binary_heap_t heap, int key, int *pos)
     {
         trouve = true;
         *pos = curr;
-    }
+    }*/
     return trouve;
 }
 
