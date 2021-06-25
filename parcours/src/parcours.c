@@ -657,6 +657,7 @@ void parcoursEnProfondeur(couples_graphe_t graph, int debut, SDL_Renderer *rende
 	{
 		fprintf(stderr, "Erreur malloc\n");
 	}
+	free(marques);
 }
 
 /**
