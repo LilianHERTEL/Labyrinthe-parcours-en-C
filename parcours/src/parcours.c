@@ -91,7 +91,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 					checkVoisin(graphe.aretes[i].noeudDeb, cour, graphe.aretes[i], prec, traite, &tas);
 				}
 			}
-			puts("***");
+			//puts("***");
 		}
 		else
 		{
@@ -100,7 +100,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 			found = true;
 			//prec[cible] = cour.num;
 		}
-		puts("\n");
+		//puts("\n");
 	}
 
 	//on remonte le tableau des precedents en partant de la cible
