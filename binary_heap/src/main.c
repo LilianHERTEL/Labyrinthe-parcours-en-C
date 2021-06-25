@@ -1,13 +1,12 @@
 #include "testbinary_heap.h"
 #include "comparison.h"
 
-
 int main()
 {
-    //test_MinHeapify();
+    test_MinHeapify();
     testBuildMinHeap();
-
-    //comparison(100000);
+    puts("\n");
+    comparison(100000);
 
     return 0;
 }

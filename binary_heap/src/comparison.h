@@ -12,7 +12,7 @@
  * @param b 
  * @return int 
  */
-int cmpfunc (const void * a, const void * b);
+int cmpfunc(const void *a, const void *b);
 
 /**
  * @brief Compare les temps d'execution des 2 methodes de tri (quicksort et heapsort)
