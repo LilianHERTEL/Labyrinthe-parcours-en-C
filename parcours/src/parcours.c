@@ -290,7 +290,11 @@ float tchebychev(int courx, int coury, int ciblex, int cibley) {
  * @return float distance
  */
 float euclide(int courx, int coury, int ciblex, int cibley) {
-	return sqrt((courx - ciblex) * (courx - ciblex) + (coury - cibley) * (coury - cibley));
+	int x, y;
+
+	x = courx - ciblex;
+	y = coury - cibley;
+	return sqrt(x * x + y * y);
 }
 
 /**
