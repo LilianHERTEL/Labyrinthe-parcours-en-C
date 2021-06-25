@@ -211,6 +211,8 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
 	//on calcule la distance de la source au voisin en passant par le noeud courant
 	noeudVoisin.num = numvoisin;
 	noeudVoisin.distcible = manhattan(numvoisin % n, numvoisin / n, cible % n, cible / n);
+	//noeudVoisin.distcible = tchebychev(numvoisin % n, numvoisin / n, cible % n, cible / n);
+	//noeudVoisin.distcible = euclide(numvoisin % n, numvoisin / n, cible % n, cible / n);
 	noeudVoisin.distsource = cour.distsource + areteVoisin.poids;
 	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]) / 2.0);
 	noeudVoisin.dist = noeudVoisin.distcible + noeudVoisin.distsource;
