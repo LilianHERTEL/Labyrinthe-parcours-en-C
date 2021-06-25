@@ -20,6 +20,7 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 
 	//initialisation
 	tas.array = malloc(sizeof(int) * n);
+	tas.indexage = malloc(sizeof(int) * n);
 	prec = malloc(sizeof(int) * n);
 	*chemin = initialisation_liste();
 	traite = malloc(sizeof(bool_t) * n);
@@ -263,6 +264,7 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	int *prec, i, u;
 
 	//initialisation
+	tas.indexage = malloc(sizeof(int) * n * m);
 	tas.array = malloc(sizeof(int) * n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
