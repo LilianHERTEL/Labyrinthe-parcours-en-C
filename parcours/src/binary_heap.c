@@ -224,7 +224,6 @@ bool_t isInHeap(binary_heap_t heap, int key, int *pos)
         trouve = false;
     }
     
-    
     /*
     while (curr < heap.heapSize && heap.array[curr].num != key)
     {
