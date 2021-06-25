@@ -396,29 +396,37 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                         drawStone(renderer, deb, n, m, tile, positionLab, texture);
                         drawStone(renderer, fin, n, m, tile, positionLab, texture);
                         SDL_RenderPresent(renderer);
-                        if (dijkstra(graph, deb, fin, &chemin, n * m))
+                        // Effectue Dijkstra 5 fois en partant de l'ancien point de fin à chaque fois
+                        for (int i = 0; i < 5; i++)
                         {
-                            SDL_Delay(1000);
-                            drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-                            drawStone(renderer, deb, n, m, tile, positionLab, texture);
-                            drawStone(renderer, fin, n, m, tile, positionLab, texture);
-                            while (chemin != NULL)
+                            if (dijkstra(graph, deb, fin, &chemin, n * m))
                             {
-                                drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
-                                chemin = chemin->suiv;
-                                SDL_RenderPresent(renderer);
-                                SDL_Delay(200);
+                                SDL_Delay(500);
+                                drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
+                                drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                                drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                                while (chemin != NULL)
+                                {
+                                    drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
+                                    chemin = chemin->suiv;
+                                    SDL_RenderPresent(renderer);
+                                    SDL_Delay(200);
+                                }
+                                //SDL_RenderPresent(renderer);
+                                libererListe(chemin);
+                                SDL_RenderClear(renderer);
+                                SDL_Delay(500);
+                                paused = SDL_FALSE;
                             }
-                            //SDL_RenderPresent(renderer);
-                            libererListe(chemin);
-                            SDL_RenderClear(renderer);
-                            SDL_Delay(1000);
-                            paused = SDL_FALSE;
+                            else
+                            {
+                                fprintf(stderr, "erreur dijkstra\n");
+                            }
+                            deb = fin;
+                            fin = randomNoeud(graph, deb);
                         }
-                        else
-                        {
-                            fprintf(stderr, "erreur dijkstra\n");
-                        }
+                        
+                        
                     }
                     else if (mouse.x >= a_etoile.x && mouse.x <= a_etoile.x + a_etoile.w && mouse.y >= a_etoile.y && mouse.y <= a_etoile.y + a_etoile.h)
                     {
