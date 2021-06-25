@@ -95,7 +95,7 @@ node_t heapExtractMin(binary_heap_t *heap)
  * @param i Indice du nouvel element
  * @param key La valeur de l'element
  */
-void heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
+int heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
 {
     if (key.dist > heap->array[i].dist)
     {
@@ -110,6 +110,7 @@ void heapDecreaseKey(binary_heap_t *heap, int i, node_t key)
             i = getParent(i);
         }
     }
+    return i;
 }
 
 /**
@@ -122,7 +123,7 @@ void minHeapInsert(binary_heap_t *heap, node_t key)
 {
     heap->heapSize = heap->heapSize + 1;
     heap->array[heap->heapSize] = key;
-    heapDecreaseKey(heap, heap->heapSize, key);
+    heap->indexage[key.num] = heapDecreaseKey(heap, heap->heapSize, key);
 }
 
 /**

@@ -52,6 +52,8 @@ void dimensionPerso(SDL_Rect *perso, SDL_Rect tile);
  * @param renderer Le rendu
  * @param perso La texture pour le personnage
  * @param dest Le rectangle pour le personnage
+ * @param ancienX Ancienne position x du personnage
+ * @param ancienY Ancienne position y du personnage
  */
 void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest, int ancienX, int ancienY);
 
@@ -79,8 +81,9 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
  * @param tile Rectangle representant une case
  * @param positionLab Rectangle delimitant le labyrinthe
  * @param texture La texture pour les cailloux
+ * @param debut Savoir si c'est le debut d'un parcours pour l'afficher avec un couleur differente
  */
-void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture);
+void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, bool_t debut);
 
 /**
  * @brief Permet de dessiner le fond, le labyrinthe et le perso si non nul

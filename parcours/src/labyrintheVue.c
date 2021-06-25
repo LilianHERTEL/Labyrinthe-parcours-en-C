@@ -50,6 +50,8 @@ void dimensionPerso(SDL_Rect *dest, SDL_Rect tile)
  * @param renderer Le rendu
  * @param perso La texture pour le personnage
  * @param dest Le rectangle pour le personnage
+ * @param ancienX Ancienne position x du personnage
+ * @param ancienY Ancienne position y du personnage
  */
 void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest, int ancienX, int ancienY)
 {
@@ -191,8 +193,9 @@ void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SD
  * @param tile Rectangle representant une case
  * @param positionLab Rectangle delimitant le labyrinthe
  * @param texture La texture pour les cailloux
+ * @param debut Savoir si c'est le debut d'un parcours pour l'afficher avec un couleur differente
  */
-void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture)
+void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture, bool_t debut)
 {
     int i, j;
     SDL_Rect source = {35, 0, 35, 30};
@@ -203,6 +206,11 @@ void drawStone(SDL_Renderer *renderer, int indiceNoeud, int n, int m, SDL_Rect t
     tile.y = positionLab.y + tile.h * i + tile.h * 0.1;
     tile.x = positionLab.x + tile.w * j + tile.w * 0.1;
     tile.w = tile.h = tile.w * 0.8;
+
+    if(debut)
+    {
+        source.x = 82;
+    }
 
     SDL_RenderFillRect(renderer, &tile);
     SDL_RenderCopy(renderer, texture, &source, &tile);
@@ -433,26 +441,26 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                         deb = randomNoeud(graph, -1);
                         fin = randomNoeud(graph, deb);
                         drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-                        drawStone(renderer, deb, n, m, tile, positionLab, texture);
-                        drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                        drawStone(renderer, deb, n, m, tile, positionLab, texture, true);
+                        drawStone(renderer, fin, n, m, tile, positionLab, texture, false);
                         SDL_RenderPresent(renderer);
                         // Effectue Dijkstra 5 fois en partant de l'ancien point de fin à chaque fois
                         for (int i = 0; i < 5; i++)
                         {
                             if (dijkstra(graph, deb, fin, &chemin, n * m))
                             {
+                                supp_lch(&chemin);
                                 SDL_Delay(500);
                                 drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-                                drawStone(renderer, deb, n, m, tile, positionLab, texture);
-                                drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                                drawStone(renderer, deb, n, m, tile, positionLab, texture, true);
+                                drawStone(renderer, fin, n, m, tile, positionLab, texture, false);
                                 while (chemin != NULL)
                                 {
-                                    drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
+                                    drawStone(renderer, chemin->v, n, m, tile, positionLab, texture, false);
                                     supp_lch(&chemin);
                                     SDL_RenderPresent(renderer);
                                     SDL_Delay(200);
                                 }
-                                //SDL_RenderPresent(renderer);
                                 libererListe(chemin);
                                 SDL_RenderClear(renderer);
                                 SDL_Delay(500);
@@ -465,8 +473,6 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                             deb = fin;
                             fin = randomNoeud(graph, deb);
                         }
-                        
-                        
                     }
                     else if (mouse.x >= a_etoile.x && mouse.x <= a_etoile.x + a_etoile.w && mouse.y >= a_etoile.y && mouse.y <= a_etoile.y + a_etoile.h)
                     {
@@ -474,23 +480,20 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                         deb = randomNoeud(graph, -1);
                         fin = randomNoeud(graph, deb);
                         drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-                        drawStone(renderer, deb, n, m, tile, positionLab, texture);
-                        drawStone(renderer, fin, n, m, tile, positionLab, texture);
+                        drawStone(renderer, deb, n, m, tile, positionLab, texture, true);
+                        drawStone(renderer, fin, n, m, tile, positionLab, texture, false);
                         SDL_RenderPresent(renderer);
-                        if (astarGrille(grille, deb, fin, &chemin, n, m))
+                        if (astar(graph, deb, fin, &chemin, n, m))
                         {
+                            supp_lch(&chemin);
                             SDL_Delay(1000);
-                            drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-                            drawStone(renderer, deb, n, m, tile, positionLab, texture);
-                            drawStone(renderer, fin, n, m, tile, positionLab, texture);
                             while (chemin != NULL)
                             {
-                                drawStone(renderer, chemin->v, n, m, tile, positionLab, texture);
+                                drawStone(renderer, chemin->v, n, m, tile, positionLab, texture, false);
                                 supp_lch(&chemin);
                                 SDL_RenderPresent(renderer);
                                 SDL_Delay(200);
                             }
-                            //SDL_RenderPresent(renderer);
                             libererListe(chemin);
                             SDL_RenderClear(renderer);
                             SDL_Delay(2000);
@@ -508,7 +511,7 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
                         paused = SDL_TRUE;
                         deb = randomNoeud(graph, -1);
                         drawLab(renderer, grille, n, m, tile, positionLab, texture, NULL);
-                        drawStone(renderer, deb, n, m, tile, positionLab, texture);
+                        drawStone(renderer, deb, n, m, tile, positionLab, texture, true);
                         SDL_RenderPresent(renderer);
                         SDL_Delay(1000);
                         parcoursEnProfondeur(graph, deb, renderer, n, m, tile, positionLab, texture, grille, destPerso, perso, 150);

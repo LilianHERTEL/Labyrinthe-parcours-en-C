@@ -17,6 +17,7 @@ typedef struct binary_heap
     int length;
     int heapSize;
     node_t *array;
+    int* indexage;
 } binary_heap_t;
 
 /**
@@ -73,7 +74,7 @@ node_t heapExtractMin(binary_heap_t *heap);
  * @param i Indice du nouvel element
  * @param key La valeur de l'element
  */
-void heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
+int heapDecreaseKey(binary_heap_t *heap, int i, node_t key);
 
 /**
  * @brief Insere un element dans le tas 

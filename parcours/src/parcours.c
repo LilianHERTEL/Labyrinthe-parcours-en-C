@@ -18,9 +18,9 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	maillon_t *maillon;
 	int u, *prec, i;
 
-	printf("cible %d\n", cible);
 	//initialisation
 	tas.array = malloc(sizeof(int) * n);
+	tas.indexage = malloc(sizeof(int) * n);
 	prec = malloc(sizeof(int) * n);
 	*chemin = initialisation_liste();
 	traite = malloc(sizeof(bool_t) * n);
@@ -37,18 +37,6 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 	tas.length = n;
 	tas.heapSize = 0;
 
-	/*
-	 * inutile si on insert au fur et a mesure
-	 *
-	//initialisation du tas
-	for(i = 0; i < nbaretes; ++i) {
-		tas.array[i].num = i;
-		tas.array[i].dist = FLT_MAX;
-		//dist[graphe[] = INT_MAX;
-		//prec[i] = -1;
-	}
-	*/
-
 	//on insert d'abord la source
 	cour.num = source;
 	cour.dist = 0;
@@ -60,11 +48,8 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 
 		//on prend le premier de la file d'attente
 		cour = heapExtractMin(&tas);
-		//fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
-		//printHeap(tas);
 		if (cour.num == -1)
 		{
-			//puts("erreur");
 			free(traite);
 			free(prec);
 			free(tas.array);
@@ -74,63 +59,38 @@ bool_t dijkstra(couples_graphe_t graphe, int source, int cible, liste_t *chemin,
 		//on n'a pas atteint la cible
 		if (cour.num != cible)
 		{
-			//puts("cible non atteinte\n");
-
 			//pour tous les voisins du noeud courant
 			for (i = 0; i < graphe.nbAretes; ++i)
 			{
-				//fprintf(stderr, "on check si %d est dans %d -> %d\n", cour.num, graphe.aretes[i].noeudDeb, graphe.aretes[i].noeudFin);
 				if (graphe.aretes[i].noeudDeb == cour.num)
 				{
-					//puts("debut");
 					checkVoisin(graphe.aretes[i].noeudFin, cour, graphe.aretes[i], prec, traite, &tas);
 				}
 				else if (graphe.aretes[i].noeudFin == cour.num)
 				{
-					//puts("fin");
 					checkVoisin(graphe.aretes[i].noeudDeb, cour, graphe.aretes[i], prec, traite, &tas);
 				}
 			}
-			//puts("***");
 		}
 		else
 		{
-			//puts("cible trouvee");
 			//cible trouvee
 			found = true;
-			//prec[cible] = cour.num;
 		}
-		//puts("\n");
 	}
 
 	//on remonte le tableau des precedents en partant de la cible
 	u = cible;
-	/*
-	printf("prec[u] = %d\n", prec[u]);
-	for (i = 0; i < n; ++i)
-	{
-		printf("prec[%d] = %d\n", i, prec[i]);
-	}
-	*/
 	if ((prec[u] != -1 || u == source))
 	{
 		while (prec[u] != -1)
 		{
 			//on ajoute le numero courant
-			//chemin[k] = prec[u];
-			//printf("u : %d, prec[u] = %d\n", u, prec[u]);
 			maillon = creerMaillon(prec[u]);
 			ajout_lch(chemin, maillon);
 			u = prec[u];
-			//++k;
 		}
 	}
-	/*
-	else
-	{
-		fputs("cible pas trouvee\n", stderr);
-	}
-	*/
 
 	free(traite);
 	free(prec);
@@ -159,16 +119,12 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 	//si le voisin est dans le tas
 	if (isInHeap(*tas, debfin, &voisin))
 	{
-		//puts("voisin dans le tas");
-		//printf("voisin %d\n", voisin);
-
 		//on calcule la distance de la source au voisin en passant par le noeud courant
 		newdist = areteVoisin.poids + cour.dist;
 
 		//si elle est plus courte que la distance precedente, alors on la remplace
 		if (tas->array[voisin].dist > newdist)
 		{
-			//puts("changement de voisin");
 			//on definit le noeud courant en tant que precedent du voisin
 			prec[debfin] = cour.num;
 
@@ -179,9 +135,6 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 	//si le voisin n'est pas dans le tas
 	else
 	{
-		//puts("voisin pas dans le tas");
-		//fprintf(stderr, "on ajoute %d au tas\n", debfin);
-
 		if (traite[debfin] == false)
 		{
 			noeudVoisin.num = debfin;
@@ -192,7 +145,6 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 			prec[debfin] = cour.num;
 		}
 	}
-	//puts("");
 }
 
 /**
@@ -215,22 +167,15 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
 	//on calcule la distance de la source au voisin en passant par le noeud courant
 	noeudVoisin.num = numvoisin;
 	noeudVoisin.distcible = manhattan(numvoisin % n, numvoisin / n, cible % n, cible / n);
-	//noeudVoisin.distcible = tchebychev(numvoisin % n, numvoisin / n, cible % n, cible / n);
-	//noeudVoisin.distcible = euclide(numvoisin % n, numvoisin / n, cible % n, cible / n);
 	noeudVoisin.distsource = cour.distsource + areteVoisin.poids;
-	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]) / 2.0);
 	noeudVoisin.dist = noeudVoisin.distcible + noeudVoisin.distsource;
 
 	//si le voisin est dans le tas
 	if (isInHeap(*tas, numvoisin, &voisinTas))
 	{
-		//puts("voisin dans le tas");
-		//printf("voisin %d\n", voisinTas);
-
 		//si elle est plus courte que la distance precedente, alors on la remplace
 		if (tas->array[voisinTas].dist > noeudVoisin.dist)
 		{
-			//puts("changement de voisin");
 			//on definit le noeud courant en tant que precedent du voisin
 			prec[numvoisin] = cour.num;
 
@@ -241,9 +186,6 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
 	//si le voisin n'est pas dans le tas
 	else
 	{
-		//puts("voisin pas dans le tas");
-		//fprintf(stderr, "on ajoute %d au tas\n", numvoisin);
-
 		if (traite[numvoisin] == false)
 		{
 			//ajouter le voisin au tas
@@ -252,7 +194,6 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
 			prec[numvoisin] = cour.num;
 		}
 	}
-	//puts("");
 }
 
 /**
@@ -320,9 +261,8 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 	bool_t found = false, *traite;
 	node_t cour;
 	maillon_t *maillon;
-	int *prec, i, u, *indexage;
+	int *prec, i, u;
 
-	//printf("cible %d\n", cible);
 	//initialisation
 	tas.indexage = malloc(sizeof(int) * n * m);
 	tas.array = malloc(sizeof(int) * n * m);
@@ -354,11 +294,8 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 
 		//on prend le premier de la file d'attente
 		cour = heapExtractMin(&tas);
-		//fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
-		//printHeap(tas);
 		if (cour.num == -1)
 		{
-			//puts("erreur");
 			free(traite);
 			free(prec);
 			free(tas.array);
@@ -368,64 +305,38 @@ bool_t astar(couples_graphe_t graphe, int source, int cible, liste_t *chemin, in
 		//on n'a pas atteint la cible
 		if (cour.num != cible)
 		{
-			//puts("cible non atteinte\n");
-
 			//pour tous les voisins du noeud courant
 			for (i = 0; i < graphe.nbAretes; ++i)
 			{
-				//fprintf(stderr, "on check si %d est dans %d -> %d\n", cour.num, graphe.aretes[i].noeudDeb, graphe.aretes[i].noeudFin);
 				if (graphe.aretes[i].noeudDeb == cour.num)
 				{
-					//puts("debut");
 					checkVoisinAstar(graphe.aretes[i].noeudFin, cour, graphe.aretes[i], prec, traite, &tas, cible, n);
 				}
 				else if (graphe.aretes[i].noeudFin == cour.num)
 				{
-					//puts("fin");
 					checkVoisinAstar(graphe.aretes[i].noeudDeb, cour, graphe.aretes[i], prec, traite, &tas, cible, n);
 				}
 			}
-			//puts("***");
 		}
 		else
 		{
-			//puts("cible trouvee");
 			//cible trouvee
 			found = true;
-			//prec[cible] = cour.num;
 		}
-		puts("\n");
 	}
 
 	//on remonte le tableau des precedents en partant de la cible
 	u = cible;
-	/*
-	printf("prec[u] = %d\n", prec[u]);
-	for (i = 0; i < n * m; ++i)
-	{
-		printf("prec[%d] = %d\n", i, prec[i]);
-	}
-	*/
 	if ((prec[u] != -1 || u == source))
 	{
 		while (prec[u] != -1)
 		{
 			//on ajoute le numero courant
-			//chemin[k] = prec[u];
-			//printf("u : %d, prec[u] = %d\n", u, prec[u]);
 			maillon = creerMaillon(prec[u]);
 			ajout_lch(chemin, maillon);
 			u = prec[u];
-			//++k;
 		}
 	}
-	/*
-	else
-	{
-		fputs("cible pas trouvee\n", stderr);
-	}
-	*/
-
 	free(traite);
 	free(prec);
 	free(tas.array);
@@ -451,30 +362,18 @@ void checkVoisinAstarGrille(int numvoisin, node_t cour, int *prec, bool_t *trait
 	//on calcule la distance de la source au voisin en passant par le noeud courant
 	noeudVoisin.num = numvoisin;
 	noeudVoisin.distcible = manhattan(numvoisin % n, numvoisin / n, cible % n, cible / n);
-	//noeudVoisin.distcible = tchebychev(numvoisin % n, numvoisin / n, cible % n, cible / n);
-	//noeudVoisin.distcible = euclide(numvoisin % n, numvoisin / n, cible % n, cible / n);
 
 	//toutes les cases ajoutent 1
-	noeudVoisin.distsource = cour.distsource + 1; 
-	
-	//moyenne des valeurs des cases
-	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]) / 2.0);
-
-	//somme des valeurs des cases
-	//((graphe[cour.num % n][cour.num / n] + graphe[numvoisin % n][numvoisin / n]));
+	noeudVoisin.distsource = cour.distsource + 1;
 
 	noeudVoisin.dist = noeudVoisin.distcible + noeudVoisin.distsource;
 
 	//si le voisin est dans le tas
 	if (isInHeap(*tas, numvoisin, &voisinTas))
 	{
-		//puts("voisin dans le tas");
-		//printf("voisin %d\n", voisinTas);
-
 		//si elle est plus courte que la distance precedente, alors on la remplace
 		if (tas->array[voisinTas].dist > noeudVoisin.dist)
 		{
-			//puts("changement de voisin");
 			//on definit le noeud courant en tant que precedent du voisin
 			prec[numvoisin] = cour.num;
 
@@ -485,9 +384,6 @@ void checkVoisinAstarGrille(int numvoisin, node_t cour, int *prec, bool_t *trait
 	//si le voisin n'est pas dans le tas
 	else
 	{
-		//puts("voisin pas dans le tas");
-		//fprintf(stderr, "on ajoute %d au tas\n", numvoisin);
-
 		if (traite[numvoisin] == false)
 		{
 			//ajouter le voisin au tas
@@ -496,7 +392,6 @@ void checkVoisinAstarGrille(int numvoisin, node_t cour, int *prec, bool_t *trait
 			prec[numvoisin] = cour.num;
 		}
 	}
-	//puts("");
 }
 
 /**
@@ -518,9 +413,7 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 	maillon_t *maillon;
 	int *prec, i, u;
 
-	//printf("cible %d\n", cible);
 	//initialisation
-	indexage = malloc(sizeof(int) * n * m);
 	tas.array = malloc(sizeof(int) * n * m);
 	prec = malloc(sizeof(int) * n * m);
 	*chemin = initialisation_liste();
@@ -543,18 +436,15 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 	cour.dist = 0;
 	cour.distcible = manhattan(source % n, source / n, cible % n, cible / n);
 	cour.distsource = 0;
-	minHeapInsert(&tas, cour, indexage);
+	minHeapInsert(&tas, cour);
 
 	while (found == false && tas.heapSize > 0)
 	{
 
 		//on prend le premier de la file d'attente
 		cour = heapExtractMin(&tas);
-		//fprintf(stderr, "on passe a %d de distance %f\n", cour.num, cour.dist);
-		//printHeap(tas);
 		if (cour.num == -1)
 		{
-			//puts("erreur");
 			free(traite);
 			free(prec);
 			free(tas.array);
@@ -564,79 +454,46 @@ bool_t astarGrille(int **graphe, int source, int cible, liste_t *chemin, int n, 
 		//on n'a pas atteint la cible
 		if (cour.num != cible)
 		{
-			//puts("cible non atteinte\n");
-
 			//pour tous les voisins du noeud courant
 			if(!(graphe[cour.num % n][cour.num / n] & OUEST)) {
-				//puts("gauche OK");
-				checkVoisinAstarGrille(cour.num - 1, cour, prec, traite, &tas, cible, n, indexage);
+				checkVoisinAstarGrille(cour.num - 1, cour, prec, traite, &tas, cible, n);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & EST)) {
-				//puts("droite OK");
-				checkVoisinAstarGrille(cour.num + 1, cour, prec, traite, &tas, cible, n, indexage);
+				checkVoisinAstarGrille(cour.num + 1, cour, prec, traite, &tas, cible, n);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & NORD)) {
-				//puts("haut OK");
-				checkVoisinAstarGrille(cour.num - n, cour, prec, traite, &tas, cible, n, indexage);
+				checkVoisinAstarGrille(cour.num - n, cour, prec, traite, &tas, cible, n);
 			}
 
 			if(!(graphe[cour.num % n][cour.num / n] & SUD)) {
-				//puts("bas OK");
-				checkVoisinAstarGrille(cour.num + n, cour, prec, traite, &tas, cible, indexage);
+				checkVoisinAstarGrille(cour.num + n, cour, prec, traite, &tas, cible, n);
 			}
-			//puts("***");
 		}
 		else
 		{
-			//puts("cible trouvee");
 			//cible trouvee
 			found = true;
-			//prec[cible] = cour.num;
 		}
-		//puts("\n");
 	}
 
 	//on remonte le tableau des precedents en partant de la cible
 	u = cible;
-	/*
-	printf("prec[u] = %d\n", prec[u]);
-	for (i = 0; i < n * m; ++i)
-	{
-		printf("prec[%d] = %d\n", i, prec[i]);
-	}
-	*/
 	if ((prec[u] != -1 || u == source) && found == true)
 	{
 		while (prec[u] != -1)
 		{
 			//on ajoute le numero courant
-			//chemin[k] = prec[u];
-			//printf("u : %d, prec[u] = %d\n", u, prec[u]);
 			maillon = creerMaillon(prec[u]);
 			ajout_lch(chemin, maillon);
 			u = prec[u];
-			//++k;
 		}
 	}
-	/*
-	else
-	{
-		fputs("cible pas trouvee\n", stderr);
-	}
-
-	puts("1");
-	puts("1.1");
-	printf("%p\n", traite);
-	puts("1.2");
-	*/
 	if(traite != NULL) {
 		free(traite);
 	}
-	//puts("2");
 	free(prec);
-	//puts("3");
 	free(tas.array);
 	return found;
 }
