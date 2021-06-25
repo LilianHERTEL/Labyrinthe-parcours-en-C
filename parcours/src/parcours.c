@@ -264,6 +264,23 @@ int manhattan(int courx, int coury, int ciblex, int cibley)
 }
 
 /**
+ * @brief Calcule la distance de Tchebytchev
+ * 
+ * @param courx abscisse du noeud courant
+ * @param coury ordonnee du noeud courant
+ * @param ciblex abscisse du noeud cible
+ * @param cibley ordonnee du noeud cible
+ * @return int distance
+ */
+int tchebychev(int courx, int coury, int ciblex, int cibley) {
+	int x, y;
+	
+	x = abs(courx - ciblex);
+	y = abs(coury - cibley);
+	return (x < y) ? y : x;
+}
+
+/**
  * @brief Applique l'algorithme A* sur un graphe
  * 
  * @param graphe Le graphe 
