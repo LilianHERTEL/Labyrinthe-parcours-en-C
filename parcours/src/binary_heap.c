@@ -190,6 +190,16 @@ void permute(node_t array[], int i, int j)
     array[j] = tmp;
 }
 
+binary_heap_t createTas(int size) {
+    binary_heap_t tas;
+
+    tas.array = malloc(sizeof(int) * size);
+    tas.heapSize = 0;
+    tas.indexage = malloc(sizeof(int) * size);
+    tas.length = size;
+    return tas;
+}
+
 /**
  * @brief Cherche si une valeur est présente dans le tas
  * 
