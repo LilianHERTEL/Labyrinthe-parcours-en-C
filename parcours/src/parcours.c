@@ -194,14 +194,14 @@ void checkVoisin(int debfin, node_t cour, arete_t areteVoisin, int *prec, bool_t
 /**
  * @brief 
  * 
- * @param numvoisin 
- * @param cour 
- * @param areteVoisin 
- * @param prec 
- * @param traite 
- * @param tas 
- * @param cible 
- * @param n 
+ * @param numvoisin numero du voisin traite
+ * @param cour noeud courant
+ * @param areteVoisin arete du graphe entre le neoud courant et le voisin traite
+ * @param prec tableau des precedents des noeuds
+ * @param traite tableau des noeuds traites
+ * @param tas file de priorite implemente avec un tas binaire
+ * @param cible noeud a atteindre
+ * @param n hauteur de la matrice du graphe
  */
 void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec, bool_t *traite, binary_heap_t *tas, int cible, int n)
 {
