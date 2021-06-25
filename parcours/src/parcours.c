@@ -256,9 +256,9 @@ void checkVoisinAstar(int numvoisin, node_t cour, arete_t areteVoisin, int *prec
  * @param coury ordonnee du noeud courant
  * @param ciblex abscisse du noeud cible
  * @param cibley ordonnee du noeud cible
- * @return int distance de manhattan
+ * @return float distance de manhattan
  */
-int manhattan(int courx, int coury, int ciblex, int cibley)
+float manhattan(int courx, int coury, int ciblex, int cibley)
 {
 	return abs(courx - ciblex) + abs(coury - cibley);
 }
@@ -270,14 +270,27 @@ int manhattan(int courx, int coury, int ciblex, int cibley)
  * @param coury ordonnee du noeud courant
  * @param ciblex abscisse du noeud cible
  * @param cibley ordonnee du noeud cible
- * @return int distance
+ * @return float distance
  */
-int tchebychev(int courx, int coury, int ciblex, int cibley) {
+float tchebychev(int courx, int coury, int ciblex, int cibley) {
 	int x, y;
 	
 	x = abs(courx - ciblex);
 	y = abs(coury - cibley);
 	return (x < y) ? y : x;
+}
+
+/**
+ * @brief Calcule la distance euclidienne
+ * 
+ * @param courx abscisse du noeud courant
+ * @param coury ordonnee du noeud courant
+ * @param ciblex abscisse du noeud cible
+ * @param cibley ordonnee du noeud cible
+ * @return float distance
+ */
+float euclide(int courx, int coury, int ciblex, int cibley) {
+	return sqrt((courx - ciblex) * (courx - ciblex) + (coury - cibley) * (coury - cibley));
 }
 
 /**
