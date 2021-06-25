@@ -134,6 +134,15 @@ void dimensionButtons(SDL_Rect *dijkstra, SDL_Rect *a_etoile, SDL_Rect *profonde
 void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_Rect dijkstra, SDL_Rect a_etoile, SDL_Rect profondeur, SDL_Rect quit);
 
 /**
+ * @brief Dessine le fond
+ * 
+ * @param renderer Le rendu
+ * @param background Texture appliquee au fond
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions);
+
+/**
  * @brief Boucle de "jeu" de l'executable
  * 
  * @param window La fenetre
@@ -141,9 +150,10 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
  * @param font La police d'ecriture a appliquer au texte 
  * @param texture La texture pour les murs et les sols 
  * @param perso La texture pour le personnage
+ * @param background Le fond du menu
  * @param graph Le graphe representant le labyrinthe
  * @param n Nombre de lignes de la matrice 
  * @param m Nombre de colonnes de la matrice 
  * @param grille La matrice representant le labyrinthe
  */
-void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso, couples_graphe_t graph, int n, int m, int **grille);
+void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso, SDL_Texture* background, couples_graphe_t graph, int n, int m, int **grille);

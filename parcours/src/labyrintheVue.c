@@ -243,12 +243,12 @@ void drawAll(bool_t *marques, SDL_Renderer *renderer, int n, int m, SDL_Rect til
  */
 bool_t drawText(char *text, SDL_Rect dest, TTF_Font *font, SDL_Renderer *renderer)
 {
-    SDL_Color color = {0};
+    SDL_Color color = {255, 255, 255, 255};
     SDL_Rect source = {0};
     SDL_Texture *texture;
     SDL_Surface *surface;
 
-    color.a = 255;
+    //color.a = 255;
 
     surface = TTF_RenderText_Solid(font, text, color);
     if (surface == NULL)
@@ -319,12 +319,12 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
     titre.h = positionLab.h * 0.2;
     titre.x = (positionLab.w - titre.w) / 2;
 
-    SDL_SetRenderDrawColor(renderer, 140, 120, 120, 255);
+    /*SDL_SetRenderDrawColor(renderer, 140, 120, 120, 128);
     SDL_RenderFillRect(renderer, &dijkstra);
     SDL_RenderFillRect(renderer, &a_etoile);
-    SDL_RenderFillRect(renderer, &profondeur);
+    SDL_RenderFillRect(renderer, &profondeur);*/
 
-    SDL_SetRenderDrawColor(renderer, 185, 25, 10, 255);
+    SDL_SetRenderDrawColor(renderer, 185, 25, 10, 128);
     SDL_RenderFillRect(renderer, &quit);
 
     drawText("Parcours !", titre, font, renderer);
@@ -332,6 +332,24 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
     drawText("A*", a_etoile, font, renderer);
     drawText("Profondeur", profondeur, font, renderer);
     drawText("Quitter", quit, font, renderer);
+}
+
+/**
+ * @brief Dessine le fond
+ * 
+ * @param renderer Le rendu
+ * @param background Texture appliquee au fond
+ * @param window_dimensions Dimensions et position de la fenetre
+ */
+void drawBackground(SDL_Renderer * renderer, SDL_Texture *background, SDL_Rect window_dimensions)
+{
+    SDL_Rect source = {0},
+             dest = {0};
+    
+    dest.w = window_dimensions.w;
+    dest.h = window_dimensions.h;
+    SDL_QueryTexture(background, NULL, NULL, &source.w, &source.h); 
+    SDL_RenderCopy(renderer, background, &source, &dest);
 }
 
 /**
@@ -347,7 +365,7 @@ void drawMenu(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect positionLab, SDL_
  * @param m Nombre de colonnes de la matrice 
  * @param grille La matrice representant le labyrinthe
  */
-void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso, couples_graphe_t graph, int n, int m, int **grille)
+void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Texture *texture, SDL_Texture *perso, SDL_Texture* background, couples_graphe_t graph, int n, int m, int **grille)
 {
     SDL_Rect positionLab = {0},
              tile = {0},
@@ -510,6 +528,7 @@ void menuLoop(SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font, SDL_Te
         }
         if (!paused)
         {
+            drawBackground(renderer, background, positionLab);
             drawMenu(renderer, font, positionLab, dijkstraR, a_etoile, profondeur, quit);
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // fond
             SDL_RenderPresent(renderer);
