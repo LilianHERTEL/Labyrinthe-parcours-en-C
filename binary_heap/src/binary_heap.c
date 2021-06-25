@@ -1,7 +1,4 @@
-#include <stdio.h>
 #include "binary_heap.h"
-#include "bool.h"
-#include <stdlib.h>
 
 /**
  * @brief Retourne l'indice du parent de l'indice index
@@ -71,9 +68,9 @@ int heap_minimum(binary_heap_t heap)
  */
 int heapExtractMin(binary_heap_t *heap)
 {
-    int min; 
+    int min;
 
-    if(heap->heapSize < 1)
+    if (heap->heapSize < 1)
     {
         fprintf(stderr, "heap underflow");
         min = M_INFINI;
@@ -97,14 +94,14 @@ int heapExtractMin(binary_heap_t *heap)
  */
 void heapDecreaseKey(binary_heap_t *heap, int i, int key)
 {
-    if(key > heap->array[i])
+    if (key > heap->array[i])
     {
         fprintf(stderr, "new key is greater than current key");
     }
     else
     {
         heap->array[i] = key;
-        while(i > 1 && heap->array[getParent(i)] > heap->array[i])
+        while (i > 1 && heap->array[getParent(i)] > heap->array[i])
         {
             permute(heap->array, i, getParent(i));
             i = getParent(i);
@@ -118,7 +115,7 @@ void heapDecreaseKey(binary_heap_t *heap, int i, int key)
  * @param heap Le tas
  * @param key La valeur de l'element
  */
-void minHeapInsert(binary_heap_t * heap, int key)
+void minHeapInsert(binary_heap_t *heap, int key)
 {
     heap->heapSize = heap->heapSize + 1;
     heap->array[heap->heapSize] = M_INFINI;
@@ -197,7 +194,8 @@ void permute(int array[], int i, int j)
  * @param pos la position de l'élément trouvé (-1 si non trouvé)
  * @return bool_t 
  */
-bool_t isInHeap(binary_heap_t heap, int key, int* pos) {
+bool_t isInHeap(binary_heap_t heap, int key, int *pos)
+{
     int curr = 1;
     bool_t trouve = false;
     *pos = -1;
