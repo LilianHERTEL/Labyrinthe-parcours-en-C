@@ -68,13 +68,12 @@ int main(int argc, char const *argv[])
     SDL_Rect dest = {0};
     int n = 25, tailleLabyrintheCouvrant, m;
     couples_graphe_t graph;
-    arete_t* labyrintheCouvrant;
-    int** grille;
+    arete_t *labyrintheCouvrant;
+    int **grille;
 
-    m=n;
+    m = n;
     genererGrapheLabyrinthe(&graph, n);
-    //labyrintheCouvrant = arbreCouvrantPoidsMin(graph, &tailleLabyrintheCouvrant);
-    labyrintheCouvrant = grapheLaby(graph, &tailleLabyrintheCouvrant, 0.9);
+    labyrintheCouvrant = kruskal_non_arbo(graph, &tailleLabyrintheCouvrant, 0.9);
     grille = arbreCouvrantToMatrice(labyrintheCouvrant, tailleLabyrintheCouvrant, n);
     //drawCouplesGraph(graph, "labyrinthe_arbo", labyrintheCouvrant, tailleLabyrintheCouvrant);
 
@@ -96,6 +95,14 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+/**
+ * @brief Calcule les dimensions d'une case du labyrinthe
+ * 
+ * @param tile Le rectangle qui represente une case
+ * @param positionLab Dimensions et position du labyrinthe
+ * @param n Nombre de lignes de la matrice qui represente le labyrinthe
+ * @param m Nombre de colonnes de la matrice qui repesente le labyrinthe
+ */
 void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
 {
     int a,
@@ -106,12 +113,25 @@ void dimensionTile(SDL_Rect *tile, SDL_Rect positionLab, int n, int m)
     tile->w = tile->h = a <= b ? a : b;
 }
 
-void dimensionPerso(SDL_Rect * dest, SDL_Rect tile)
+/**
+ * @brief Calcule les dimensions du personnage
+ * 
+ * @param dest Rectangle qui represente le personnage
+ * @param tile Rectangle qui represente une case du labyrinthe
+ */
+void dimensionPerso(SDL_Rect *dest, SDL_Rect tile)
 {
     dest->w = tile.w * 0.5;
     dest->h = tile.h * 0.5;
 }
 
+/**
+ * @brief Dessine le personnage a l'ecran
+ * 
+ * @param renderer Le rendu
+ * @param perso La texture a appliquer au personnage
+ * @param dest Rectangle qui represente le personnage
+ */
 void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
 {
     SDL_Rect source = {0};
@@ -121,6 +141,17 @@ void drawperso(SDL_Renderer *renderer, SDL_Texture *perso, SDL_Rect dest)
     SDL_RenderCopy(renderer, perso, &source, &dest);
 }
 
+/**
+ * @brief Dessine tout le labyrinthe sur le rendu
+ * 
+ * @param renderer Le rendu
+ * @param grid La matrice representant le labyrinthe
+ * @param n Nombre de lignes de la matrice
+ * @param m Nombre de colonnes de la matrice
+ * @param tile Le rectangle pour une case
+ * @param positionLab Le rectangle delimitant le labyrinthe
+ * @param texture La texture a appliquer pour le sol et les murs
+ */
 void drawLab(SDL_Renderer *renderer, int **grid, int n, int m, SDL_Rect tile, SDL_Rect positionLab, SDL_Texture *texture)
 {
     SDL_Rect wallNS = {0},              // Nord et Sud destination
