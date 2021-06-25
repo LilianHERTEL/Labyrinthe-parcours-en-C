@@ -17,7 +17,6 @@ typedef struct binary_heap
     int length;
     int heapSize;
     node_t *array;
-    int* indexage;
 } binary_heap_t;
 
 binary_heap_t createTas(int size);

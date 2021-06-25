@@ -123,7 +123,6 @@ void minHeapInsert(binary_heap_t *heap, node_t key)
 {
     heap->heapSize = heap->heapSize + 1;
     heap->array[heap->heapSize] = key;
-    heap->indexage[key.num] = heapDecreaseKey(heap, heap->heapSize, key);
 }
 
 /**
@@ -190,16 +189,6 @@ void permute(node_t array[], int i, int j)
     array[j] = tmp;
 }
 
-binary_heap_t createTas(int size) {
-    binary_heap_t tas;
-
-    tas.array = malloc(sizeof(int) * size);
-    tas.heapSize = 0;
-    tas.indexage = malloc(sizeof(int) * size);
-    tas.length = size;
-    return tas;
-}
-
 /**
  * @brief Cherche si une valeur est présente dans le tas
  * 
@@ -212,19 +201,7 @@ bool_t isInHeap(binary_heap_t heap, int key, int *pos)
 {
     int curr = 0;
     bool_t trouve = false;
-
-    if (heap.indexage[key] != -1)
-    {
-        trouve = true;
-        *pos = heap.indexage[key];
-    }
-    else
-    {
-        *pos = -1;
-        trouve = false;
-    }
-    
-    /*
+    *pos = -1;
     while (curr < heap.heapSize && heap.array[curr].num != key)
     {
         curr++;
@@ -233,7 +210,7 @@ bool_t isInHeap(binary_heap_t heap, int key, int *pos)
     {
         trouve = true;
         *pos = curr;
-    }*/
+    }
     return trouve;
 }
 
