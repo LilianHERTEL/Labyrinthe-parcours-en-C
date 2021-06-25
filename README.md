@@ -6,7 +6,7 @@ Projet réalisé en fin de première année ISIMA sur le thème du Labyrinthe, e
 
 Le projet se découpe en deux parties : 
 - La première est consacrée à une série d'exercices préparant la suite
-- Dans une second temps, le projet prendra une direction plus libre
+- Dans un second temps, nous nous consacrerons à la création d'un labyrinthe
 
 # Site web du projet
 
